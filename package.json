@@ -1,0 +1,43 @@
+{
+  "name": "dodona-plugin-vscode",
+  "displayName": "Dodona",
+  "description": "Plugin for Visual Studio Code to submit exercises to Dodona.",
+  "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/thepieterdc/dodona-plugin-vscode"
+  },
+  "engines": {
+    "vscode": "^1.34.0"
+  },
+  "license": "MIT",
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:extension.helloWorld"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "extension.helloWorld",
+        "title": "Hello World"
+      }
+    ]
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "lint": "eslint . --ext .ts,.tsx",
+    "vscode:prepublish": "npm run compile",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/node": "^12.12.6",
+    "@types/vscode": "^1.34.0",
+    "@typescript-eslint/eslint-plugin": "^3.3.0",
+    "@typescript-eslint/parser": "^3.3.0",
+    "eslint": "^7.2.0",
+    "typescript": "^3.9.5"
+  }
+}
