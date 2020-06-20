@@ -24,7 +24,18 @@
         "command": "extension.submit",
         "title": "Submit to Dodona"
       }
-    ]
+    ],
+    "configuration": {
+      "title": "Dodona",
+      "properties": {
+        "dodona.apiToken": {
+          "type": "string",
+          "default": null,
+          "description": "Specifies which API token should be used to authorize to Dodona.",
+          "scope": "application"
+        }
+      }
+    }
   },
   "scripts": {
     "compile": "tsc -p ./",
