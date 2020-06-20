@@ -11,9 +11,12 @@ export function activate(context: vscode.ExtensionContext) {
             // Get the code.
             const code = editor.document.getText();
 
+            // Get the API token from the settings.
+            const config = vscode.workspace.getConfiguration('dodona');
+
             // Submit the code to Dodona.
             const headers = {
-                'Authorization': 'token'
+                'Authorization': config.get('api.token')
             }
 
             const body = {

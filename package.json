@@ -28,7 +28,7 @@
     "configuration": {
       "title": "Dodona",
       "properties": {
-        "dodona.apiToken": {
+        "dodona.api.token": {
           "type": "string",
           "default": null,
           "description": "Specifies which API token should be used to authorize to Dodona.",
