@@ -3,6 +3,7 @@
   "displayName": "Dodona",
   "description": "Plugin for Visual Studio Code to submit exercises to Dodona.",
   "version": "0.1.0",
+  "publisher": "thepieterdc",
   "repository": {
     "type": "git",
     "url": "https://github.com/thepieterdc/dodona-plugin-vscode"
