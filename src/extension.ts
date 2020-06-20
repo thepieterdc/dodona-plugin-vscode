@@ -1,8 +1,11 @@
 import * as vscode from 'vscode';
 import * as bent from 'bent';
 import {identify} from "./exercise/identification";
+import {Submission, SubmissionResponse} from "./submission";
 
-const post = bent('https://dodona.ugent.be', 'POST', 'json')
+const get = bent('json');
+const post = bent('https://dodona.ugent.be', 'POST', 'json');
+const sleep = (amt: number) => new Promise(r => setTimeout(r, amt));
 
 export function activate(context: vscode.ExtensionContext) {
     const disp = vscode.commands.registerCommand('extension.submit', async () => {
@@ -34,12 +37,39 @@ export function activate(context: vscode.ExtensionContext) {
             }
 
             // Submit the code to Dodona.
-            const response = await post('/submissions.json', body, headers);
+            const submitResp = await post('/submissions.json', body, headers) as SubmissionResponse;
 
             // Send a notification message.
             vscode.window.showInformationMessage('Solution submitted!');
 
-            // Poll the submission url until it is evaluated.
+            // Get the result.
+            let submission = await get(submitResp.url, {}, headers) as Submission;
+
+            // Poll the submission url every 5 seconds until it is evaluated.
+            let totalDelayed = 0;
+            while (submission.status === "queued" || submission.status === "running") {
+                // Validate the timeout.
+                if (totalDelayed >= 120000) {
+                    throw new Error("Timeout reached for submission.");
+                }
+
+                // Wait the delay.
+                await sleep(5000);
+
+                // Refresh the response.
+                submission = await get(submitResp.url, {}, headers) as Submission;
+
+                totalDelayed += 5000;
+            }
+
+            // Analyse the result.
+            if (submission.status === "correct") {
+                vscode.window.showInformationMessage('Solution was correct!');
+            } else if (submission.status === "wrong") {
+                vscode.window.showWarningMessage('Solution was incorrect.');
+            } else {
+                vscode.window.showErrorMessage(submission.summary || "Unknown error.");
+            }
         }
     });
 
