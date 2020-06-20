@@ -8,6 +8,8 @@ You can authenticate by creating an API token. Instructions on how to do so can 
 ## Usage
 Add the url to the exercise as a comment on the first line of your solution and execute the `Submit to Dodona`-command by opening the command palette using `Ctrl-Shift-P`. 
 
+![Submit](assets/submit.png)
+
 ## Example
 ```javascript
 // https://dodona.ugent.be/nl/activities/1545120484/
