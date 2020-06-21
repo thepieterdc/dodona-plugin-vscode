@@ -1,5 +1,6 @@
 # Dodona
 
+[![Visual Studio Marketplace](https://vsmarketplacebadge.apphb.com/version-short/thepieterdc.dodona-plugin-vscode.svg)](https://marketplace.visualstudio.com/items?itemName=thepieterdc.dodona-plugin-vscode)
 [![Visual Studio Marketplace](https://vsmarketplacebadge.apphb.com/installs-short/thepieterdc.dodona-plugin-vscode.svg?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=thepieterdc.dodona-plugin-vscode)
 
 Plugin for Visual Studio Code to submit exercises to Dodona.
