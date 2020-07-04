@@ -7,7 +7,7 @@ Extension for Visual Studio Code to submit exercises to [Dodona](https://dodona.
 
 ## Install the Dodona extension
 
-1. <img src="assets/extensions-view-icon.png" alt="Extensions" style="width:30px;" /> Extensions (`Ctrl+Shift+X`)
+1. <img src="assets/extensions-view-icon.png" alt="Extensions" width=30px; /> Extensions (`Ctrl+Shift+X`)
 2. Search for **Dodona**
 3. `Install`
 
@@ -15,7 +15,7 @@ Extension for Visual Studio Code to submit exercises to [Dodona](https://dodona.
 
 You can authenticate by creating an API token. Instructions on how to do so can be found [here](https://dodona-edu.github.io/guides/creating-an-api-token/). After you have generated a token, configure it in the settings:
 
-1. <img src="assets/cogwheel.png" alt="cogwheel" style="width:30px;"/> Cogwheel (icon in bottom left corner),  Settings (`Ctrl+,`)
+1. <img src="assets/cogwheel.png" alt="cogwheel" width=30px;/> Cogwheel (icon in bottom left corner),  Settings (`Ctrl+,`)
 2. `Extensions ` (last item in list), `Dodona`
 3. Paste the API token in text box
 
