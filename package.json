@@ -15,7 +15,7 @@
   "categories": [
     "Other"
   ],
-  "icon": "assets/Dodona_icon.png",
+  "icon": "assets/dodona.png",
   "activationEvents": [
     "onCommand:extension.submit"
   ],
