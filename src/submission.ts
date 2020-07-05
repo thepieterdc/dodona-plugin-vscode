@@ -18,4 +18,5 @@ export type SubmissionStatus =
 export interface Submission {
     status: SubmissionStatus;
     summary: string | null;
+    url: string;
 }

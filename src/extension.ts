@@ -21,7 +21,7 @@ export function activate(context: vscode.ExtensionContext) {
             // Set the HTTP header.
             const headers = {
                 'Authorization': config.get('api.token')
-            }
+            };
 
             // Identify the exercise.
             const identification = identify(code);
@@ -34,13 +34,16 @@ export function activate(context: vscode.ExtensionContext) {
                     "series_id": identification.series,
                     "exercise_id": identification.activity
                 }
-            }
+            };
 
             // Submit the code to Dodona.
             const submitResp = await post('/submissions.json', body, headers) as SubmissionResponse;
 
             // Send a notification message.
             vscode.window.showInformationMessage('Solution submitted!');
+
+            // Set the status bar.
+            vscode.window.setStatusBarMessage('Evaluating submission...');
 
             // Get the result.
             let submission = await get(submitResp.url, {}, headers) as Submission;
@@ -62,13 +65,31 @@ export function activate(context: vscode.ExtensionContext) {
                 totalDelayed += 5000;
             }
 
+            // Set the status bar.
+            vscode.window.setStatusBarMessage('');
+
+            // Define an action to open the submission details in a browser.
+            const viewResultsAction = "View results";
+
             // Analyse the result.
             if (submission.status === "correct") {
-                vscode.window.showInformationMessage('Solution was correct!');
+                vscode.window.showInformationMessage('Solution was correct!', ...[viewResultsAction]).then((selection) => {
+                    if (selection === viewResultsAction) {
+                        vscode.commands.executeCommand('vscode.open', vscode.Uri.parse(submission.url.replace(".json", "")));
+                    }
+                });
             } else if (submission.status === "wrong") {
-                vscode.window.showWarningMessage('Solution was incorrect.');
+                vscode.window.showWarningMessage('Solution was incorrect.', ...[viewResultsAction]).then((selection) => {
+                    if (selection === viewResultsAction) {
+                        vscode.commands.executeCommand('vscode.open', vscode.Uri.parse(submission.url.replace(".json", "")));
+                    }
+                });
             } else {
-                vscode.window.showErrorMessage(submission.summary || "Unknown error.");
+                vscode.window.showErrorMessage(submission.summary || "Unknown error.", ...[viewResultsAction]).then((selection) => {
+                    if (selection === viewResultsAction) {
+                        vscode.commands.executeCommand('vscode.open', vscode.Uri.parse(submission.url.replace(".json", "")));
+                    }
+                });
             }
         }
     });
