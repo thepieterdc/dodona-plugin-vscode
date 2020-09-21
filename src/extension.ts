@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import * as bent from 'bent';
 import {identify} from "./exercise/identification";
 import {Submission, SubmissionResponse} from "./submission";
+import { AssertionError } from 'assert';
 
 const get = bent('json');
 const post = bent('https://dodona.ugent.be', 'POST', 'json');
@@ -37,7 +38,26 @@ export function activate(context: vscode.ExtensionContext) {
             }
 
             // Identify the exercise.
-            const identification = identify(code);
+            let identification;
+            try {
+                identification = identify(code);
+            } catch (error) {
+                // Display a proper error message instead of raising an error
+                if (error instanceof AssertionError) {
+                    const tryAgain = "Try Again";
+                    vscode.window.showErrorMessage("No exercise link found. Make sure the first line of the file contains the link to the exercise, and is commented out.", tryAgain)
+                    .then(selection => {
+                        // Retry when the user clicks Try Again
+                        if (selection === tryAgain) {
+                            vscode.commands.executeCommand("extension.submit");
+                        }
+                    });
+                    return;
+                }
+                
+                // Something else went wrong, rethrow
+                throw error;
+            }
 
             // Set the body.
             const body = {
