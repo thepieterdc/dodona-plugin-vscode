@@ -25,7 +25,7 @@ export function activate(context: vscode.ExtensionContext) {
 
             // Display a warning notification if no Api token has been set
             if (!(config.get("api.token"))) {
-                let instructionsButton = "Instructions";
+                const instructionsButton = "Instructions";
                 vscode.window.showWarningMessage("You have not yet configured your Dodona Api token. To correctly set up your Visual Studio Code, click the Instructions button below.", instructionsButton)
                 .then(selection => {
                     // Open the page when the user clicks the button
