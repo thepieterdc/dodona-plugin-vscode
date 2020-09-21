@@ -4,7 +4,7 @@ import {identify} from "./exercise/identification";
 import {Submission, SubmissionResponse} from "./submission";
 
 const get = bent('json');
-const post = bent('https://dodona.ugent.be', 'POST', 'json');
+const post = bent('https://naos.ugent.be', 'POST', 'json');
 const sleep = (amt: number) => new Promise(r => setTimeout(r, amt));
 
 export function activate(context: vscode.ExtensionContext) {
@@ -22,6 +22,19 @@ export function activate(context: vscode.ExtensionContext) {
             const headers = {
                 'Authorization': config.get('api.token')
             };
+
+            // Display a warning notification if no Api token has been set
+            if (!(config.get("api.token"))) {
+                let instructionsButton = "Instructions";
+                vscode.window.showWarningMessage("You have not yet configured your Dodona Api token. To correctly set up your Visual Studio Code, click the Instructions button below.", instructionsButton)
+                .then(selection => {
+                    // Open the page when the user clicks the button
+                    if (selection === instructionsButton) {
+                        vscode.env.openExternal(vscode.Uri.parse("https://dodona-edu.github.io/en/guides/vs-code-extension/#_3-insert-api-token"))
+                    }
+                });
+                return;
+            }
 
             // Identify the exercise.
             const identification = identify(code);
