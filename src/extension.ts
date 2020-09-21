@@ -1,11 +1,12 @@
 import * as vscode from 'vscode';
 import * as bent from 'bent';
-import {identify} from "./exercise/identification";
-import {Submission, SubmissionResponse} from "./submission";
+import { identify } from "./exercise/identification";
+import { Submission, SubmissionResponse } from "./submission";
 import { AssertionError } from 'assert';
 
 const get = bent('json');
-const post = bent('https://dodona.ugent.be', 'POST', 'json');
+const getHTML = bent();
+const post = bent('https://naos.ugent.be', 'POST', 'json');
 const sleep = (amt: number) => new Promise(r => setTimeout(r, amt));
 
 export function activate(context: vscode.ExtensionContext) {
@@ -127,5 +128,47 @@ export function activate(context: vscode.ExtensionContext) {
         }
     });
 
+    const descr = vscode.commands.registerCommand('extension.description', async () => {
+        //TODO remove duplicate code
+        const editor = vscode.window.activeTextEditor;
+        if (editor) {
+            // Get the code.
+            const code = editor.document.getText();
+
+            // Get the API token from the settings.
+            const config = vscode.workspace.getConfiguration('dodona');
+
+            // Set the HTTP header.
+            const headers = {
+                'Authorization': config.get('api.token')
+            };
+
+            // Display a warning notification if no Api token has been set
+            if (!(config.get("api.token"))) {
+                let instructionsButton = "Instructions";
+                vscode.window.showWarningMessage("You have not yet configured your Dodona Api token. To correctly set up your Visual Studio Code, click the Instructions button below.", instructionsButton)
+                    .then(selection => {
+                        // Open the page when the user clicks the button
+                        if (selection === instructionsButton) {
+                            vscode.env.openExternal(vscode.Uri.parse("https://dodona-edu.github.io/en/guides/vs-code-extension/#_3-insert-api-token"))
+                        }
+                    });
+                return;
+            }
+
+            // Get the first line of the code.
+            const firstLine = code.split("\n")[0];
+            // TODO check if valid Dodona url, for now assume it is
+            const dodonaUrl = firstLine.slice(1);
+            let page = await get(dodonaUrl, {}, headers);
+            //@ts-ignore
+            const panel = vscode.window.createWebviewPanel("exerciseDescription", page.name, vscode.ViewColumn.One, {enableScripts: true});
+            //@ts-ignore
+            let stream = await getHTML(page.description_url, {}, {});
+            //@ts-ignore
+            panel.webview.html = await stream.text();
+        }
+    })
     context.subscriptions.push(disp);
+    context.subscriptions.push(descr);
 }
