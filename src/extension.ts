@@ -4,7 +4,7 @@ import {identify} from "./exercise/identification";
 import {Submission, SubmissionResponse} from "./submission";
 
 const get = bent('json');
-const post = bent('https://naos.ugent.be', 'POST', 'json');
+const post = bent('https://dodona.ugent.be', 'POST', 'json');
 const sleep = (amt: number) => new Promise(r => setTimeout(r, amt));
 
 export function activate(context: vscode.ExtensionContext) {
