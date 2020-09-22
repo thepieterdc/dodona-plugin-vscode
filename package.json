@@ -17,7 +17,8 @@
   ],
   "icon": "assets/dodona.png",
   "activationEvents": [
-    "onCommand:extension.submit"
+    "onCommand:extension.submit",
+    "onCommand:extension.description"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -25,6 +26,10 @@
       {
         "command": "extension.submit",
         "title": "Submit to Dodona"
+      },
+      {
+        "command": "extension.description",
+        "title": "Show exercise description"
       }
     ],
     "configuration": {

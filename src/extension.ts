@@ -6,7 +6,7 @@ import { AssertionError } from 'assert';
 
 const get = bent('json');
 const getHTML = bent();
-const post = bent('https://naos.ugent.be', 'POST', 'json');
+const post = bent('https://dodona.ugent.be', 'POST', 'json');
 const sleep = (amt: number) => new Promise(r => setTimeout(r, amt));
 
 export function activate(context: vscode.ExtensionContext) {
@@ -128,10 +128,19 @@ export function activate(context: vscode.ExtensionContext) {
         }
     });
 
+    // Store all active panels
+    let panels = new Array<vscode.WebviewPanel>();
+
     const descr = vscode.commands.registerCommand('extension.description', async () => {
         //TODO remove duplicate code
         const editor = vscode.window.activeTextEditor;
+
         if (editor) {
+            // The column to show the webview in
+            const columnToShowIn = vscode.window.activeTextEditor
+            ? vscode.window.activeTextEditor.viewColumn
+            : undefined;
+
             // Get the code.
             const code = editor.document.getText();
 
@@ -161,8 +170,33 @@ export function activate(context: vscode.ExtensionContext) {
             // TODO check if valid Dodona url, for now assume it is
             const dodonaUrl = firstLine.slice(1);
             let page = await get(dodonaUrl, {}, headers);
+            
+            // Can't return the main command from inside of an inline function, so keep track of a bool
+            let shouldReturn = false;
+
+            // Remove all closed panels in the array
+            for(let i = panels.length - 1; i >= 0; i--) {
+                //@ts-ignore
+                if (panels[i]._store._isDisposed) {
+                    panels.splice(i, 1);
+                }
+                //@ts-ignore
+                else if (panels[i].title === page.name) {
+                    // Check if a panel with this name already exists, if yes don't create a new one
+                    panels[i].reveal(columnToShowIn);
+                    shouldReturn = true;
+                }
+            }
+
+            // In case a panel already existed, return
+            if (shouldReturn) {
+                return;
+            }
+
             //@ts-ignore
             const panel = vscode.window.createWebviewPanel("exerciseDescription", page.name, vscode.ViewColumn.One, {enableScripts: true});
+            panels.push(panel);
+            
             //@ts-ignore
             let stream = await getHTML(page.description_url, {}, {});
             //@ts-ignore
