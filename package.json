@@ -40,6 +40,13 @@
           "default": null,
           "description": "Specifies which API token should be used to authorize to Dodona.",
           "scope": "application"
+        },
+        "dodona.platform": {
+          "type": "string",
+          "default": "Dodona",
+          "enum": ["Dodona", "Naos"],
+          "description": "Specifies whether submissions should be sent to Dodona or Naos.",
+          "scope": "application"
         }
       }
     }
