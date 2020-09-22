@@ -3,15 +3,29 @@ import { identify } from "./exercise/identification";
 import { AssertionError } from "assert";
 import { sleep } from "./util";
 import { DodonaClient } from "./api/client";
-import { URL } from "url";
 
-const dodona = new DodonaClient("https://naos.ugent.be");
+// Initialise a Dodona client.
+let dodona = new DodonaClient("https://dodona.ugent.be");
+
+// Get the API token from the settings.
+let config = vscode.workspace.getConfiguration('dodona');
 
 export function activate(context: vscode.ExtensionContext) {
     const disp = vscode.commands.registerCommand("extension.submit", async () => {
         // Get the current editor.
         const editor = vscode.window.activeTextEditor;
         if (editor) {
+            // Get the configuration from the settings.
+            // Re-declare in case the user changed it.
+            config = vscode.workspace.getConfiguration('dodona');
+
+            // Declare this here so that the platform can be changed without restarting.
+            // Cast to lowercase so the enum values can be CamelCased to look better.
+            // Error can be ignored as this configuration has a default value & is always a string.
+            //@ts-ignore
+            const domain = config.get("platform").toLowerCase();
+            dodona = new DodonaClient(`https://${domain}.ugent.be`);
+
             // Get the code.
             const code = editor.document.getText();
 
