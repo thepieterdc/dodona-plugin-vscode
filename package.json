@@ -35,10 +35,16 @@
     "configuration": {
       "title": "Dodona",
       "properties": {
-        "dodona.api.token": {
+        "dodona.api.token.dodona": {
           "type": "string",
           "default": null,
           "description": "Specifies which API token should be used to authorize to Dodona.",
+          "scope": "application"
+        },
+        "dodona.api.token.naos": {
+          "type": "string",
+          "default": null,
+          "description": "Specifies which API token should be used to authorize to Naos.",
           "scope": "application"
         },
         "dodona.api.host": {
