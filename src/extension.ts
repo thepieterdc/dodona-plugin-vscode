@@ -17,26 +17,18 @@ export function activate(context: vscode.ExtensionContext) {
             // Get the code.
             const code = editor.document.getText();
 
-            // Get the API token from the settings.
-            const config = vscode.workspace.getConfiguration('dodona');
+            // Try and get the Api token
+            const token = getToken(editor);
+
+            // If no token was set, getToken() displays a message, so this function only has to return
+            if (token === null) {
+                return;
+            }
 
             // Set the HTTP header.
             const headers = {
-                'Authorization': config.get('api.token')
+                'Authorization': token
             };
-
-            // Display a warning notification if no Api token has been set
-            if (!(config.get("api.token"))) {
-                const instructionsButton = "Instructions";
-                vscode.window.showErrorMessage("You have not yet configured your Dodona Api token. To correctly set up your Visual Studio Code, click the Instructions button below.", instructionsButton)
-                .then(selection => {
-                    // Open the page when the user clicks the button
-                    if (selection === instructionsButton) {
-                        vscode.env.openExternal(vscode.Uri.parse("https://dodona-edu.github.io/en/guides/vs-code-extension/#_3-insert-api-token"))
-                    }
-                });
-                return;
-            }
 
             // Identify the exercise.
             let identification;
@@ -137,33 +129,23 @@ export function activate(context: vscode.ExtensionContext) {
 
         if (editor) {
             // The column to show the webview in
-            const columnToShowIn = vscode.window.activeTextEditor
-            ? vscode.window.activeTextEditor.viewColumn
-            : undefined;
+            const columnToShowIn = editor ? editor.viewColumn : undefined;
 
             // Get the code.
             const code = editor.document.getText();
 
-            // Get the API token from the settings.
-            const config = vscode.workspace.getConfiguration('dodona');
+            // Try and get the Api token
+            const token = getToken(editor);
+
+            // If no token was set, getToken() displays a message, so this function only has to return
+            if (token === null) {
+                return;
+            }
 
             // Set the HTTP header.
             const headers = {
-                'Authorization': config.get('api.token')
+                'Authorization': token
             };
-
-            // Display a warning notification if no Api token has been set
-            if (!(config.get("api.token"))) {
-                let instructionsButton = "Instructions";
-                vscode.window.showWarningMessage("You have not yet configured your Dodona Api token. To correctly set up your Visual Studio Code, click the Instructions button below.", instructionsButton)
-                    .then(selection => {
-                        // Open the page when the user clicks the button
-                        if (selection === instructionsButton) {
-                            vscode.env.openExternal(vscode.Uri.parse("https://dodona-edu.github.io/en/guides/vs-code-extension/#_3-insert-api-token"))
-                        }
-                    });
-                return;
-            }
 
             // Get the first line of the code.
             const firstLine = code.split("\n")[0];
@@ -205,4 +187,24 @@ export function activate(context: vscode.ExtensionContext) {
     })
     context.subscriptions.push(disp);
     context.subscriptions.push(descr);
+
+    function getToken(editor: any) {
+        // Get the API token from the settings.
+        const config = vscode.workspace.getConfiguration('dodona');
+    
+        // Display a warning notification if no Api token has been set
+        if (!(config.get("api.token"))) {
+            const instructionsButton = "Instructions";
+            vscode.window.showErrorMessage("You have not yet configured your Dodona Api token. To correctly set up your Visual Studio Code, click the Instructions button below.", instructionsButton)
+                .then(selection => {
+                    // Open the page when the user clicks the button
+                    if (selection === instructionsButton) {
+                        vscode.env.openExternal(vscode.Uri.parse("https://dodona-edu.github.io/en/guides/vs-code-extension/#_3-insert-api-token"))
+                    }
+                });
+            return null;
+        }
+
+        return config.get("api.token");
+    }
 }
