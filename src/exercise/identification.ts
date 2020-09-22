@@ -7,6 +7,7 @@ export interface IdentificationData {
     activity: number;
     course: number | null;
     series: number | null;
+    platform: string;
 }
 
 // Initialise regexes.
@@ -39,6 +40,10 @@ function identifySeries(url: string): number | null {
     return null;
 }
 
+function identifyPlatform(url: string) {
+    return url.toLowerCase().includes("dodona") ? "dodona" : "naos";
+}
+
 /**
  * Identifies the activity from the code.
  *
@@ -52,7 +57,13 @@ export function identify(code: string): IdentificationData {
     const activity = identifyActivity(firstLine);
     const course = identifyCourse(firstLine);
     const series = identifySeries(firstLine);
+    const platform = identifyPlatform(firstLine);
 
     // Format the result.
-    return { activity: activity, course: course, series: series };
+    return {
+        activity: activity,
+        course: course,
+        series: series,
+        platform: platform,
+    };
 }

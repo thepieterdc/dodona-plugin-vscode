@@ -8,7 +8,7 @@ import { DodonaClient } from "./api/client";
 let dodona = new DodonaClient("https://dodona.ugent.be");
 
 // Get the API token from the settings.
-let config = vscode.workspace.getConfiguration('dodona');
+let config = vscode.workspace.getConfiguration("dodona");
 
 export function activate(context: vscode.ExtensionContext) {
     const disp = vscode.commands.registerCommand("extension.submit", async () => {
@@ -17,16 +17,17 @@ export function activate(context: vscode.ExtensionContext) {
         if (editor) {
             // Get the configuration from the settings.
             // Re-declare in case the user changed it.
-            config = vscode.workspace.getConfiguration('dodona');
+            config = vscode.workspace.getConfiguration("dodona");
 
             // Declare this here so that the platform can be changed without restarting.
-            dodona = new DodonaClient(config.get('api.host') as string);
+            const platform = config.get("platform") as string;
+            dodona = new DodonaClient(config.get("api.host") as string);
 
             // Get the code.
             const code = editor.document.getText();
 
             // Try and get the Api token
-            const token = getToken();
+            const token = getToken(platform);
 
             // If no token was set, getToken() displays a message, so this function only has to return
             if (token === null) {
@@ -56,6 +57,12 @@ export function activate(context: vscode.ExtensionContext) {
 
                 // Something else went wrong, rethrow
                 throw error;
+            }
+
+            // Check if the platforms match.
+            if (!(platform.toLowerCase() === identification.platform)) {
+                vscode.window.showErrorMessage(`You are trying to submit a ${oppositePlatform(platform)} exercise to ${platform}. Make sure you have properly configured your submission platform in the settings, and try again.`);
+                return;
             }
 
             // Submit the code to Dodona.
@@ -127,11 +134,14 @@ export function activate(context: vscode.ExtensionContext) {
             // The column to show the webview in
             const columnToShowIn = editor ? editor.viewColumn : undefined;
 
+            config = vscode.workspace.getConfiguration("dodona");
+            const platform = config.get("platform") as string;
+
             // Get the code.
             const code = editor.document.getText();
 
             // Try and get the Api token
-            const token = getToken();
+            const token = getToken(platform);
 
             // If no token was set, getToken() displays a message, so this function only has to return
             if (token === null) {
@@ -145,6 +155,14 @@ export function activate(context: vscode.ExtensionContext) {
             const firstLine = code.split("\n")[0];
             // TODO check if valid Dodona url, for now assume it is
             const dodonaUrl = firstLine.slice(1);
+
+            // Check if the user is trying to submit to Dodona & has a Dodona URL in the code,
+            // submitting a Dodona exercise to Naos does not work.
+            if (!(dodonaUrl.toLowerCase().includes(platform.toLowerCase()))) {
+                vscode.window.showErrorMessage(`You are trying to open a ${oppositePlatform(platform)} exercise on ${platform}. Make sure you have properly configured your submission platform in the settings, and try again.`);
+                return;
+            }
+
             const exercise = await dodona.getExercise(dodonaUrl);
 
             // Can't return the main command from inside of an inline function, so keep track of a bool
@@ -176,15 +194,15 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(disp);
     context.subscriptions.push(descr);
 
-    function getToken(): string | null {
+    function getToken(platform: string): string | null {
         // Get the API token from the settings.
         const config = vscode.workspace.getConfiguration("dodona");
-        const token = config.get<string>("api.token");
+        const token = config.get<string>(`api.token.${platform}`);
 
         // Display a warning notification if no Api token has been set
         if (!token) {
             const instructionsButton = "Instructions";
-            vscode.window.showErrorMessage("You have not yet configured your Dodona Api token. To correctly set up your Visual Studio Code, click the Instructions button below.", instructionsButton)
+            vscode.window.showErrorMessage(`You have not yet configured your ${platform} Api token. To correctly set up your Visual Studio Code, click the Instructions button below.`, instructionsButton)
                 .then(selection => {
                     // Open the page when the user clicks the button
                     if (selection === instructionsButton) {
@@ -195,5 +213,10 @@ export function activate(context: vscode.ExtensionContext) {
         }
 
         return token;
+    }
+
+    // Return the opposite of the input platform (used in error message)
+    function oppositePlatform(inputPlatform: string) {
+        return inputPlatform === "Naos" ? "Dodona" : "Naos";
     }
 }
