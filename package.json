@@ -45,7 +45,7 @@
           "type": "string",
           "default": "https://dodona.ugent.be",
           "enum": ["https://dodona.ugent.be", "https://naos.ugent.be"],
-          "description": "Specifies whether submissions should be sent to Dodona or Naos.",
+          "description": "Specifies which Dodona instance should be used.",
           "scope": "application"
         }
       }
