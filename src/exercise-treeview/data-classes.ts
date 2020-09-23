@@ -14,8 +14,13 @@ export class DataClass extends vscode.TreeItem {
         super(label, collapsibleState);
     }
 
+    getTreeItem(element?: DataClass): vscode.TreeItem | undefined {
+        return element;
+    }
+
+    // Function only needed to extend TreeItem, all classes that extend this
+    // implement it themselves
     getChildren(element?: DataClass): Thenable<DataClass[]> {
-        console.log("Something went wrong if this somehow fired");
         return Promise.resolve([]);
     }
 }
@@ -29,22 +34,25 @@ export class Course extends DataClass {
 
     getChildren(element?: DataClass): Thenable<DataClass[]> {
         if (element) {
-            console.log("elementCourse");
+            console.log("course");
             return Promise.resolve(getAvailableSeries(this));
         } else {
+            console.log("none");
             return Promise.resolve([]);
         }
     }
 }
 
 export class Series extends DataClass {
-    constructor(public label: string) {
+    seriesid: number;
+    constructor(public label: string, seriesid: number) {
         super(label, vscode.TreeItemCollapsibleState.Collapsed);
+        this.seriesid = seriesid;
     }
 
     getChildren(element?: DataClass): Thenable<DataClass[]> {
         if (element) {
-            console.log("elementSeries");
+            console.log("series");
             return Promise.resolve(getAvailableExercises(this));
         } else {
             return Promise.resolve([]);
@@ -86,12 +94,49 @@ function getIconPath(state: State) {
     return `assets/exercise-${state}.svg`
 }
 
-function getAvailableSeries(course: Course): Series[] {
+// TODO make general getAvailable<T>-function for this as all of them are the same
+async function getAvailableSeries(course: Course): Promise<Series[]> {
     const series = new Array<Series>();
+
+    const headers = {
+        'Authorization': token
+    };
+
+    //@ts-ignore
+    const resp = await get(`${host}/courses/${course.courseid}/series.json`, {}, headers)
+    
+    //Sort series alphabetically to find them easily 
+    //@ts-ignore
+    resp.sort((a: string, b: string) => a.name < b.name? -1 : a.name > b.name ? 1 : 0);
+
+    resp.forEach(function (entry: any) {
+        //TODO write response class to avoid this ignore
+        //@ts-ignore
+        series.push(new Series(entry.name, entry.id));
+    });
+
     return series;
 }
 
-function getAvailableExercises(week: Series): Exercise[] {
-    console.log("test");
+async function getAvailableExercises(series: Series): Promise<Exercise[]> {
+    const exercises = new Array<Exercise>();
+
+    const headers = {
+        'Authorization': token
+    };
+
+    //@ts-ignore
+    const resp = await get(`${host}/series/${series.seriesid}/activities.json`, {}, headers)
+
+    //Sort exercises alphabetically to find them easily 
+    //@ts-ignore
+    resp.sort((a: string, b: string) => a.name < b.name? -1 : a.name > b.name ? 1 : 0);
+    
+    resp.forEach(function (exercise: any) {
+        //TODO write response class to avoid this ignore
+        //@ts-ignore
+        series.push(new Exercise(exercise.name, exercise.url, State.Correct));
+    });
+
     return new Array<Exercise>(new Exercise("Double Dutch", "https://naos.ugent.be/nl/courses/54/series/547/activities/1153066363/", State.NotStarted));
 }

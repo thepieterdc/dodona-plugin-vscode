@@ -9,8 +9,7 @@ const config = vscode.workspace.getConfiguration('dodona');
 const token = config.get("api.token");
 const host = config.get("api.host");
 
-// TODO query data once & store it inside the dataprovider in a dict,
-// then find the data related to the treeitem in getChildren
+// TODO query data once & store it inside the dataclass itself
 export class DataProvider implements vscode.TreeDataProvider<DataClass> {
     constructor() {}
 
@@ -40,7 +39,8 @@ async function getAvailableCourses(): Promise<Course[]> {
     const resp = await get(`${host}/courses.json`, {}, headers)
     
     //Sort courses alphabetically to find them easily 
-    resp.sort();
+    //@ts-ignore
+    resp.sort((a: string, b: string) => a.name < b.name? -1 : a.name > b.name ? 1 : 0);
     // Add all courses to the list
     resp.forEach(function (course: any) {
         //TODO write response class to avoid this ignore
@@ -56,4 +56,5 @@ async function getAvailableCourses(): Promise<Course[]> {
 // TODO series contain exercises
 
 // TODO opening an exercise both creates a new file & opens the description
+// (Open with an indicator on View Actions -> view/item/context group: inline)
 // TODO refresh button
