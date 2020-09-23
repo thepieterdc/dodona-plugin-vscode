@@ -16,6 +16,7 @@ export type SubmissionStatus =
     | "wrong";
 
 export interface Submission {
+    exercise: string;
     status: SubmissionStatus;
     summary: string | null;
     url: string;

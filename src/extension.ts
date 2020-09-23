@@ -2,6 +2,7 @@ import * as vscode from "vscode";
 import { identify } from "./exercise/identification";
 import { AssertionError } from "assert";
 import { DataProvider } from "./exercise-treeview/treeDataProvider";
+import { State } from './exercise-treeview/data-classes';
 import { sleep } from "./util";
 import { DodonaClient } from "./api/client";
 
@@ -10,6 +11,7 @@ let dodona = new DodonaClient("https://dodona.ugent.be");
 
 // Get the API token from the settings.
 let config = vscode.workspace.getConfiguration("dodona");
+const dataProvider = new DataProvider();
 
 export function activate(context: vscode.ExtensionContext) {
     const disp = vscode.commands.registerCommand("extension.submit", async () => {
@@ -108,12 +110,14 @@ export function activate(context: vscode.ExtensionContext) {
                         vscode.commands.executeCommand("vscode.open", vscode.Uri.parse(submission.url.replace(".json", "")));
                     }
                 });
+                dataProvider.fireListeners(submission.exercise, State.Correct);
             } else if (submission.status === "wrong") {
                 vscode.window.showWarningMessage("Solution was incorrect.", ...[viewResultsAction]).then((selection) => {
                     if (selection === viewResultsAction) {
                         vscode.commands.executeCommand("vscode.open", vscode.Uri.parse(submission.url.replace(".json", "")));
                     }
                 });
+                dataProvider.fireListeners(submission.exercise, State.Wrong);
             } else {
                 vscode.window.showErrorMessage(submission.summary || "Unknown error.", ...[viewResultsAction]).then((selection) => {
                     if (selection === viewResultsAction) {
@@ -196,8 +200,8 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(descr);
 
     // Register & create the tree view for the plugin
-    vscode.window.registerTreeDataProvider("dodona-exercises", new DataProvider());
-    vscode.window.createTreeView("dodona-exercises", { treeDataProvider: new DataProvider() });
+    vscode.window.registerTreeDataProvider("dodona-exercises", dataProvider);
+    vscode.window.createTreeView("dodona-exercises", {treeDataProvider: dataProvider});
 
     function getToken(platform: string): string | null {
         // Get the API token from the settings.
