@@ -1,6 +1,7 @@
 import bent = require('bent');
 import * as vscode from 'vscode';
 import * as path from 'path';
+import { DataProvider } from './treeDataProvider';
 
 const get = bent('json');
 const config = vscode.workspace.getConfiguration('dodona');
@@ -33,41 +34,58 @@ export class DataClass extends vscode.TreeItem {
 
 export class Course extends DataClass {
     courseid: number;
-    constructor(public label: string, courseid: number) {
+    dataProvider: DataProvider;
+    constructor(dataProvider: DataProvider, public label: string, courseid: number) {
         super(label, vscode.TreeItemCollapsibleState.Collapsed);
         this.courseid = courseid;
+        this.dataProvider = dataProvider;
     }
 
     getChildren(element?: DataClass): Thenable<DataClass[]> {
-        return Promise.resolve(getAvailableSeries(this));
+        return Promise.resolve(getAvailableSeries(this, this.dataProvider));
     }
 }
 
 export class Series extends DataClass {
     seriesid: number;
-    constructor(public label: string, seriesid: number) {
+    dataProvider: DataProvider;
+    constructor(dataProvider: DataProvider, public label: string, seriesid: number) {
         super(label, vscode.TreeItemCollapsibleState.Collapsed);
         this.seriesid = seriesid;
+        this.dataProvider = dataProvider;
     }
 
     getChildren(element?: DataClass): Thenable<DataClass[]> {
-        return Promise.resolve(getAvailableExercises(this));
+        return Promise.resolve(getAvailableExercises(this, this.dataProvider));
     }
 }
 
 export class Exercise extends DataClass {
-    state: State;
+    dataProvider: DataProvider;
     url: string;
-    constructor(public label: string, url: string, state: State){
+    exerciseid: number
+    state: State;
+    constructor(dataProvider: DataProvider, public label: string, url: string, exerciseid: number, state: State){
         super(label, vscode.TreeItemCollapsibleState.Collapsed);
+        this.dataProvider = dataProvider;
         this.state = state;
         this.url = url;
+        this.exerciseid = exerciseid;
         this.iconPath = getIconPath(this.state);
+
+        // Register this exercise with the DataProvider
+        this.dataProvider.registerListener(this);
     }
 
+
     getChildren(element?: DataClass): Thenable<DataClass[]> {
-        super.getChildren(element);
         return Promise.resolve([]);
+    }
+
+    update(state: State) {
+        this.state = state;
+        // this.iconPath = getIconPath(this.state);
+        this.iconPath = undefined;
     }
 }
 
@@ -83,7 +101,11 @@ function getState(exercise: any): State {
         return State.NotStarted;
     }
 
-    if (!(exercise.has_correct_solution)) {
+    // if (!(exercise.has_correct_solution)) {
+    //     return State.Wrong;
+    // }
+
+    if (!(exercise.last_solution_is_best)) {
         return State.Wrong;
     }
 
@@ -96,7 +118,7 @@ function getIconPath(state: State) {
 }
 
 // TODO make general getAvailable<T>-function for this as all of them are the same
-async function getAvailableSeries(course: Course): Promise<Series[]> {
+async function getAvailableSeries(course: Course, dataProvider: DataProvider): Promise<Series[]> {
     const series = new Array<Series>();
 
     const headers = {
@@ -108,18 +130,18 @@ async function getAvailableSeries(course: Course): Promise<Series[]> {
     
     //Sort series alphabetically to find them easily 
     //@ts-ignore
-    resp.sort((a: string, b: string) => a.name < b.name? -1 : a.name > b.name ? 1 : 0);
+    resp.sort((a: number, b: number) => a.order < b.order? -1 : a.order > b.order ? 1 : 0);
 
     resp.forEach(function (entry: any) {
         //TODO write response class to avoid this ignore
         //@ts-ignore
-        series.push(new Series(entry.name, entry.id));
+        series.push(new Series(dataProvider, entry.name, entry.id));
     });
 
     return series;
 }
 
-async function getAvailableExercises(series: Series): Promise<Exercise[]> {
+async function getAvailableExercises(series: Series, dataProvider: DataProvider): Promise<Exercise[]> {
     const exercises = new Array<Exercise>();
 
     const headers = {
@@ -128,15 +150,11 @@ async function getAvailableExercises(series: Series): Promise<Exercise[]> {
 
     //@ts-ignore
     const resp = await get(`${host}/series/${series.seriesid}/activities.json`, {}, headers)
-
-    //Sort exercises alphabetically to find them easily 
-    //@ts-ignore
-    resp.sort((a: string, b: string) => a.name < b.name? -1 : a.name > b.name ? 1 : 0);
     
     resp.forEach(function (exercise: any) {
         //TODO write response class to avoid this ignore
         //@ts-ignore
-        exercises.push(new Exercise(exercise.name, exercise.url, getState(exercise)));
+        exercises.push(new Exercise(dataProvider, exercise.name, exercise.url, exercise.id, getState(exercise)));
     });
 
     return exercises;

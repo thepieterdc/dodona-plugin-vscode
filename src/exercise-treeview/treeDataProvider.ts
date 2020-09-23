@@ -8,9 +8,11 @@ const config = vscode.workspace.getConfiguration('dodona');
 // TODO when refreshing, update token & host in case it changed
 const token = config.get("api.token");
 const host = config.get("api.host");
+const exerciseRegex = /[0-9]+.json/g;
 
-// TODO query data once & store it inside the dataclass itself
 export class DataProvider implements vscode.TreeDataProvider<DataClass> {
+    // List of listeners to update
+    listeners: Exercise[] = new Array<Exercise>();
     constructor() {}
 
     getTreeItem(element: DataClass): vscode.TreeItem {
@@ -22,13 +24,36 @@ export class DataProvider implements vscode.TreeDataProvider<DataClass> {
             return element.getChildren();
         } else {
             // Has to be a course
-            return Promise.resolve(getAvailableCourses());
+            return Promise.resolve(getAvailableCourses(this));
         }
+    }
+
+    // Add a listener to the list
+    registerListener(listener: Exercise) {
+        this.listeners.push(listener);
+    }
+
+    fireListeners(url: string, state: State) {
+        let regex_match = url.match(exerciseRegex);
+
+        if (!(regex_match)) {
+            return;
+        }
+
+        const excercise_id = Number(regex_match[0].slice(0, -5));
+
+        // Check all exercises to find the one that matches this url
+        this.listeners.forEach(function(exercise: Exercise) {
+            if (exercise.exerciseid === excercise_id) {
+                exercise.update(state);
+                return;
+            }
+        });
     }
 }
 
 // TODO when other branches are merged, check for dodona/naos api key
-async function getAvailableCourses(): Promise<Course[]> {
+async function getAvailableCourses(dataProvider: DataProvider): Promise<Course[]> {
     const courses = new Array<Course>();
 
     const headers = {
@@ -48,7 +73,7 @@ async function getAvailableCourses(): Promise<Course[]> {
     subscribed_courses.forEach(function (course: any) {
         //TODO write response class to avoid this ignore
         //@ts-ignore
-        courses.push(new Course(course.name, course.id));
+        courses.push(new Course(dataProvider, course.name, course.id));
     });
 
     return courses;
