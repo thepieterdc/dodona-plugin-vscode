@@ -19,6 +19,7 @@
   "activationEvents": [
     "onCommand:extension.submit",
     "onCommand:extension.description",
+    "onView:extension.description",
     "onView:dodona-exercises"
   ],
   "main": "./out/extension.js",
@@ -32,6 +33,11 @@
         "command": "extension.description",
         "title": "Show exercise description",
         "icon": "assets/open-exercise.svg"
+      },
+      {
+        "command": "extension.open-exercise",
+        "title": "Open exercise in editor",
+        "icon": "assets/edit.svg"
       }
     ],
     "configuration": {
@@ -52,7 +58,10 @@
         "dodona.api.host": {
           "type": "string",
           "default": "https://dodona.ugent.be",
-          "enum": ["https://dodona.ugent.be", "https://naos.ugent.be"],
+          "enum": [
+            "https://dodona.ugent.be",
+            "https://naos.ugent.be"
+          ],
           "description": "Specifies which Dodona instance should be used.",
           "scope": "application"
         }
@@ -62,6 +71,11 @@
       "view/item/context": [
         {
           "command": "extension.description",
+          "when": "view == dodona-exercises && viewItem == exercise",
+          "group": "inline"
+        },
+        {
+          "command": "extension.open-exercise",
           "when": "view == dodona-exercises && viewItem == exercise",
           "group": "inline"
         }
@@ -74,7 +88,7 @@
           "name": "Dodona Exercises"
         }
       ]
-    }, 
+    },
     "viewsContainers": {
       "activitybar": [
         {
