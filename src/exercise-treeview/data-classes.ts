@@ -2,6 +2,11 @@ import * as vscode from 'vscode';
 
 const config = vscode.workspace.getConfiguration('dodona');
 
+// TODO when refreshing, update token & host in case it changed
+// TODO check if a token was set (for the current host), for now assume it is
+const token = config.get("api.token");
+const host = config.get("api.host");
+
 // Main parent class because for some reason TreeItems can only have children of the same type
 // This way, the items can still be separate classes, while still implementing this same class
 export class DataClass extends vscode.TreeItem {
@@ -23,9 +28,8 @@ export class Course extends DataClass {
     }
 
     getChildren(element?: DataClass): Thenable<DataClass[]> {
-        super.getChildren(element);
         if (element) {
-            console.log("element");
+            console.log("elementCourse");
             return Promise.resolve(getAvailableSeries(this));
         } else {
             return Promise.resolve([]);
@@ -39,9 +43,8 @@ export class Series extends DataClass {
     }
 
     getChildren(element?: DataClass): Thenable<DataClass[]> {
-        super.getChildren(element);
         if (element) {
-            console.log("element");
+            console.log("elementSeries");
             return Promise.resolve(getAvailableExercises(this));
         } else {
             return Promise.resolve([]);
