@@ -41,7 +41,7 @@
           "description": "Specifies which API token should be used to authorize to Dodona.",
           "scope": "application"
         },
-        "dodona.platform": {
+        "dodona.api.host": {
           "type": "string",
           "default": "https://dodona.ugent.be",
           "enum": ["https://dodona.ugent.be", "https://naos.ugent.be"],
