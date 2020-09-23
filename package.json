@@ -55,6 +55,23 @@
           "scope": "application"
         }
       }
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "dodona-exercises",
+          "title": "Dodona Exercises",
+          "icon": "assets/activity-bar-icon.png"
+        }
+      ]
+    },
+    "views": {
+      "dodona-exercises": [
+        {
+          "id": "dodona-exercises",
+          "name": "Dodona Exercises"
+        }
+      ]
     }
   },
   "scripts": {
