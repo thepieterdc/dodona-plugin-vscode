@@ -20,7 +20,7 @@ export function activate(context: vscode.ExtensionContext) {
             config = vscode.workspace.getConfiguration('dodona');
 
             // Declare this here so that the platform can be changed without restarting.
-            dodona = new DodonaClient(config.get('api.host'));
+            dodona = new DodonaClient(config.get('api.host') as string);
 
             // Get the code.
             const code = editor.document.getText();
