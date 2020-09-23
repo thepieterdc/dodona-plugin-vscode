@@ -30,11 +30,7 @@
       },
       {
         "command": "extension.description",
-        "title": "Show exercise description"
-      },
-      {
-        "command": "extension.openExercise",
-        "title": "Open Exercise",
+        "title": "Show exercise description",
         "icon": "assets/open-exercise.svg"
       }
     ],
@@ -65,7 +61,7 @@
     "menus": {
       "view/item/context": [
         {
-          "command": "extension.openExercise",
+          "command": "extension.description",
           "when": "view == dodona-exercises && viewItem == exercise",
           "group": "inline"
         }

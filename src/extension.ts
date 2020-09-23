@@ -132,7 +132,7 @@ export function activate(context: vscode.ExtensionContext) {
     // Store all active panels
     const panels = new Array<vscode.WebviewPanel>();
 
-    const descr = vscode.commands.registerCommand("extension.description", async () => {
+    const descr = vscode.commands.registerCommand("extension.description", async (exercise) => {
         //TODO remove duplicate code
         const editor = vscode.window.activeTextEditor;
 
@@ -170,18 +170,15 @@ export function activate(context: vscode.ExtensionContext) {
             }
 
             const exercise = await dodona.getExercise(dodonaUrl);
-
             await showExerciseDescription(columnToShowIn!, exercise);
+            return;
         }
-    });
 
-    const openEx = vscode.commands.registerCommand("extension.openExercise", async (exercise) => {
         await showExerciseDescription(vscode.ViewColumn.Beside, exercise);
-    });
+    })
 
     context.subscriptions.push(disp);
     context.subscriptions.push(descr);
-    context.subscriptions.push(openEx);
 
     // Register & create the tree view for the plugin
     vscode.window.registerTreeDataProvider("dodona-exercises", dataProvider);
