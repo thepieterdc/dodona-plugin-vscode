@@ -1,5 +1,4 @@
 import bent = require('bent');
-import { pathToFileURL } from 'url';
 import * as vscode from 'vscode';
 import * as path from 'path';
 
@@ -10,6 +9,7 @@ const config = vscode.workspace.getConfiguration('dodona');
 
 // TODO when refreshing, update token & host in case it changed
 // TODO check if a token was set (for the current host), for now assume it is
+// TODO refresh when user submits an exercise (to update the icons)
 const token = config.get("api.token");
 const host = config.get("api.host");
 
@@ -62,16 +62,13 @@ export class Exercise extends DataClass {
         super(label, vscode.TreeItemCollapsibleState.Collapsed);
         this.state = state;
         this.url = url;
+        this.iconPath = getIconPath(this.state);
     }
 
     getChildren(element?: DataClass): Thenable<DataClass[]> {
         super.getChildren(element);
         return Promise.resolve([]);
     }
-
-    // TODO light/dark icons
-    // TODO use this.state which doesn't work atm for whatever reason
-    iconPath = getIconPath(State.Correct);
 }
 
 // An enum containing states for the exercise, to display them with an icon
@@ -79,6 +76,18 @@ export enum State {
     NotStarted = "not-started",
     Wrong = "wrong",
     Correct = "correct"
+}
+
+function getState(exercise: any): State {
+    if (!(exercise.has_solution)) {
+        return State.NotStarted;
+    }
+
+    if (!(exercise.has_correct_solution)) {
+        return State.Wrong;
+    }
+
+    return State.Correct;
 }
 
 // TODO check if this path works, otherwise use path.join(...)
@@ -127,7 +136,7 @@ async function getAvailableExercises(series: Series): Promise<Exercise[]> {
     resp.forEach(function (exercise: any) {
         //TODO write response class to avoid this ignore
         //@ts-ignore
-        exercises.push(new Exercise(exercise.name, exercise.url, State.Correct));
+        exercises.push(new Exercise(exercise.name, exercise.url, getState(exercise)));
     });
 
     return exercises;
