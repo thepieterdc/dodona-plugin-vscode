@@ -68,8 +68,9 @@ export class Exercise extends DataClass {
     state: State;
     boilerplate: string;
     description_url: string;
+    language: Language;
 
-    constructor(dataProvider: DataProvider, public label: string, url: string, exerciseid: number, boilerplate: string, state: State, description_url: string){
+    constructor(dataProvider: DataProvider, public label: string, url: string, exerciseid: number, boilerplate: string, state: State, description_url: string, language: Language){
         super(label, vscode.TreeItemCollapsibleState.Collapsed);
         this.dataProvider = dataProvider;
         this.name = label;
@@ -79,6 +80,7 @@ export class Exercise extends DataClass {
         this.iconPath = getIconPath(this.state);
         this.boilerplate = boilerplate;
         this.description_url = description_url;
+        this.language = language;
         this.contextValue = "exercise";
 
         // Register this exercise with the DataProvider
@@ -93,6 +95,16 @@ export class Exercise extends DataClass {
     update(state: State) {
         this.state = state;
         this.iconPath = getIconPath(this.state);
+    }
+}
+
+// Programming language
+export class Language {
+    name: string;
+    extension: string;
+    constructor(name: string, extension: string) {
+        this.name = name;
+        this.extension = extension;
     }
 }
 
@@ -153,11 +165,12 @@ async function getAvailableExercises(series: Series, dataProvider: DataProvider)
 
     //@ts-ignore
     const resp = await get(`${host}/series/${series.seriesid}/activities.json`, {}, headers)
-    
     resp.forEach(function (exercise: any) {
-        //TODO write response class to avoid this ignore
+        //TODO write response class to avoid these ignores
         //@ts-ignore
-        exercises.push(new Exercise(dataProvider, exercise.name, exercise.url, exercise.id, exercise.boilerplate, getState(exercise), exercise.description_url));
+        const programming_language = new Language(exercise.programming_language.name, exercise.programming_language.extension)
+        //@ts-ignore
+        exercises.push(new Exercise(dataProvider, exercise.name, exercise.url, exercise.id, exercise.boilerplate, getState(exercise), exercise.description_url, programming_language));
     });
 
     return exercises;

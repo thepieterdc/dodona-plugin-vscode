@@ -6,6 +6,8 @@ import { State } from "./exercise-treeview/data-classes";
 import { sleep } from "./util";
 import { DodonaClient } from "./api/client";
 import { Exercise } from "./api/resources/exercise";
+import { getSyntax } from "./commentSyntax";
+import * as path from "path";
 
 // Initialise a Dodona client.
 let dodona = new DodonaClient("https://dodona.ugent.be");
@@ -136,6 +138,12 @@ export function activate(context: vscode.ExtensionContext) {
         //TODO remove duplicate code
         const editor = vscode.window.activeTextEditor;
 
+        // User clicked in the sidebar to open the description
+        if (exercise) {
+            await showExerciseDescription(vscode.ViewColumn.Beside, exercise);
+            return;
+        }
+
         if (editor) {
             // The column to show the webview in
             const columnToShowIn = editor ? editor.viewColumn : undefined;
@@ -174,11 +182,43 @@ export function activate(context: vscode.ExtensionContext) {
             return;
         }
 
-        await showExerciseDescription(vscode.ViewColumn.Beside, exercise);
-    })
+        // User randomly used this in the command panel, where it wouldn't know what exercise to choose
+        vscode.window.showErrorMessage("You do not currently have an active editor.");
+
+    });
+
+    const openEx = vscode.commands.registerCommand("extension.open-exercise", async (exercise) => {
+
+        // Somehow got the command triggered another way (user doing it in command pannel, ...)
+        // this results in exercise being undefined, so ignore it
+        if (!(exercise)) {
+            return;
+        }
+
+        if (!(vscode.workspace.rootPath)) {
+            vscode.window.showErrorMessage("No active workspace found. Make sure you have opened a folder in Visual Studio Code and try again.");
+            return;
+        }
+
+        vscode.commands.executeCommand("workbench.action.files.newUntitledFile");
+        const newFile = vscode.Uri.parse("untitled:" + path.join(vscode.workspace.rootPath, `${exercise.name}.${exercise.language.extension}`));
+        vscode.workspace.openTextDocument(newFile).then(document => {
+            const edit = new vscode.WorkspaceEdit();
+            const boilerplate = exercise.boilerplate != null ? exercise.boilerplate : "";
+            edit.insert(newFile, new vscode.Position(0, 0), `${getSyntax(exercise.language.name, exercise.url)}\n${boilerplate}`);
+            return vscode.workspace.applyEdit(edit).then(success => {
+                if (success) {
+                    vscode.window.showTextDocument(document);
+                } else {
+                    vscode.window.showErrorMessage("There was an error trying to add the boilerplate for this exercise.");
+                }
+            });
+        });
+    });
 
     context.subscriptions.push(disp);
     context.subscriptions.push(descr);
+    context.subscriptions.push(openEx);
 
     // Register & create the tree view for the plugin
     vscode.window.registerTreeDataProvider("dodona-exercises", dataProvider);
@@ -192,11 +232,15 @@ export function activate(context: vscode.ExtensionContext) {
         // Display a warning notification if no Api token has been set
         if (!token) {
             const instructionsButton = "Instructions";
-            vscode.window.showErrorMessage(`You have not yet configured your ${platform} Api token. To correctly set up your Visual Studio Code, click the Instructions button below.`, instructionsButton)
+            const settingsButton = "Open Settings";
+            vscode.window.showErrorMessage(`You have not yet configured your ${platform} Api token. To correctly set up your Visual Studio Code, click the Instructions button below.`, instructionsButton, settingsButton)
                 .then(selection => {
                     // Open the page when the user clicks the button
                     if (selection === instructionsButton) {
                         vscode.env.openExternal(vscode.Uri.parse("https://dodona-edu.github.io/en/guides/vs-code-extension/#_3-insert-api-token"));
+                        vscode.env.openExternal(vscode.Uri.parse("https://dodona-edu.github.io/en/guides/vs-code-extension/#_3-insert-api-token"));
+                    } else if (selection === settingsButton) {
+                        vscode.commands.executeCommand("workbench.action.openSettings2");
                     }
                 });
             return null;
