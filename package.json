@@ -43,8 +43,8 @@
         },
         "dodona.platform": {
           "type": "string",
-          "default": "Dodona",
-          "enum": ["Dodona", "Naos"],
+          "default": "https://dodona.ugent.be",
+          "enum": ["https://dodona.ugent.be", "https://naos.ugent.be"],
           "description": "Specifies whether submissions should be sent to Dodona or Naos.",
           "scope": "application"
         }
