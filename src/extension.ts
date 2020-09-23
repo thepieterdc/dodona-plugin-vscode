@@ -1,6 +1,7 @@
 import * as vscode from "vscode";
 import { identify } from "./exercise/identification";
 import { AssertionError } from "assert";
+import { DataProvider } from "./exercise-treeview/treeDataProvider";
 import { sleep } from "./util";
 import { DodonaClient } from "./api/client";
 
@@ -193,6 +194,10 @@ export function activate(context: vscode.ExtensionContext) {
     });
     context.subscriptions.push(disp);
     context.subscriptions.push(descr);
+
+    // Register & create the tree view for the plugin
+    vscode.window.registerTreeDataProvider("dodona-exercises", new DataProvider());
+    vscode.window.createTreeView("dodona-exercises", { treeDataProvider: new DataProvider() });
 
     function getToken(platform: string): string | null {
         // Get the API token from the settings.

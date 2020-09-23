@@ -18,7 +18,8 @@
   "icon": "assets/dodona.png",
   "activationEvents": [
     "onCommand:extension.submit",
-    "onCommand:extension.description"
+    "onCommand:extension.description",
+    "onView:dodona-exercises"
   ],
   "main": "./out/extension.js",
   "contributes": {

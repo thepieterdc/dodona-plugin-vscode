@@ -2,7 +2,6 @@ import got, { Got } from "got";
 import { IdentificationData } from "../exercise/identification";
 import { Submission, SubmissionResponse } from "./resources/submission";
 import { Exercise } from "./resources/exercise";
-import { URL } from "url";
 
 export class DodonaClient {
     private readonly htmlApi: Got;
