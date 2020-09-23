@@ -36,13 +36,16 @@ async function getAvailableCourses(): Promise<Course[]> {
     };
 
     //@ts-ignore
-    const resp = await get(`${host}/courses.json`, {}, headers)
+    const resp = await get(`${host}`, {}, headers)
     
+    // @ts-ignore
+    const subscribed_courses = resp.user.subscribed_courses;
+
     //Sort courses alphabetically to find them easily 
     //@ts-ignore
-    resp.sort((a: string, b: string) => a.name < b.name? -1 : a.name > b.name ? 1 : 0);
+    subscribed_courses.sort((a: string, b: string) => a.name < b.name? -1 : a.name > b.name ? 1 : 0);
     // Add all courses to the list
-    resp.forEach(function (course: any) {
+    subscribed_courses.forEach(function (course: any) {
         //TODO write response class to avoid this ignore
         //@ts-ignore
         courses.push(new Course(course.name, course.id));
@@ -50,10 +53,6 @@ async function getAvailableCourses(): Promise<Course[]> {
 
     return courses;
 }
-
-// TODO tree of courses, contains every course the user can see
-// TODO courses contain every series that the user can make exercises for
-// TODO series contain exercises
 
 // TODO opening an exercise both creates a new file & opens the description
 // (Open with an indicator on View Actions -> view/item/context group: inline)

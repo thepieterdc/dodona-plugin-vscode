@@ -1,6 +1,12 @@
+import bent = require('bent');
+import { pathToFileURL } from 'url';
 import * as vscode from 'vscode';
+import * as path from 'path';
 
+const get = bent('json');
 const config = vscode.workspace.getConfiguration('dodona');
+
+// TODO add an icon for course & series to make them easier to separate in the view
 
 // TODO when refreshing, update token & host in case it changed
 // TODO check if a token was set (for the current host), for now assume it is
@@ -33,13 +39,7 @@ export class Course extends DataClass {
     }
 
     getChildren(element?: DataClass): Thenable<DataClass[]> {
-        if (element) {
-            console.log("course");
-            return Promise.resolve(getAvailableSeries(this));
-        } else {
-            console.log("none");
-            return Promise.resolve([]);
-        }
+        return Promise.resolve(getAvailableSeries(this));
     }
 }
 
@@ -51,12 +51,7 @@ export class Series extends DataClass {
     }
 
     getChildren(element?: DataClass): Thenable<DataClass[]> {
-        if (element) {
-            console.log("series");
-            return Promise.resolve(getAvailableExercises(this));
-        } else {
-            return Promise.resolve([]);
-        }
+        return Promise.resolve(getAvailableExercises(this));
     }
 }
 
@@ -74,12 +69,9 @@ export class Exercise extends DataClass {
         return Promise.resolve([]);
     }
 
-    iconPath = {
-        // TODO light/dark icons
-        // TODO use this.state which doesn't work atm for whatever reason
-        light: getIconPath(State.Correct),
-        dark: getIconPath(State.Correct)
-    }
+    // TODO light/dark icons
+    // TODO use this.state which doesn't work atm for whatever reason
+    iconPath = getIconPath(State.Correct);
 }
 
 // An enum containing states for the exercise, to display them with an icon
@@ -91,7 +83,7 @@ export enum State {
 
 // TODO check if this path works, otherwise use path.join(...)
 function getIconPath(state: State) {
-    return `assets/exercise-${state}.svg`
+    return path.join(__filename, '..', '..', '..', 'assets', `exercise-${state}.svg`);
 }
 
 // TODO make general getAvailable<T>-function for this as all of them are the same
@@ -135,8 +127,8 @@ async function getAvailableExercises(series: Series): Promise<Exercise[]> {
     resp.forEach(function (exercise: any) {
         //TODO write response class to avoid this ignore
         //@ts-ignore
-        series.push(new Exercise(exercise.name, exercise.url, State.Correct));
+        exercises.push(new Exercise(exercise.name, exercise.url, State.Correct));
     });
 
-    return new Array<Exercise>(new Exercise("Double Dutch", "https://naos.ugent.be/nl/courses/54/series/547/activities/1153066363/", State.NotStarted));
+    return exercises;
 }
