@@ -31,6 +31,11 @@
       {
         "command": "extension.description",
         "title": "Show exercise description"
+      },
+      {
+        "command": "extension.openExercise",
+        "title": "Open Exercise",
+        "icon": "assets/open-exercise.svg"
       }
     ],
     "configuration": {
@@ -57,12 +62,12 @@
         }
       }
     },
-    "viewsContainers": {
-      "activitybar": [
+    "menus": {
+      "view/item/context": [
         {
-          "id": "dodona-exercises",
-          "title": "Dodona Exercises",
-          "icon": "assets/activity-bar-icon.svg"
+          "command": "extension.openExercise",
+          "when": "view == dodona-exercises && viewItem == exercise",
+          "group": "inline"
         }
       ]
     },
@@ -71,6 +76,15 @@
         {
           "id": "dodona-exercises",
           "name": "Dodona Exercises"
+        }
+      ]
+    }, 
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "dodona-exercises",
+          "title": "Dodona Exercises",
+          "icon": "assets/activity-bar-icon.svg"
         }
       ]
     }
