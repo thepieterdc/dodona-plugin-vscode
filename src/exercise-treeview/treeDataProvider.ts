@@ -78,7 +78,3 @@ async function getAvailableCourses(dataProvider: DataProvider): Promise<Course[]
 
     return courses;
 }
-
-// TODO opening an exercise both creates a new file & opens the description
-// (Open with an indicator on View Actions -> view/item/context group: inline)
-// TODO refresh button

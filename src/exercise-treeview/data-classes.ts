@@ -62,16 +62,24 @@ export class Series extends DataClass {
 
 export class Exercise extends DataClass {
     dataProvider: DataProvider;
+    name: string;
     url: string;
     exerciseid: number
     state: State;
-    constructor(dataProvider: DataProvider, public label: string, url: string, exerciseid: number, state: State){
+    boilerplate: string;
+    description_url: string;
+
+    constructor(dataProvider: DataProvider, public label: string, url: string, exerciseid: number, boilerplate: string, state: State, description_url: string){
         super(label, vscode.TreeItemCollapsibleState.Collapsed);
         this.dataProvider = dataProvider;
+        this.name = label;
         this.state = state;
         this.url = url;
         this.exerciseid = exerciseid;
         this.iconPath = getIconPath(this.state);
+        this.boilerplate = boilerplate;
+        this.description_url = description_url;
+        this.contextValue = "exercise";
 
         // Register this exercise with the DataProvider
         this.dataProvider.registerListener(this);
@@ -84,8 +92,7 @@ export class Exercise extends DataClass {
 
     update(state: State) {
         this.state = state;
-        // this.iconPath = getIconPath(this.state);
-        this.iconPath = undefined;
+        this.iconPath = getIconPath(this.state);
     }
 }
 
@@ -101,11 +108,7 @@ function getState(exercise: any): State {
         return State.NotStarted;
     }
 
-    // if (!(exercise.has_correct_solution)) {
-    //     return State.Wrong;
-    // }
-
-    if (!(exercise.last_solution_is_best)) {
+    if (!(exercise.has_correct_solution)) {
         return State.Wrong;
     }
 
@@ -154,7 +157,7 @@ async function getAvailableExercises(series: Series, dataProvider: DataProvider)
     resp.forEach(function (exercise: any) {
         //TODO write response class to avoid this ignore
         //@ts-ignore
-        exercises.push(new Exercise(dataProvider, exercise.name, exercise.url, exercise.id, getState(exercise)));
+        exercises.push(new Exercise(dataProvider, exercise.name, exercise.url, exercise.id, exercise.boilerplate, getState(exercise), exercise.description_url));
     });
 
     return exercises;

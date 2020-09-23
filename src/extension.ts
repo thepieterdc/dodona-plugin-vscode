@@ -2,9 +2,10 @@ import * as vscode from "vscode";
 import { identify } from "./exercise/identification";
 import { AssertionError } from "assert";
 import { DataProvider } from "./exercise-treeview/treeDataProvider";
-import { State } from './exercise-treeview/data-classes';
+import { State } from "./exercise-treeview/data-classes";
 import { sleep } from "./util";
 import { DodonaClient } from "./api/client";
+import { Exercise } from "./api/resources/exercise";
 
 // Initialise a Dodona client.
 let dodona = new DodonaClient("https://dodona.ugent.be");
@@ -170,38 +171,21 @@ export function activate(context: vscode.ExtensionContext) {
 
             const exercise = await dodona.getExercise(dodonaUrl);
 
-            // Can't return the main command from inside of an inline function, so keep track of a bool
-            let shouldReturn = false;
-
-            // Remove all closed panels in the array
-            for (let i = panels.length - 1; i >= 0; i--) {
-                //@ts-ignore
-                if (panels[i]._store._isDisposed) {
-                    panels.splice(i, 1);
-                } else if (panels[i].title === exercise.name) {
-                    // Check if a panel with this name already exists, if yes don't create a new one
-                    panels[i].reveal(columnToShowIn);
-                    shouldReturn = true;
-                }
-            }
-
-            // In case a panel already existed, return
-            if (shouldReturn) {
-                return;
-            }
-
-            const panel = vscode.window.createWebviewPanel("exerciseDescription", exercise.name, vscode.ViewColumn.One, { enableScripts: true });
-            panels.push(panel);
-
-            panel.webview.html = await dodona.getExerciseDescription(exercise);
+            await showExerciseDescription(columnToShowIn!, exercise);
         }
     });
+
+    const openEx = vscode.commands.registerCommand("extension.openExercise", async (exercise) => {
+        await showExerciseDescription(vscode.ViewColumn.Beside, exercise);
+    });
+
     context.subscriptions.push(disp);
     context.subscriptions.push(descr);
+    context.subscriptions.push(openEx);
 
     // Register & create the tree view for the plugin
     vscode.window.registerTreeDataProvider("dodona-exercises", dataProvider);
-    vscode.window.createTreeView("dodona-exercises", {treeDataProvider: dataProvider});
+    vscode.window.createTreeView("dodona-exercises", { treeDataProvider: dataProvider });
 
     function getToken(platform: string): string | null {
         // Get the API token from the settings.
@@ -227,5 +211,25 @@ export function activate(context: vscode.ExtensionContext) {
     // Return the opposite of the input platform (used in error message)
     function oppositePlatform(inputPlatform: string) {
         return inputPlatform === "Naos" ? "Dodona" : "Naos";
+    }
+
+    async function showExerciseDescription(columnToShowIn: vscode.ViewColumn, exercise: Exercise) {
+        // Remove all closed panels in the array
+        for (let i = panels.length - 1; i >= 0; i--) {
+            //@ts-ignore
+            if (panels[i]._store._isDisposed) {
+                panels.splice(i, 1);
+            } else if (panels[i].title === exercise.name) {
+                // Check if a panel with this name already exists, if yes don't create a new one
+                panels[i].reveal(columnToShowIn);
+                return;
+            }
+        }
+
+        // Create a new panel & add it to the array
+        const panel = vscode.window.createWebviewPanel("exerciseDescription", exercise.name, vscode.ViewColumn.One, { enableScripts: true });
+        panels.push(panel);
+
+        panel.webview.html = await dodona.getExerciseDescription(exercise);
     }
 }
