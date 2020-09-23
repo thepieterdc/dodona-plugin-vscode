@@ -20,11 +20,7 @@ export function activate(context: vscode.ExtensionContext) {
             config = vscode.workspace.getConfiguration('dodona');
 
             // Declare this here so that the platform can be changed without restarting.
-            // Cast to lowercase so the enum values can be CamelCased to look better.
-            // Error can be ignored as this configuration has a default value & is always a string.
-            //@ts-ignore
-            const domain = config.get("platform").toLowerCase();
-            dodona = new DodonaClient(`https://${domain}.ugent.be`);
+            dodona = new DodonaClient(config.get('api.host'));
 
             // Get the code.
             const code = editor.document.getText();
