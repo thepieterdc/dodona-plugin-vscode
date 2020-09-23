@@ -5,6 +5,10 @@ import { DataClass, Course, Series, Exercise, State } from './data-classes';
 const get = bent('json');
 const config = vscode.workspace.getConfiguration('dodona');
 
+// TODO when refreshing, update token & host in case it changed
+const token = config.get("api.token");
+const host = config.get("api.host");
+
 // TODO query data once & store it inside the dataprovider in a dict,
 // then find the data related to the treeitem in getChildren
 export class DataProvider implements vscode.TreeDataProvider<DataClass> {
@@ -16,8 +20,7 @@ export class DataProvider implements vscode.TreeDataProvider<DataClass> {
 
     getChildren(element?: DataClass): Thenable<DataClass[]> {
         if (element) {
-            console.log("element");
-            return Promise.resolve([]);
+            return element.getChildren();
         } else {
             // Has to be a course
             return Promise.resolve(getAvailableCourses());
@@ -25,8 +28,26 @@ export class DataProvider implements vscode.TreeDataProvider<DataClass> {
     }
 }
 
-function getAvailableCourses(): Course[] {
+// TODO when other branches are merged, check for dodona/naos api key
+async function getAvailableCourses(): Promise<Course[]> {
     const courses = new Array<Course>();
+
+    const headers = {
+        'Authorization': token
+    };
+
+    //@ts-ignore
+    const resp = await get(`${host}/courses.json`, {}, headers)
+    
+    //Sort courses alphabetically to find them easily 
+    resp.sort();
+    // Add all courses to the list
+    resp.forEach(function (course: any) {
+        //TODO write response class to avoid this ignore
+        //@ts-ignore
+        courses.push(new Course(course.name, course.id));
+    });
+
     return courses;
 }
 
