@@ -10,7 +10,7 @@ export interface IdentificationData {
 }
 
 // Initialise regexes.
-const activityRegex = /https?:\/\/.*\/(?:activities|exercises)\/(\d+)/i
+const activityRegex = /https?:\/\/.*\/(?:activities|exercises)\/(\d+)/i;
 const courseRegex = /https?:\/\/.*\/courses\/(\d+)/i;
 const seriesRegex = /https?:\/\/.*\/series\/(\d+)/i;
 

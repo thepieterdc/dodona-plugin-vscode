@@ -18,7 +18,7 @@ export function activate(context: vscode.ExtensionContext) {
             const code = editor.document.getText();
 
             // Try and get the Api token
-            const token = getToken(editor);
+            const token = getToken();
 
             // If no token was set, getToken() displays a message, so this function only has to return
             if (token === null) {
@@ -121,7 +121,7 @@ export function activate(context: vscode.ExtensionContext) {
     });
 
     // Store all active panels
-    let panels = new Array<vscode.WebviewPanel>();
+    const panels = new Array<vscode.WebviewPanel>();
 
     const descr = vscode.commands.registerCommand('extension.description', async () => {
         //TODO remove duplicate code
@@ -135,7 +135,7 @@ export function activate(context: vscode.ExtensionContext) {
             const code = editor.document.getText();
 
             // Try and get the Api token
-            const token = getToken(editor);
+            const token = getToken();
 
             // If no token was set, getToken() displays a message, so this function only has to return
             if (token === null) {
@@ -151,7 +151,7 @@ export function activate(context: vscode.ExtensionContext) {
             const firstLine = code.split("\n")[0];
             // TODO check if valid Dodona url, for now assume it is
             const dodonaUrl = firstLine.slice(1);
-            let page = await get(dodonaUrl, {}, headers);
+            const page = await get(dodonaUrl, {}, headers);
             
             // Can't return the main command from inside of an inline function, so keep track of a bool
             let shouldReturn = false;
@@ -180,15 +180,15 @@ export function activate(context: vscode.ExtensionContext) {
             panels.push(panel);
             
             //@ts-ignore
-            let stream = await getHTML(page.description_url, {}, {});
+            const stream = await getHTML(page.description_url, {}, {});
             //@ts-ignore
             panel.webview.html = await stream.text();
         }
-    })
+    });
     context.subscriptions.push(disp);
     context.subscriptions.push(descr);
 
-    function getToken(editor: any) {
+    function getToken() {
         // Get the API token from the settings.
         const config = vscode.workspace.getConfiguration('dodona');
     
@@ -199,7 +199,7 @@ export function activate(context: vscode.ExtensionContext) {
                 .then(selection => {
                     // Open the page when the user clicks the button
                     if (selection === instructionsButton) {
-                        vscode.env.openExternal(vscode.Uri.parse("https://dodona-edu.github.io/en/guides/vs-code-extension/#_3-insert-api-token"))
+                        vscode.env.openExternal(vscode.Uri.parse("https://dodona-edu.github.io/en/guides/vs-code-extension/#_3-insert-api-token"));
                     }
                 });
             return null;
