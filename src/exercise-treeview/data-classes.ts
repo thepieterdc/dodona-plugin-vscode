@@ -1,10 +1,8 @@
-import bent = require('bent');
-import * as vscode from 'vscode';
-import * as path from 'path';
-import { DataProvider } from './treeDataProvider';
+import * as vscode from "vscode";
+import * as path from "path";
+import { DataProvider } from "./treeDataProvider";
 
-const get = bent('json');
-const config = vscode.workspace.getConfiguration('dodona');
+const config = vscode.workspace.getConfiguration("dodona");
 
 // TODO add an icon for course & series to make them easier to separate in the view
 
@@ -35,6 +33,7 @@ export class DataClass extends vscode.TreeItem {
 export class Course extends DataClass {
     courseid: number;
     dataProvider: DataProvider;
+
     constructor(dataProvider: DataProvider, public label: string, courseid: number) {
         super(label, vscode.TreeItemCollapsibleState.Collapsed);
         this.courseid = courseid;
@@ -49,6 +48,7 @@ export class Course extends DataClass {
 export class Series extends DataClass {
     seriesid: number;
     dataProvider: DataProvider;
+
     constructor(dataProvider: DataProvider, public label: string, seriesid: number) {
         super(label, vscode.TreeItemCollapsibleState.Collapsed);
         this.seriesid = seriesid;
@@ -64,13 +64,13 @@ export class Exercise extends DataClass {
     dataProvider: DataProvider;
     name: string;
     url: string;
-    exerciseid: number
+    exerciseid: number;
     state: State;
     boilerplate: string;
     description_url: string;
     language: Language;
 
-    constructor(dataProvider: DataProvider, public label: string, url: string, exerciseid: number, boilerplate: string, state: State, description_url: string, language: Language){
+    constructor(dataProvider: DataProvider, public label: string, url: string, exerciseid: number, boilerplate: string, state: State, description_url: string, language: Language) {
         super(label, vscode.TreeItemCollapsibleState.Collapsed);
         this.dataProvider = dataProvider;
         this.name = label;
@@ -102,6 +102,7 @@ export class Exercise extends DataClass {
 export class Language {
     name: string;
     extension: string;
+
     constructor(name: string, extension: string) {
         this.name = name;
         this.extension = extension;
@@ -129,7 +130,7 @@ function getState(exercise: any): State {
 
 // TODO check if this path works, otherwise use path.join(...)
 function getIconPath(state: State) {
-    return path.join(__filename, '..', '..', '..', 'assets', `exercise-${state}.svg`);
+    return path.join(__filename, "..", "..", "..", "assets", `exercise-${state}.svg`);
 }
 
 // TODO make general getAvailable<T>-function for this as all of them are the same
@@ -137,17 +138,17 @@ async function getAvailableSeries(course: Course, dataProvider: DataProvider): P
     const series = new Array<Series>();
 
     const headers = {
-        'Authorization': token
+        "Authorization": token,
     };
 
     //@ts-ignore
-    const resp = await get(`${host}/courses/${course.courseid}/series.json`, {}, headers)
-    
+    const resp = await get(`${host}/courses/${course.courseid}/series.json`, {}, headers);
+
     //Sort series alphabetically to find them easily 
     //@ts-ignore
-    resp.sort((a: number, b: number) => a.order < b.order? -1 : a.order > b.order ? 1 : 0);
+    resp.sort((a: number, b: number) => a.order < b.order ? -1 : a.order > b.order ? 1 : 0);
 
-    resp.forEach(function (entry: any) {
+    resp.forEach(function(entry: any) {
         //TODO write response class to avoid this ignore
         //@ts-ignore
         series.push(new Series(dataProvider, entry.name, entry.id));
@@ -160,15 +161,15 @@ async function getAvailableExercises(series: Series, dataProvider: DataProvider)
     const exercises = new Array<Exercise>();
 
     const headers = {
-        'Authorization': token
+        "Authorization": token,
     };
 
     //@ts-ignore
-    const resp = await get(`${host}/series/${series.seriesid}/activities.json`, {}, headers)
-    resp.forEach(function (exercise: any) {
+    const resp = await get(`${host}/series/${series.seriesid}/activities.json`, {}, headers);
+    resp.forEach(function(exercise: any) {
         //TODO write response class to avoid these ignores
         //@ts-ignore
-        const programming_language = new Language(exercise.programming_language.name, exercise.programming_language.extension)
+        const programming_language = new Language(exercise.programming_language.name, exercise.programming_language.extension);
         //@ts-ignore
         exercises.push(new Exercise(dataProvider, exercise.name, exercise.url, exercise.id, exercise.boilerplate, getState(exercise), exercise.description_url, programming_language));
     });
