@@ -26,16 +26,16 @@
   "contributes": {
     "commands": [
       {
-        "command": "extension.submit",
+        "command": "dodona.submit",
         "title": "Submit to Dodona"
       },
       {
-        "command": "extension.description",
+        "command": "dodona.exercise.description",
         "title": "Show exercise description",
         "icon": "assets/open-exercise.svg"
       },
       {
-        "command": "extension.open-exercise",
+        "command": "dodona.exercise.create",
         "title": "Open exercise in editor",
         "icon": "assets/edit.svg"
       }
@@ -43,39 +43,45 @@
     "configuration": {
       "title": "Dodona",
       "properties": {
-        "dodona.api.token.dodona": {
+        "dodona.auth.dodona": {
           "type": "string",
           "default": null,
           "description": "Specifies which API token should be used to authorize to Dodona.",
           "scope": "application"
         },
-        "dodona.api.token.naos": {
+        "dodona.auth.naos": {
           "type": "string",
           "default": null,
           "description": "Specifies which API token should be used to authorize to Naos.",
           "scope": "application"
         },
-        "dodona.api.host": {
+        "dodona.environment": {
           "type": "string",
           "default": "https://dodona.ugent.be",
           "enum": [
             "https://dodona.ugent.be",
             "https://naos.ugent.be"
           ],
-          "description": "Specifies which Dodona instance should be used.",
+          "description": "Specifies which Dodona environment should be used.",
           "scope": "application"
         }
       }
     },
     "menus": {
+      "commandPalette": [
+        {
+          "command": "dodona.exercise.create",
+          "when": "false"
+        }
+      ],
       "view/item/context": [
         {
-          "command": "extension.description",
+          "command": "dodona.exercise.description",
           "when": "view == dodona-exercises && viewItem == exercise",
           "group": "inline"
         },
         {
-          "command": "extension.open-exercise",
+          "command": "dodona.exercise.create",
           "when": "view == dodona-exercises && viewItem == exercise",
           "group": "inline"
         }
