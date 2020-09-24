@@ -51,15 +51,14 @@
     "watch": "tsc -watch -p ./"
   },
   "dependencies": {
-    "bent": "^7.3.6"
+    "got": "^11.7.0"
   },
   "devDependencies": {
-    "@types/bent": "^7.0.2",
-    "@types/node": "^12.12.6",
+    "@types/node": "^14.11.2",
     "@types/vscode": "^1.34.0",
-    "@typescript-eslint/eslint-plugin": "^3.3.0",
-    "@typescript-eslint/parser": "^3.3.0",
-    "eslint": "^7.2.0",
-    "typescript": "^3.9.5"
+    "@typescript-eslint/eslint-plugin": "^4.2.0",
+    "@typescript-eslint/parser": "^4.2.0",
+    "eslint": "^7.9.0",
+    "typescript": "^4.0.3"
   }
 }
