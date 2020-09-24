@@ -1,13 +1,14 @@
 import { AssertionError } from "assert";
+import { DodonaEnvironment, getDodonaEnvironment } from "./dodonaEnvironment";
 
 /**
  * Identification data.
  */
 export interface IdentificationData {
+    environment: DodonaEnvironment;
     activity: number;
     course: number | null;
     series: number | null;
-    platform: string;
 }
 
 // Initialise regexes.
@@ -40,10 +41,6 @@ function identifySeries(url: string): number | null {
     return null;
 }
 
-function identifyPlatform(url: string) {
-    return url.toLowerCase().includes("dodona") ? "dodona" : "naos";
-}
-
 /**
  * Identifies the activity from the code.
  *
@@ -57,13 +54,17 @@ export function identify(code: string): IdentificationData {
     const activity = identifyActivity(firstLine);
     const course = identifyCourse(firstLine);
     const series = identifySeries(firstLine);
-    const platform = identifyPlatform(firstLine);
+
+    // Parse the environment.
+    const environment = getDodonaEnvironment(firstLine);
 
     // Format the result.
     return {
+        environment: environment,
         activity: activity,
         course: course,
         series: series,
-        platform: platform,
     };
 }
+
+export default IdentificationData;

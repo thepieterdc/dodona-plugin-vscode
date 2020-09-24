@@ -1,4 +1,7 @@
-export interface SubmissionResponse {
+import { Resource } from "./resource";
+import { ExerciseStatus } from "./activities/exercise";
+
+export interface SubmissionCreatedResponse {
     url: string;
 }
 
@@ -15,9 +18,26 @@ export type SubmissionStatus =
     | "unknown"
     | "wrong";
 
-export interface Submission {
+/**
+ * A submission on Dodona.
+ */
+export interface Submission extends Resource {
     exercise: string;
     status: SubmissionStatus;
     summary: string | null;
-    url: string;
 }
+
+/**
+ * Finds the status of an exercise.
+ *
+ * @param submission the submission
+ */
+export function findExerciseStatus(submission: Submission): ExerciseStatus {
+    if (submission.status === "correct") {
+        return ExerciseStatus.CORRECT;
+    }
+
+    return ExerciseStatus.WRONG;
+}
+
+export default Submission;
