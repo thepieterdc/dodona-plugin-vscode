@@ -1,8 +1,8 @@
+import { AssertionError } from "assert";
+
 /**
  * Identification data.
  */
-import {AssertionError} from "assert";
-
 export interface IdentificationData {
     activity: number;
     course: number | null;
@@ -20,7 +20,7 @@ function identifyActivity(url: string): number {
         return parseInt(match[1]);
     }
 
-    throw new AssertionError({message: "Activity not found in url."});
+    throw new AssertionError({ message: "Activity not found in url." });
 }
 
 function identifyCourse(url: string): number | null {
@@ -54,5 +54,5 @@ export function identify(code: string): IdentificationData {
     const series = identifySeries(firstLine);
 
     // Format the result.
-    return {activity: activity, course: course, series: series};
+    return { activity: activity, course: course, series: series };
 }
