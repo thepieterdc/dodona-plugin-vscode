@@ -4,6 +4,8 @@ import * as path from "path";
 import * as vscode from "vscode";
 import { getSyntax } from "../commentSyntax";
 import { ExerciseDataClass } from "../treeView/dataClasses";
+import { getAutoDescription } from "../configuration";
+import { showExerciseDescription } from ".././commands/showExerciseDescription";
 
 /**
  * Action to create a new file for an exercise.
@@ -25,6 +27,8 @@ export async function createNewExercise(exerciseDataClass: ExerciseDataClass) {
 
     // Open the created file.
     workspace.openTextDocument(newFile).then(document => {
+        // TODO check file content first
+
         // Build the file contents: the comment line and exercise boilerplate.
         const edit = new vscode.WorkspaceEdit();
         const commentedUrl = getSyntax(exercise.programming_language, exercise.url);
@@ -40,4 +44,9 @@ export async function createNewExercise(exerciseDataClass: ExerciseDataClass) {
             }
         });
     });
+
+    // Open the exercise if the user checked this option in the configuration
+    if (getAutoDescription()) {
+        showExerciseDescription(exerciseDataClass);
+    }
 }
