@@ -38,3 +38,12 @@ export function getApiToken(): ApiToken | null {
     const environment = getApiEnvironment().toLowerCase();
     return config().get<string>(`auth.${environment}`) || null;
 }
+
+/**
+ * Gets the Auto-Open-Description checkbox from the configuration.
+ * 
+ * @return the current value of the checkbox
+ */
+export function getAutoDescription(): boolean | null {
+    return config().get("automaticallyOpenExerciseDescription") || null;
+}
