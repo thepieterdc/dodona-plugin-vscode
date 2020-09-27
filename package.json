@@ -17,9 +17,9 @@
   ],
   "icon": "assets/dodona.png",
   "activationEvents": [
-    "onCommand:extension.submit",
-    "onCommand:extension.description",
-    "onView:extension.description",
+    "onCommand:dodona.submit",
+    "onCommand:dodona.exercise.description",
+    "onView:dodona.exercise.description",
     "onView:dodona-exercises"
   ],
   "main": "./out/extension.js",
@@ -36,8 +36,7 @@
       },
       {
         "command": "dodona.exercise.create",
-        "title": "Open exercise in editor",
-        "icon": "assets/edit.svg"
+        "title": "Open exercise in editor"
       }
     ],
     "configuration": {

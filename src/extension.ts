@@ -1,4 +1,4 @@
-import { commands, ExtensionContext, window } from "vscode";
+import { commands, ExtensionContext, window, workspace } from "vscode";
 import RootDataProvider from "./treeView/dataProvider";
 import { createNewExercise } from "./commands/createNewExercise";
 import { submitSolution } from "./commands/submitSolution";
@@ -24,8 +24,8 @@ export function activate(context: ExtensionContext) {
     const submitSolutionCommand = commands.registerCommand(
         "dodona.submit",
         () => {
-            submitSolution(submission => {
-                treeDataProvider.fireListeners(submission);
+            submitSolution(() => {
+                treeDataProvider.refresh();
             });
         },
     );
@@ -40,4 +40,9 @@ export function activate(context: ExtensionContext) {
     // Register & create the exercise tree view for the plugin.
     window.registerTreeDataProvider("dodona-exercises", treeDataProvider);
     window.createTreeView("dodona-exercises", { treeDataProvider });
+
+    // Automatically refresh the treeview when the API domain is changed
+    workspace.onDidChangeConfiguration(() => {
+        treeDataProvider.refresh();
+    });
 }
