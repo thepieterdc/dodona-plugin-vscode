@@ -44,6 +44,6 @@ export function getApiToken(): ApiToken | null {
  * 
  * @return the current value of the checkbox
  */
-export function getAutoDescription(): boolean | null {
-    return config().get("automaticallyOpenExerciseDescription") || null;
+export function getAutoDescription(): boolean {
+    return config().get("automaticallyOpenExerciseDescription") || true;
 }
