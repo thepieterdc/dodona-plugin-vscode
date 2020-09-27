@@ -23,30 +23,61 @@ export async function createNewExercise(exerciseDataClass: ExerciseDataClass) {
     }
 
     // Create a new file.
-    const newFile = Uri.parse("untitled:" + path.join(workspace.rootPath, `${exercise.name}.${exercise.programming_language?.extension || "txt"}`));
+    const fileName = `${exercise.name}.${exercise.programming_language?.extension || "txt"}`
+    const newFile = Uri.parse("untitled:" + path.join(workspace.rootPath, `${fileName}`));
 
     // Open the created file.
     workspace.openTextDocument(newFile).then(document => {
-        // TODO check file content first
-
+        window.showTextDocument(document);
         // Build the file contents: the comment line and exercise boilerplate.
         const edit = new vscode.WorkspaceEdit();
         const commentedUrl = getSyntax(exercise.programming_language, exercise.url);
         const boilerplate = exercise.boilerplate != null ? exercise.boilerplate : "";
-        edit.insert(newFile, new vscode.Position(0, 0), `${commentedUrl}\n${boilerplate}`);
 
-        // Insert the contents into the file.
-        return workspace.applyEdit(edit).then(success => {
-            if (success) {
-                window.showTextDocument(document);
-            } else {
-                window.showErrorMessage("There was an error trying to add the boilerplate for this exercise.");
-            }
-        });
+        // If the document is not empty, clear it
+        if (document.getText()) {
+            const message = `File ${fileName} already exists, and is not empty. Clicking "Confirm" will clear this document's contents, and replace it with the exercise's URL & boilerplate. Any changes made will be lost. Are you sure you want to continue?`
+            const confirm = "Confirm";
+            const decline = "Decline"
+
+            // Show a warning message asking for confirmation so the user doesn't
+            // accidentally erase their file
+            vscode.window.showWarningMessage(message, confirm, decline)
+                .then(selection => {
+                    if (selection == confirm) {
+                        // Create the range here, so that the user can't add any new code
+                        // inbetween calling this function & confirming, which could
+                        // mess it up (not deleting everything, going out of range, ...)
+                        const code = document.getText().split("\n");
+                        const range = new vscode.Range(0, 0, code.length - 1, code[code.length - 1].length);
+
+                        // Delete the file content
+                        edit.delete(newFile, range);
+                        vscode.window.showInformationMessage(`Cleared ${fileName}.`);
+
+                        // Add the URL & boilerplate
+                        edit.insert(newFile, new vscode.Position(0, 0), `${commentedUrl}\n${boilerplate}`);
+                        return applyEdit(edit, document);
+                    }
+            });
+        } else {
+            // Add the URL & boilerplate
+            edit.insert(newFile, new vscode.Position(0, 0), `${commentedUrl}\n${boilerplate}`);
+            return applyEdit(edit, document);
+        }
     });
 
     // Open the exercise if the user checked this option in the configuration
     if (getAutoDescription()) {
         showExerciseDescription(exerciseDataClass);
     }
+}
+
+export async function applyEdit(edit: vscode.WorkspaceEdit, document: vscode.TextDocument) {
+    // Insert the contents into the file.
+    return workspace.applyEdit(edit).then(success => {
+        if (!(success)) {
+            window.showErrorMessage("There was an error trying to add the boilerplate for this exercise.");
+        }
+    });
 }
