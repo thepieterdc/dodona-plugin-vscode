@@ -14,7 +14,9 @@ import { SubmissionEvaluatedListener } from "../listeners";
  *
  * @param listener function that is called when a submission is evaluated
  */
-export async function submitSolution(listener: SubmissionEvaluatedListener): Promise<void> {
+export async function submitSolution(
+    listener: SubmissionEvaluatedListener,
+): Promise<void> {
     const editor = window.activeTextEditor;
     if (editor) {
         // Get the code.
@@ -28,7 +30,11 @@ export async function submitSolution(listener: SubmissionEvaluatedListener): Pro
             // Display a proper error message instead of raising an error
             if (error instanceof AssertionError) {
                 const tryAgain = "Try Again";
-                window.showErrorMessage("No exercise link found. Make sure the first line of the file contains a comment with the link to the exercise.", tryAgain)
+                window
+                    .showErrorMessage(
+                        "No exercise link found. Make sure the first line of the file contains a comment with the link to the exercise.",
+                        tryAgain,
+                    )
                     .then(selection => {
                         // Retry when the user clicks Try Again
                         if (selection === tryAgain) {
@@ -45,7 +51,9 @@ export async function submitSolution(listener: SubmissionEvaluatedListener): Pro
         // Validate that the environment is correct.
         const apiEnvironment = getApiEnvironment();
         if (identification.environment !== apiEnvironment) {
-            window.showErrorMessage(`You are trying to submit an exercise to ${identification.environment.titlecase()}, but your environment is configured as ${apiEnvironment.titlecase()}.`);
+            window.showErrorMessage(
+                `You are trying to submit an exercise to ${identification.environment.titlecase()}, but your environment is configured as ${apiEnvironment.titlecase()}.`,
+            );
             return;
         }
 
@@ -93,23 +101,38 @@ export async function submitSolution(listener: SubmissionEvaluatedListener): Pro
         // Analyse the result.
         const url = Uri.parse(submission!.url.replace(".json", ""));
         if (submission!.status === "correct") {
-            window.showInformationMessage("Solution was correct!", ...[viewResultsAction]).then((selection) => {
-                if (selection === viewResultsAction) {
-                    commands.executeCommand("vscode.open", url);
-                }
-            });
+            window
+                .showInformationMessage(
+                    "Solution was correct!",
+                    ...[viewResultsAction],
+                )
+                .then(selection => {
+                    if (selection === viewResultsAction) {
+                        commands.executeCommand("vscode.open", url);
+                    }
+                });
         } else if (submission!.status === "wrong") {
-            window.showWarningMessage("Solution was incorrect.", ...[viewResultsAction]).then((selection) => {
-                if (selection === viewResultsAction) {
-                    commands.executeCommand("vscode.open", url);
-                }
-            });
+            window
+                .showWarningMessage(
+                    "Solution was incorrect.",
+                    ...[viewResultsAction],
+                )
+                .then(selection => {
+                    if (selection === viewResultsAction) {
+                        commands.executeCommand("vscode.open", url);
+                    }
+                });
         } else {
-            window.showErrorMessage(submission!.summary || "Unknown error.", ...[viewResultsAction]).then((selection) => {
-                if (selection === viewResultsAction) {
-                    commands.executeCommand("vscode.open", url);
-                }
-            });
+            window
+                .showErrorMessage(
+                    submission!.summary || "Unknown error.",
+                    ...[viewResultsAction],
+                )
+                .then(selection => {
+                    if (selection === viewResultsAction) {
+                        commands.executeCommand("vscode.open", url);
+                    }
+                });
         }
 
         // Notify listeners.
