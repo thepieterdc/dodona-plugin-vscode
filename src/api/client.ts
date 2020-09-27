@@ -92,8 +92,10 @@ workspace.onDidChangeConfiguration(e => {
  */
 export default async function execute<T>(call: DodonaCall<T>): Promise<T> {
     return call(client).catch(error => {
-        if (error instanceof HTTPError && error.response.statusCode === 401
-            || error instanceof InvalidAccessToken) {
+        if (
+            (error instanceof HTTPError && error.response.statusCode === 401) ||
+            error instanceof InvalidAccessToken
+        ) {
             // Display a warning notification if no API token has been configured.
             const instructionsButton = "Instructions";
             const settingsButton = "Open Settings";
@@ -102,30 +104,28 @@ export default async function execute<T>(call: DodonaCall<T>): Promise<T> {
                 msg = `You have configured an invalid API token for ${getApiEnvironment().titlecase()}.`;
             }
 
-            window.showErrorMessage(`${msg} To correctly set up your token in Visual Studio Code, click the Instructions button below.`, instructionsButton, settingsButton)
-                .then((selection) => {
+            window
+                .showErrorMessage(
+                    `${msg} To correctly set up your token in Visual Studio Code, click the Instructions button below.`,
+                    instructionsButton,
+                    settingsButton,
+                )
+                .then(selection => {
                     // Open the page when the user clicks the button
                     if (selection === instructionsButton) {
-                        env.openExternal(Uri.parse("https://dodona-edu.github.io/en/guides/vs-code-extension/#_3-insert-api-token"));
+                        env.openExternal(
+                            Uri.parse(
+                                "https://dodona-edu.github.io/en/guides/vs-code-extension/#_3-insert-api-token",
+                            ),
+                        );
                     } else if (selection === settingsButton) {
-                        commands.executeCommand("workbench.action.openSettings2");
+                        commands.executeCommand(
+                            "workbench.action.openSettings",
+                            `dodona.auth.${getApiEnvironment()}`,
+                        );
                     }
                 });
         }
         return Promise.reject(error);
     });
 }
-
-//     // /**
-//     //  * Gets the description of the exercise as HTML.
-//     //  *
-//     //  * @param exercise the exercise to fetch the description for
-//     //  */
-//     // public async getExerciseDescription(exercise: Exercise): Promise<string> {
-//     //     return this.htmlApi
-//     //         .extend({ prefixUrl: "" })
-//     //         .get(exercise.description_url, {
-//     //             headers: {
-//     //                 Authorization: this.token,
-//     //             },
-//     //         }
