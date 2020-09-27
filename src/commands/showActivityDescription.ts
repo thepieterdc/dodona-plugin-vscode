@@ -1,10 +1,10 @@
-import Exercise from "../api/resources/activities/exercise";
 import { commands, ViewColumn, WebviewPanel, window } from "vscode";
-import { ExerciseDataClass } from "../treeView/dataClasses";
 import IdentificationData, { identify } from "../identification";
 import { AssertionError } from "assert";
 import { getApiEnvironment } from "../configuration";
 import execute from "../api/client";
+import Activity from "../api/resources/activities/activity";
+import { AbstractActivityTreeItem } from "../treeView/items/activityTreeItem";
 
 // TODO only show command in palette if an exercise is opened
 //      (can be done using "when" in package.json)
@@ -13,15 +13,15 @@ import execute from "../api/client";
 const descriptionPanels = new Array<WebviewPanel>();
 
 /**
- * Opens a new or existing panel with an exercise description.
+ * Opens a new or existing panel with an activity description.
  *
- * @param exercise the exercise to open the description for
+ * @param activity the activity to open the description for
  */
-async function openExerciseDescription(exercise: Exercise) {
+async function openActivityDescription(activity: Activity) {
     // Find an existing panel and reveal that.
     for (let i = descriptionPanels.length - 1; i >= 0; i--) {
         try {
-            if (descriptionPanels[i].title === exercise.name) {
+            if (descriptionPanels[i].title === activity.name) {
                 descriptionPanels[i].reveal(ViewColumn.Beside);
                 return;
             }
@@ -33,36 +33,38 @@ async function openExerciseDescription(exercise: Exercise) {
 
     // Create a new panel.
     const panel = window.createWebviewPanel(
-        "exerciseDescription",
-        exercise.name,
+        "activityDescription",
+        activity.name,
         ViewColumn.Beside,
-        { enableScripts: true },
-    );
+        { enableScripts: true });
     descriptionPanels.push(panel);
 
-    // Load the exercise HTML.
+    // Load the activity description HTML.
     panel.webview.html = await execute(dodona =>
-        dodona.exercises.description(exercise),
+        dodona.activities.description(activity),
     );
 }
 
 /**
- * Action to show the description of an exercise.
+ * Action to show the description of an activity.
  *
- * @param exerciseDataClass the exercise to load the description for
+ * @param activity the activity to load the description for
  */
-export async function showExerciseDescription(
-    exerciseDataClass?: ExerciseDataClass,
-) {
+export async function showActivityDescription(activity?: Activity | AbstractActivityTreeItem) {
+    // Coerce to correct type.
+    if (activity instanceof AbstractActivityTreeItem) {
+        activity = activity.activity;
+    }
+
     // User can click in the sidebar to open the description.
-    if (exerciseDataClass) {
-        return openExerciseDescription(exerciseDataClass.exercise);
+    if (activity) {
+        return openActivityDescription(activity);
     }
 
     // Open the description of the currently opened file.
     const editor = window.activeTextEditor;
 
-    // Identify the exercise.
+    // Identify the activity.
     let identification: IdentificationData;
     try {
         identification = identify(editor?.document.getText() || "");
@@ -78,7 +80,7 @@ export async function showExerciseDescription(
                 .then(selection => {
                     // Retry when the user clicks Try Again.
                     if (selection === tryAgain) {
-                        commands.executeCommand("dodona.exercise.description");
+                        commands.executeCommand("dodona.activity.description");
                     }
                 });
             return;
@@ -99,9 +101,9 @@ export async function showExerciseDescription(
 
     // Get the exercise.
     const exercise = await execute(dodona =>
-        dodona.exercises.get(identification),
+        dodona.activities.get(identification),
     );
 
     // Open the description.
-    return openExerciseDescription(exercise);
+    return openActivityDescription(exercise);
 }

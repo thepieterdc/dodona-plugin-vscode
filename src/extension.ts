@@ -2,7 +2,9 @@ import { commands, ExtensionContext, window, workspace } from "vscode";
 import RootDataProvider from "./treeView/dataProvider";
 import { createNewExercise } from "./commands/createNewExercise";
 import { submitSolution } from "./commands/submitSolution";
-import { showExerciseDescription } from "./commands/showExerciseDescription";
+import { showActivityDescription } from "./commands/showActivityDescription";
+import { completeContentPage } from "./commands/completeContentPage";
+import ContentPage from "./api/resources/activities/contentPage";
 
 export function activate(context: ExtensionContext) {
     // Create a data provider for the tree view.
@@ -14,17 +16,26 @@ export function activate(context: ExtensionContext) {
         createNewExercise,
     );
 
-    // Command: Show the description of an exercise.
-    const showExerciseDescriptionCommand = commands.registerCommand(
-        "dodona.exercise.description",
-        showExerciseDescription,
+    // Command: Show the description of an activity.
+    const showActivityDescriptionCommand = commands.registerCommand(
+        "dodona.activity.description", showActivityDescription,
+    );
+
+    // Command: Mark a content page as read.
+    const completeContentPageCommand = commands.registerCommand(
+        "dodona.contentPage.read",
+        async (contentPage?: ContentPage) => {
+            await completeContentPage(() => {
+                treeDataProvider.refresh();
+            }, contentPage);
+        },
     );
 
     // Command: Submit a solution to Dodona.
     const submitSolutionCommand = commands.registerCommand(
         "dodona.submit",
-        () => {
-            submitSolution(() => {
+        async () => {
+            await submitSolution(() => {
                 treeDataProvider.refresh();
             });
         },
@@ -32,16 +43,17 @@ export function activate(context: ExtensionContext) {
 
     // Register all commands.
     context.subscriptions.push(
+        completeContentPageCommand,
         createNewExerciseCommand,
-        showExerciseDescriptionCommand,
+        showActivityDescriptionCommand,
         submitSolutionCommand,
     );
 
-    // Register & create the exercise tree view for the plugin.
-    window.registerTreeDataProvider("dodona-exercises", treeDataProvider);
-    window.createTreeView("dodona-exercises", { treeDataProvider });
+    // Register and create the activity tree view for the plugin.
+    window.registerTreeDataProvider("dodona-activities", treeDataProvider);
+    window.createTreeView("dodona-activities", { treeDataProvider });
 
-    // Automatically refresh the treeview when the API domain is changed
+    // Refresh the treeview when the API domain is changed.
     workspace.onDidChangeConfiguration(() => {
         treeDataProvider.refresh();
     });

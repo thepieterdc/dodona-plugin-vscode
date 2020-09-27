@@ -92,7 +92,7 @@ export async function submitSolution(
             totalDelay += 5000;
         }
 
-        // Set the status bar.
+        // Clear the status bar.
         window.setStatusBarMessage("");
 
         // Define an action to open the submission details in a browser.
