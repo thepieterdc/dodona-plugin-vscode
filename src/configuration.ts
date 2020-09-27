@@ -11,7 +11,6 @@ export const CONFIG_KEY = "dodona";
  */
 export type ApiToken = string;
 
-
 /**
  * Gets the configuration for this plugin.
  */
@@ -41,9 +40,9 @@ export function getApiToken(): ApiToken | null {
 
 /**
  * Gets the Auto-Open-Description checkbox from the configuration.
- * 
+ *
  * @return the current value of the checkbox
  */
 export function getAutoDescription(): boolean {
-    return config().get("automaticallyOpenExerciseDescription") || true;
+    return config().get("exercise.description.auto") || false;
 }
