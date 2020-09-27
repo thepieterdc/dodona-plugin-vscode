@@ -87,8 +87,7 @@
         },
         {
           "command": "dodona.exercise.create",
-          "when": "view == dodona-exercises && viewItem == exercise",
-          "group": "inline"
+          "when": "view == dodona-exercises && viewItem == exercise"
         }
       ]
     },
