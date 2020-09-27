@@ -1,4 +1,3 @@
-import Exercise from "../api/resources/activities/exercise";
 import { Uri, window, workspace } from "vscode";
 import * as path from "path";
 import * as vscode from "vscode";
