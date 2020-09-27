@@ -21,6 +21,14 @@ You can authenticate by creating an API token. Instructions on how to do so can 
 
 ![API token](assets/api-token.png)
 
+## Creating new exercises via Dodona extension (Usage)
+
+1. <img src="assets/sideview.png" alt="sideview" width=30px;/> Dodona icon in the sideview.
+2. Select your course, series, and exercise in the tree.
+3. <img src="assets/open-in-editor.png" alt="open-in-editor" width=30px;/> Hover over your exercise and click the "Open in editor" button
+
+<img src="assets/sideview-example.png" alt="sideview-example"/>
+
 ## Submit exercises via Dodona extension (Usage)
 
 Add the Dodona url of the exercise in VS Code as a comment on the **first line** of your solution.
@@ -34,11 +42,11 @@ Add the Dodona url of the exercise in VS Code as a comment on the **first line**
 > }
 > ```
 
-Execute the `Submit to Dodona`-command by opening the command palette using `Ctrl-Shift-P` by typing (parts of) `Submit to Dodona` and pressing `Enter`.  You can also make a [shortcut](https://code.visualstudio.com/docs/getstarted/keybindings#_keyboard-shortcuts-editor) for this.
+Execute the `Submit to Dodona`-command by opening the command palette using `Ctrl-Shift-P` by typing (parts of) `Submit to Dodona` and pressing `Enter`. You can also make a [shortcut](https://code.visualstudio.com/docs/getstarted/keybindings#_keyboard-shortcuts-editor) for this.
 
 ![Submit](assets/submit.png)
 
 ## Credits
 
-- Extension initially developed by [Pieter De Clercq](https://thepieterdc.github.io/).
-
+-   Extension initially developed by [Pieter De Clercq](https://thepieterdc.github.io/).
+-   Functionality vastly extended by [Stijn De Clercq](https://github.com/stijndcl)
