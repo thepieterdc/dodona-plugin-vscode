@@ -10,24 +10,32 @@ export function activate(context: ExtensionContext) {
 
     // Command: Create a new file for an exercise.
     const createNewExerciseCommand = commands.registerCommand(
-        "dodona.exercise.create", createNewExercise,
+        "dodona.exercise.create",
+        createNewExercise,
     );
 
     // Command: Show the description of an exercise.
     const showExerciseDescriptionCommand = commands.registerCommand(
-        "dodona.exercise.description", showExerciseDescription,
+        "dodona.exercise.description",
+        showExerciseDescription,
     );
 
     // Command: Submit a solution to Dodona.
     const submitSolutionCommand = commands.registerCommand(
-        "dodona.submit", submitSolution,
+        "dodona.submit",
+        () => {
+            submitSolution(submission => {
+                treeDataProvider.fireListeners(submission);
+            });
+        },
     );
 
     // Register all commands.
     context.subscriptions.push(
         createNewExerciseCommand,
         showExerciseDescriptionCommand,
-        submitSolutionCommand);
+        submitSolutionCommand,
+    );
 
     // Register & create the exercise tree view for the plugin.
     window.registerTreeDataProvider("dodona-exercises", treeDataProvider);
