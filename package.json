@@ -113,7 +113,7 @@
   "scripts": {
     "compile": "tsc -p ./",
     "lint": "eslint . --ext .ts,.tsx",
-    "vscode:prepublish": "npm run compile",
+    "vscode:prepublish": "yarn run compile",
     "watch": "tsc -watch -p ./"
   },
   "dependencies": {
