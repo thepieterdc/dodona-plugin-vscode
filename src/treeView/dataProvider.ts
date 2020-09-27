@@ -1,4 +1,10 @@
-import { ProviderResult, TreeDataProvider, TreeItem } from "vscode";
+import {
+    Event,
+    EventEmitter,
+    ProviderResult,
+    TreeDataProvider,
+    TreeItem,
+} from "vscode";
 import { CourseDataClass, DataClass } from "./dataClasses";
 import execute from "../api/client";
 import { SubmissionEvaluatedListener } from "../listeners";
@@ -34,12 +40,14 @@ export default class RootDataProvider implements TreeDataProvider<DataClass> {
         return element;
     }
 
-    fireListeners(submission: Submission) {
-        // Check all exercises to find the one that matches this url
-        this.listeners.forEach(function (
-            listener: SubmissionEvaluatedListener,
-        ) {
-            listener(submission);
-        });
+    // Refresh method for the treeview
+    private _onDidChangeTreeData: EventEmitter<
+        DataClass | undefined
+    > = new EventEmitter<DataClass | undefined>();
+    readonly onDidChangeTreeData: Event<DataClass | undefined> = this
+        ._onDidChangeTreeData.event;
+
+    refresh(): void {
+        this._onDidChangeTreeData.fire(undefined);
     }
 }
