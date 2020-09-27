@@ -68,7 +68,7 @@
         "dodona.automaticallyOpenExerciseDescription": {
           "type": "boolean",
           "default": true,
-          "description": "Specifies whether or not creating a new exercise should automatically open it's description in a new window."
+          "description": "Specifies whether or not creating a new exercise should automatically open its description in a new window."
         }
       }
     },
