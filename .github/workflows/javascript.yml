@@ -24,6 +24,11 @@ jobs:
             ${{ runner.os }}-yarn-
       - run: yarn install
       - run: yarn compile
+      - run: yarn package
+      - uses: actions/upload-artifact@v2
+        with:
+          path: |
+            *.vsix
 
   lint:
     runs-on: ubuntu-latest
