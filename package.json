@@ -32,7 +32,7 @@
       {
         "command": "dodona.exercise.description",
         "title": "Show exercise description",
-        "icon": "assets/open-exercise.svg"
+        "icon": "assets/open-description.svg"
       },
       {
         "command": "dodona.exercise.create",
