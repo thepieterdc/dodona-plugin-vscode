@@ -3,19 +3,16 @@ import * as path from "path";
 import * as vscode from "vscode";
 import * as fs from "fs";
 import { getSyntax } from "../commentSyntax";
-import { ExerciseDataClass } from "../treeView/dataClasses";
 import { getAutoDescription } from "../configuration";
-import { showExerciseDescription } from ".././commands/showExerciseDescription";
+import { showActivityDescription } from "./showActivityDescription";
+import Exercise from "../api/resources/activities/exercise";
 
 /**
  * Action to create a new file for an exercise.
  *
- * @param exerciseDataClass the exercise to create a file for
+ * @param exercise the exercise to create a file for
  */
-export async function createNewExercise(exerciseDataClass: ExerciseDataClass) {
-    // Get the exercise.
-    const { exercise } = exerciseDataClass;
-
+export async function createNewExercise(exercise: Exercise) {
     // Find the active workspace.
     if (!workspace.rootPath) {
         window.showErrorMessage(
@@ -106,14 +103,14 @@ export async function createNewExercise(exerciseDataClass: ExerciseDataClass) {
             }
         })
         .then(() => {
-            // Open the exercise if the user checked this option in the configuration
+            // Open the exercise if the user checked this option in the configuration.
             if (getAutoDescription()) {
-                showExerciseDescription(exerciseDataClass);
+                showActivityDescription(exercise);
             }
         });
 }
 
-export async function applyEdit(edit: vscode.WorkspaceEdit) {
+async function applyEdit(edit: vscode.WorkspaceEdit): Promise<void> {
     // Insert the contents into the file.
     return workspace.applyEdit(edit).then(success => {
         if (!success) {
@@ -124,7 +121,11 @@ export async function applyEdit(edit: vscode.WorkspaceEdit) {
     });
 }
 
-// Strip optional .json extention from an exercise url
+/**
+ * Removes the .json extension from the url.
+ *
+ * @param url the url to process
+ */
 function removeJson(url: string): string {
     if (url.endsWith(".json")) {
         url = url.slice(0, url.length - 5);

@@ -2,7 +2,7 @@
   "name": "dodona-plugin-vscode",
   "displayName": "Dodona",
   "description": "Extension for Visual Studio Code to submit exercises to Dodona.",
-  "version": "1.0.1-SNAPSHOT",
+  "version": "1.1.0-SNAPSHOT",
   "publisher": "thepieterdc",
   "repository": {
     "type": "git",
@@ -17,26 +17,31 @@
   ],
   "icon": "assets/dodona.png",
   "activationEvents": [
+    "onCommand:dodona.activity.description",
     "onCommand:dodona.submit",
-    "onCommand:dodona.exercise.description",
-    "onView:dodona.exercise.description",
-    "onView:dodona-exercises"
+    "onView:dodona.activity.description",
+    "onView:dodona-activities"
   ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "dodona.submit",
-        "title": "Submit to Dodona"
-      },
-      {
-        "command": "dodona.exercise.description",
-        "title": "Show exercise description",
+        "command": "dodona.activity.description",
+        "title": "Dodona: Show activity description",
         "icon": "assets/open-description.svg"
       },
       {
+        "command": "dodona.contentPage.read",
+        "title": "Dodona: Mark reading activity as completed",
+        "icon": "assets/content-page-read.svg"
+      },
+      {
         "command": "dodona.exercise.create",
-        "title": "Open exercise in editor"
+        "title": "Dodona: Open exercise in editor"
+      },
+      {
+        "command": "dodona.submit",
+        "title": "Dodona: Submit solution"
       }
     ],
     "configuration": {
@@ -76,33 +81,42 @@
         {
           "command": "dodona.exercise.create",
           "when": "false"
+        },
+        {
+          "command": "dodona.contentPage.read",
+          "when": "false"
         }
       ],
       "view/item/context": [
         {
-          "command": "dodona.exercise.description",
-          "when": "view == dodona-exercises && viewItem == exercise",
+          "command": "dodona.activity.description",
+          "when": "view == dodona-activities && viewItem == activity-exercise",
+          "group": "inline"
+        },
+        {
+          "command": "dodona.contentPage.read",
+          "when": "view == dodona-activities && viewItem == activity-contentpage",
           "group": "inline"
         },
         {
           "command": "dodona.exercise.create",
-          "when": "view == dodona-exercises && viewItem == exercise"
+          "when": "view == dodona-activities && viewItem == activity-exercise"
         }
       ]
     },
     "views": {
-      "dodona-exercises": [
+      "dodona": [
         {
-          "id": "dodona-exercises",
-          "name": "Dodona Exercises"
+          "id": "dodona-activities",
+          "name": "Activities"
         }
       ]
     },
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "dodona-exercises",
-          "title": "Dodona Exercises",
+          "id": "dodona",
+          "title": "Dodona",
           "icon": "assets/activity-bar-icon.svg"
         }
       ]

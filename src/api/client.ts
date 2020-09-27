@@ -4,7 +4,7 @@ import { DodonaEnvironments } from "../dodonaEnvironment";
 import got, { HTTPError } from "got";
 import {
     CourseManager,
-    ExerciseManager,
+    ActivityManager,
     SeriesManager,
     SubmissionManager,
 } from "./managers";
@@ -15,8 +15,8 @@ import { InvalidAccessToken } from "./errors/invalidAccessToken";
  * A client for interfacing with Dodona.
  */
 export interface DodonaClient {
+    activities: ActivityManager;
     courses: CourseManager;
-    exercises: ExerciseManager;
     series: SeriesManager;
     submissions: SubmissionManager;
 }
@@ -25,8 +25,8 @@ export interface DodonaClient {
  * Implementation of a client for interfacing with Dodona.
  */
 class DodonaClientImpl implements DodonaClient {
+    public readonly activities: ActivityManager;
     public readonly courses: CourseManager;
-    public readonly exercises: ExerciseManager;
     public readonly series: SeriesManager;
     public readonly submissions: SubmissionManager;
 
@@ -52,8 +52,8 @@ class DodonaClientImpl implements DodonaClient {
         });
 
         // Initialise managers.
+        this.activities = new ActivityManager(html, json);
         this.courses = new CourseManager(json);
-        this.exercises = new ExerciseManager(html, json);
         this.series = new SeriesManager(json);
         this.submissions = new SubmissionManager(json);
     }
@@ -88,7 +88,9 @@ workspace.onDidChangeConfiguration(e => {
 
 /**
  * Executes a call on Dodona.
- * @param call
+ *
+ * @param call the call to execute
+ * @return the result of the call, or error handling
  */
 export default async function execute<T>(call: DodonaCall<T>): Promise<T> {
     return call(client).catch(error => {
