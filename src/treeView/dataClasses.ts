@@ -1,6 +1,6 @@
 import {
+    Uri,
     ProviderResult,
-    StatusBarAlignment,
     TreeItem,
     TreeItemCollapsibleState,
 } from "vscode";
@@ -128,6 +128,11 @@ export class ExerciseDataClass extends DataClass {
         super(exercise.name, TreeItemCollapsibleState.None);
         this.contextValue = "exercise";
         this.exercise = exercise;
+        this.command = {
+            command: "dodona.exercise.create",
+            arguments: [this],
+            title: "Create Exercise",
+        };
 
         if (findExerciseStatus(exercise) !== ExerciseStatus.NOT_STARTED) {
             this.iconPath = getExerciseIconPath(findExerciseStatus(exercise));
