@@ -23,7 +23,7 @@ export async function createNewExercise(exerciseDataClass: ExerciseDataClass) {
     }
 
     // Create a new file.
-    const fileName = `${exercise.name}.${exercise.programming_language?.extension || "txt"}`
+    const fileName = `${exercise.name}.${exercise.programming_language?.extension || "txt"}`;
     const newFile = Uri.parse("untitled:" + path.join(workspace.rootPath, `${fileName}`));
 
     // Open the created file.
@@ -36,9 +36,9 @@ export async function createNewExercise(exerciseDataClass: ExerciseDataClass) {
 
         // If the document is not empty, clear it
         if (document.getText()) {
-            const message = `File ${fileName} already exists, and is not empty. Clicking "Confirm" will clear this document's contents, and replace it with the exercise's URL & boilerplate. Any changes made will be lost. Are you sure you want to continue?`
+            const message = `File ${fileName} already exists, and is not empty. Clicking "Confirm" will clear this document's contents, and replace it with the exercise's URL & boilerplate. Any changes made will be lost. Are you sure you want to continue?`;
             const confirm = "Confirm";
-            const decline = "Decline"
+            const decline = "Decline";
 
             // Show a warning message asking for confirmation so the user doesn't
             // accidentally erase their file
@@ -57,13 +57,13 @@ export async function createNewExercise(exerciseDataClass: ExerciseDataClass) {
 
                         // Add the URL & boilerplate
                         edit.insert(newFile, new vscode.Position(0, 0), `${commentedUrl}\n${boilerplate}`);
-                        return applyEdit(edit, document);
+                        return applyEdit(edit);
                     }
             });
         } else {
             // Add the URL & boilerplate
             edit.insert(newFile, new vscode.Position(0, 0), `${commentedUrl}\n${boilerplate}`);
-            return applyEdit(edit, document);
+            return applyEdit(edit);
         }
     });
 
@@ -73,7 +73,7 @@ export async function createNewExercise(exerciseDataClass: ExerciseDataClass) {
     }
 }
 
-export async function applyEdit(edit: vscode.WorkspaceEdit, document: vscode.TextDocument) {
+export async function applyEdit(edit: vscode.WorkspaceEdit) {
     // Insert the contents into the file.
     return workspace.applyEdit(edit).then(success => {
         if (!(success)) {
