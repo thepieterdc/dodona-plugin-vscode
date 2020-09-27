@@ -1,3 +1,10 @@
+## 1.0.0 - September 27, 2020
+* [Stijn De Clercq (@stijndcl)](https://github.com/stijndcl)
+  * Display exercise descriptions in Visual Studio Code.
+  * Load list of exercises in TreeView.
+  * Create new exercise from TreeView.
+  * Support for multiple Dodona environments.
+
 ## 0.1.2 - July 6, 2020
 
 * [Pieter De Clercq (@thepieterdc)](https://github.com/thepieterdc)
