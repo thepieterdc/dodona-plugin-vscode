@@ -9,6 +9,7 @@ import {
     SubmissionManager,
 } from "./managers";
 import "../prototypes/string";
+import { InvalidAccessToken } from "./errors/invalidAccessToken";
 
 /**
  * A client for interfacing with Dodona.
@@ -91,7 +92,8 @@ workspace.onDidChangeConfiguration(e => {
  */
 export default async function execute<T>(call: DodonaCall<T>): Promise<T> {
     return call(client).catch(error => {
-        if (error instanceof HTTPError && error.response.statusCode === 401) {
+        if (error instanceof HTTPError && error.response.statusCode === 401
+            || error instanceof InvalidAccessToken) {
             // Display a warning notification if no API token has been configured.
             const instructionsButton = "Instructions";
             const settingsButton = "Open Settings";

@@ -1,9 +1,7 @@
 import { ProviderResult, TreeDataProvider, TreeItem } from "vscode";
-import { CourseDataClass, DataClass, ExerciseDataClass } from "./dataClasses";
+import { CourseDataClass, DataClass} from "./dataClasses";
 import execute from "../api/client";
 import { SubmissionEvaluatedListener } from "../listeners";
-
-const exerciseRegex = /[0-9]+.json/g;
 
 /**
  * Data provider for the exercise tree view.
@@ -29,24 +27,3 @@ export default class RootDataProvider implements TreeDataProvider<DataClass> {
         return element;
     }
 }
-
-//
-//     fireListeners(url: string, state: State) {
-//         let regex_match = url.match(exerciseRegex);
-//
-//         if (!(regex_match)) {
-//             return;
-//         }
-//
-//         const excercise_id = Number(regex_match[0].slice(0, -5));
-//
-//         // Check all exercises to find the one that matches this url
-//         this.listeners.forEach(function(exercise: Exercise) {
-//             if (exercise.exerciseid === excercise_id) {
-//                 exercise.update(state);
-//                 return;
-//             }
-//         });
-//     }
-// }
-//
