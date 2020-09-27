@@ -105,7 +105,7 @@ export class ExerciseDataClass extends DataClass {
      * @param dataProvider root provider of the tree to attach listeners
      */
     constructor(exercise: Exercise, dataProvider: RootDataProvider) {
-        super(exercise.name, TreeItemCollapsibleState.Collapsed);
+        super(exercise.name, TreeItemCollapsibleState.None);
         this.contextValue = "exercise";
         this.exercise = exercise;
         this.iconPath = getExerciseIconPath(findExerciseStatus(exercise));
@@ -117,7 +117,7 @@ export class ExerciseDataClass extends DataClass {
     }
 
     getChildren(): ProviderResult<DataClass[]> {
-        return [];
+        return undefined;
     }
 
     /**
