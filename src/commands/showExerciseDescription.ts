@@ -9,7 +9,6 @@ import execute from "../api/client";
 // TODO only show command in palette if an exercise is opened
 //      (can be done using "when" in package.json)
 
-
 // Store all open descriptions.
 const descriptionPanels = new Array<WebviewPanel>();
 
@@ -36,8 +35,9 @@ async function openExerciseDescription(exercise: Exercise) {
     const panel = window.createWebviewPanel(
         "exerciseDescription",
         exercise.name,
-        ViewColumn.One,
-        { enableScripts: true });
+        ViewColumn.Beside,
+        { enableScripts: true },
+    );
     descriptionPanels.push(panel);
 
     // Load the exercise HTML.
@@ -51,7 +51,9 @@ async function openExerciseDescription(exercise: Exercise) {
  *
  * @param exerciseDataClass the exercise to load the description for
  */
-export async function showExerciseDescription(exerciseDataClass?: ExerciseDataClass) {
+export async function showExerciseDescription(
+    exerciseDataClass?: ExerciseDataClass,
+) {
     // User can click in the sidebar to open the description.
     if (exerciseDataClass) {
         return openExerciseDescription(exerciseDataClass.exercise);
@@ -68,7 +70,11 @@ export async function showExerciseDescription(exerciseDataClass?: ExerciseDataCl
         // Display a proper error message instead of raising an error
         if (error instanceof AssertionError) {
             const tryAgain = "Try Again";
-            window.showErrorMessage("No exercise link found. Make sure the first line of the file contains a comment with the link to the exercise.", tryAgain)
+            window
+                .showErrorMessage(
+                    "No exercise link found. Make sure the first line of the file contains a comment with the link to the exercise.",
+                    tryAgain,
+                )
                 .then(selection => {
                     // Retry when the user clicks Try Again.
                     if (selection === tryAgain) {
@@ -85,7 +91,9 @@ export async function showExerciseDescription(exerciseDataClass?: ExerciseDataCl
     // Validate that the environment is correct.
     const apiEnvironment = getApiEnvironment();
     if (identification.environment !== apiEnvironment) {
-        window.showErrorMessage(`You are trying to open an exercise from ${identification.environment.titlecase()}, but your environment is configured as ${apiEnvironment.titlecase()}.`);
+        window.showErrorMessage(
+            `You are trying to open an exercise from ${identification.environment.titlecase()}, but your environment is configured as ${apiEnvironment.titlecase()}.`,
+        );
         return;
     }
 
