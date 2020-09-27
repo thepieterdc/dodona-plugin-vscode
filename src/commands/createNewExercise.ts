@@ -1,6 +1,7 @@
 import { Uri, window, workspace } from "vscode";
 import * as path from "path";
 import * as vscode from "vscode";
+import * as fs from "fs";
 import { getSyntax } from "../commentSyntax";
 import { ExerciseDataClass } from "../treeView/dataClasses";
 import { getAutoDescription } from "../configuration";
@@ -27,9 +28,20 @@ export async function createNewExercise(exerciseDataClass: ExerciseDataClass) {
     const fileName = `${exercise.name}.${
         exercise.programming_language?.extension || "txt"
     }`;
-    const newFile = Uri.parse(
-        "untitled:" + path.join(workspace.rootPath, `${fileName}`),
-    );
+
+    const filePath = path.join(workspace.rootPath, `${fileName}`);
+
+    // Check if file already exists, if yes open that instead
+    if (fs.existsSync(filePath)) {
+        workspace
+            .openTextDocument(path.join(workspace.rootPath, `${fileName}`))
+            .then(document => {
+                window.showTextDocument(document);
+            });
+        return;
+    }
+
+    const newFile = Uri.parse("untitled:" + filePath);
 
     // Open the created file.
     workspace.openTextDocument(newFile).then(document => {
