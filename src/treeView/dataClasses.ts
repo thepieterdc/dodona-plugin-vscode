@@ -1,4 +1,9 @@
-import { ProviderResult, TreeItem, TreeItemCollapsibleState } from "vscode";
+import {
+    ProviderResult,
+    StatusBarAlignment,
+    TreeItem,
+    TreeItemCollapsibleState,
+} from "vscode";
 import Course from "../api/resources/course";
 import RootDataProvider from "./dataProvider";
 import execute from "../api/client";
@@ -7,9 +12,7 @@ import Exercise, {
     ExerciseStatus,
     findExerciseStatus,
 } from "../api/resources/activities/exercise";
-import {
-    findExerciseStatus as findSubmissionStatus,
-} from "../api/resources/submission";
+import { findExerciseStatus as findSubmissionStatus } from "../api/resources/submission";
 import * as path from "path";
 
 // TODO add an icon for course & series to make them easier to separate in the view
@@ -25,8 +28,10 @@ export abstract class DataClass extends TreeItem {
      * @param label the label to display
      * @param collapsibleState whether this level is collapsed or not
      */
-    protected constructor(label: string,
-                          collapsibleState: TreeItemCollapsibleState) {
+    protected constructor(
+        label: string,
+        collapsibleState: TreeItemCollapsibleState,
+    ) {
         super(label, collapsibleState);
     }
 
@@ -54,11 +59,15 @@ export class CourseDataClass extends DataClass {
 
     getChildren(): ProviderResult<DataClass[]> {
         // Get the series in the course.
-        return execute(dodona => dodona.series.inCourse(this.course))
-            // Sort them by their order.
-            .then(ss => ss.sort((a, b) => a.order - b.order))
-            // Convert them to dataclasses.
-            .then(ss => ss.map(s => new SeriesDataClass(s, this.dataProvider)));
+        return (
+            execute(dodona => dodona.series.inCourse(this.course))
+                // Sort them by their order.
+                .then(ss => ss.sort((a, b) => a.order - b.order))
+                // Convert them to dataclasses.
+                .then(ss =>
+                    ss.map(s => new SeriesDataClass(s, this.dataProvider)),
+                )
+        );
     }
 }
 
@@ -80,9 +89,13 @@ class SeriesDataClass extends DataClass {
 
     getChildren(): ProviderResult<DataClass[]> {
         // Get the exercises in the series.
-        return execute(dodona => dodona.exercises.inSeries(this.series))
-            // Convert them to dataclasses.
-            .then(es => es.map(e => new ExerciseDataClass(e, this.dataProvider)));
+        return (
+            execute(dodona => dodona.exercises.inSeries(this.series))
+                // Convert them to dataclasses.
+                .then(es =>
+                    es.map(e => new ExerciseDataClass(e, this.dataProvider)),
+                )
+        );
     }
 }
 
@@ -92,7 +105,14 @@ class SeriesDataClass extends DataClass {
  * @param status the status of the exercise
  */
 function getExerciseIconPath(status: ExerciseStatus) {
-    return path.join(__filename, "..", "..", "..", "assets", `exercise-${status}.svg`);
+    return path.join(
+        __filename,
+        "..",
+        "..",
+        "..",
+        "assets",
+        `exercise-${status}.svg`,
+    );
 }
 
 export class ExerciseDataClass extends DataClass {
@@ -108,7 +128,10 @@ export class ExerciseDataClass extends DataClass {
         super(exercise.name, TreeItemCollapsibleState.None);
         this.contextValue = "exercise";
         this.exercise = exercise;
-        this.iconPath = getExerciseIconPath(findExerciseStatus(exercise));
+
+        if (findExerciseStatus(exercise) !== ExerciseStatus.NOT_STARTED) {
+            this.iconPath = getExerciseIconPath(findExerciseStatus(exercise));
+        }
 
         // Add a listener for this exercise to the data provider.
         dataProvider.listeners.push(submission => {
@@ -126,6 +149,8 @@ export class ExerciseDataClass extends DataClass {
      * @param status the (new) status
      */
     update(status: ExerciseStatus) {
-        this.iconPath = getExerciseIconPath(status);
+        if (status !== ExerciseStatus.NOT_STARTED) {
+            this.iconPath = getExerciseIconPath(status);
+        }
     }
 }
