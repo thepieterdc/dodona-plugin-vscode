@@ -53,7 +53,7 @@ export function activate(context: ExtensionContext) {
     context.subscriptions.push(
         completeContentPageCommand,
         createNewExerciseCommand,
-        refreshTreeView,
+        refreshTreeViewCommand,
         showActivityDescriptionCommand,
         submitSolutionCommand,
     );
