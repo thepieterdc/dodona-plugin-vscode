@@ -1,15 +1,23 @@
-## 1.1.0 - September 28, 2020
+## 1.1.1 - September 28, 2020
 * [Pieter De Clercq (@thepieterdc)](https://github.com/thepieterdc)
-  * [FEATURE] Add support for reading and completing content pages. (https://github.com/thepieterdc/dodona-plugin-vscode/issues/36)
+  * [BUG] Don't open reading activities in split view [#45](https://github.com/thepieterdc/dodona-plugin-vscode/issues/45)
 
 * [Stijn De Clercq (@stijndcl)](https://github.com/stijndcl)
-  * [FEATURE] Improve UX for entering an API key (https://github.com/thepieterdc/dodona-plugin-vscode/issues/30)
-  * [FEATURE] Open exercise description in split view (https://github.com/thepieterdc/dodona-plugin-vscode/issues/34)
-  * [FEATURE] UX improvements exercise panel (https://github.com/thepieterdc/dodona-plugin-vscode/issues/35)
-  * [BUG] Dodona exercises panel doesn't update when entering an API token (https://github.com/thepieterdc/dodona-plugin-vscode/issues/31)
-  * [BUG] First line in exercise is a .json file (https://github.com/thepieterdc/dodona-plugin-vscode/issues/33)
-  * [BUG] Setting `dodona.automaticallyOpenExerciseDescription` has no effect (https://github.com/thepieterdc/dodona-plugin-vscode/issues/37)
-  * [BUG] Command `Submit to Dodona` resulted in an error (listener is not a function) (https://github.com/thepieterdc/dodona-plugin-vscode/issues/38)
+  * [FEATURE] Add link to instructions in API token setting [#46](https://github.com/thepieterdc/dodona-plugin-vscode/issues/46)
+  * [FEATURE] Refresh button for Dodona activities panel [#47](https://github.com/thepieterdc/dodona-plugin-vscode/issues/47)
+
+## 1.1.0 - September 28, 2020
+* [Pieter De Clercq (@thepieterdc)](https://github.com/thepieterdc)
+  * [FEATURE] Add support for reading and completing content pages. [#36](https://github.com/thepieterdc/dodona-plugin-vscode/issues/36)
+
+* [Stijn De Clercq (@stijndcl)](https://github.com/stijndcl)
+  * [FEATURE] Improve UX for entering an API key [#30](https://github.com/thepieterdc/dodona-plugin-vscode/issues/30)
+  * [FEATURE] Open exercise description in split view [#34](https://github.com/thepieterdc/dodona-plugin-vscode/issues/34)
+  * [FEATURE] UX improvements exercise panel [#35](https://github.com/thepieterdc/dodona-plugin-vscode/issues/35)
+  * [BUG] Dodona exercises panel doesn't update when entering an API token [#31](https://github.com/thepieterdc/dodona-plugin-vscode/issues/31)
+  * [BUG] First line in exercise is a .json file [#33](https://github.com/thepieterdc/dodona-plugin-vscode/issues/33)
+  * [BUG] Setting `dodona.automaticallyOpenExerciseDescription` has no effect [#37](https://github.com/thepieterdc/dodona-plugin-vscode/issues/37)
+  * [BUG] Command `Submit to Dodona` resulted in an error (listener is not a function) [#38](https://github.com/thepieterdc/dodona-plugin-vscode/issues/38)
 
 ## 1.0.0 - September 27, 2020
 * [Stijn De Clercq (@stijndcl)](https://github.com/stijndcl)
