@@ -32,7 +32,8 @@ export function activate(context: ExtensionContext) {
         },
     );
 
-    const refreshTreeView = commands.registerCommand(
+    // Command: Reload the list of activities in the tree view. 
+    const refreshTreeViewCommand = commands.registerCommand(
         "dodona.treeview.refresh",
         () => {
             treeDataProvider.refresh();
