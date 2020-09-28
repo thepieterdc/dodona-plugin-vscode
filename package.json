@@ -36,6 +36,11 @@
         "icon": "assets/content-page-read.svg"
       },
       {
+        "command": "dodona.treeview.refresh",
+        "title": "Dodona: Reload the list of activities",
+        "icon": "assets/refresh.svg"
+      },
+      {
         "command": "dodona.exercise.create",
         "title": "Dodona: Open exercise in editor"
       },
@@ -85,6 +90,13 @@
         {
           "command": "dodona.contentPage.read",
           "when": "false"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "dodona.treeview.refresh",
+          "when": "view == dodona-activities",
+          "group": "navigation"
         }
       ],
       "view/item/context": [

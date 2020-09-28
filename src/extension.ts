@@ -18,7 +18,8 @@ export function activate(context: ExtensionContext) {
 
     // Command: Show the description of an activity.
     const showActivityDescriptionCommand = commands.registerCommand(
-        "dodona.activity.description", showActivityDescription,
+        "dodona.activity.description",
+        showActivityDescription,
     );
 
     // Command: Mark a content page as read.
@@ -28,6 +29,13 @@ export function activate(context: ExtensionContext) {
             await completeContentPage(() => {
                 treeDataProvider.refresh();
             }, contentPage);
+        },
+    );
+
+    const refreshTreeView = commands.registerCommand(
+        "dodona.treeview.refresh",
+        async () => {
+            treeDataProvider.refresh();
         },
     );
 
@@ -45,6 +53,7 @@ export function activate(context: ExtensionContext) {
     context.subscriptions.push(
         completeContentPageCommand,
         createNewExerciseCommand,
+        refreshTreeView,
         showActivityDescriptionCommand,
         submitSolutionCommand,
     );
