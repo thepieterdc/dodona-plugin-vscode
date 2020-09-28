@@ -55,13 +55,13 @@
         "dodona.auth.dodona": {
           "type": "string",
           "default": null,
-          "description": "Specifies which API token should be used to authorize to Dodona.",
+          "markdownDescription": "Specifies which API token should be used to authorize to Dodona.\n\nFollow [these instructions](https://dodona-edu.github.io/en/guides/vs-code-extension/#_3-insert-api-token) to get an API token.",
           "scope": "application"
         },
         "dodona.auth.naos": {
           "type": "string",
           "default": null,
-          "description": "Specifies which API token should be used to authorize to Naos.",
+          "markdownDescription": "Specifies which API token should be used to authorize to Naos.\n\nFollow [these instructions](https://dodona-edu.github.io/en/guides/vs-code-extension/#_3-insert-api-token) to get an API token.",
           "scope": "application"
         },
         "dodona.environment": {
