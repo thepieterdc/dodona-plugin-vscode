@@ -1,3 +1,7 @@
+## 1.1.2 - September 28, 2020
+* [Stijn De Clercq (@stijndcl)](https://github.com/stijndcl)
+  * [BUG] `Dodona: show activity description` of exercise opens new split view [#52](https://github.com/thepieterdc/dodona-plugin-vscode/issues/52)
+
 ## 1.1.1 - September 28, 2020
 * [Pieter De Clercq (@thepieterdc)](https://github.com/thepieterdc)
   * [BUG] Don't open reading activities in split view [#45](https://github.com/thepieterdc/dodona-plugin-vscode/issues/45)
