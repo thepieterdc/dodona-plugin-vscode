@@ -16,13 +16,15 @@ const descriptionPanels = new Array<WebviewPanel>();
  * Opens a new or existing panel with an activity description.
  *
  * @param activity the activity to open the description for
+ * @param viewColumn the column in which the description must be shown
  */
-async function openActivityDescription(activity: Activity) {
+async function openActivityDescription(activity: Activity,
+                                       viewColumn = ViewColumn.Beside) {
     // Find an existing panel and reveal that.
     for (let i = descriptionPanels.length - 1; i >= 0; i--) {
         try {
             if (descriptionPanels[i].title === activity.name) {
-                descriptionPanels[i].reveal(ViewColumn.Beside);
+                descriptionPanels[i].reveal(viewColumn);
                 return;
             }
         } catch (e) {
@@ -35,7 +37,7 @@ async function openActivityDescription(activity: Activity) {
     const panel = window.createWebviewPanel(
         "activityDescription",
         activity.name,
-        ViewColumn.Beside,
+        viewColumn,
         { enableScripts: true });
     descriptionPanels.push(panel);
 
@@ -49,8 +51,10 @@ async function openActivityDescription(activity: Activity) {
  * Action to show the description of an activity.
  *
  * @param activity the activity to load the description for
+ * @param viewColumn the column in which to display the description
  */
-export async function showActivityDescription(activity?: Activity | AbstractActivityTreeItem) {
+export async function showActivityDescription(activity?: Activity | AbstractActivityTreeItem,
+                                              viewColumn = ViewColumn.Beside) {
     // Coerce to correct type.
     if (activity instanceof AbstractActivityTreeItem) {
         activity = activity.activity;
@@ -58,7 +62,7 @@ export async function showActivityDescription(activity?: Activity | AbstractActi
 
     // User can click in the sidebar to open the description.
     if (activity) {
-        return openActivityDescription(activity);
+        return openActivityDescription(activity, viewColumn);
     }
 
     // Open the description of the currently opened file.
@@ -105,5 +109,5 @@ export async function showActivityDescription(activity?: Activity | AbstractActi
     );
 
     // Open the description.
-    return openActivityDescription(exercise);
+    return openActivityDescription(exercise, viewColumn);
 }
