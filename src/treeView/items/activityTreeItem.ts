@@ -6,7 +6,7 @@ import Exercise, {
     ExerciseStatus,
     findExerciseStatus,
 } from "../../api/resources/activities/exercise";
-import { ProviderResult, TreeItemCollapsibleState } from "vscode";
+import { ProviderResult, TreeItemCollapsibleState, ViewColumn } from "vscode";
 
 // Icon to display next to completed content pages.
 const CONTENT_PAGE_COMPLETED_ICON = path.join(__filename, "..", "..", "..", "..", "assets", "content-page-completed.svg");
@@ -60,7 +60,7 @@ class ContentPageTreeItem extends AbstractActivityTreeItem {
         // Set the left-click action.
         this.command = {
             command: "dodona.activity.description",
-            arguments: [contentPage],
+            arguments: [contentPage, ViewColumn.One],
             title: "Open reading activity",
         };
 
