@@ -1,3 +1,16 @@
+## 1.1.0 - September 28, 2020
+* [Pieter De Clercq (@thepieterdc)](https://github.com/thepieterdc)
+  * [FEATURE] Add support for reading and completing content pages. (https://github.com/thepieterdc/dodona-plugin-vscode/issues/36)
+
+* [Stijn De Clercq (@stijndcl)](https://github.com/stijndcl)
+  * [FEATURE] Improve UX for entering an API key (https://github.com/thepieterdc/dodona-plugin-vscode/issues/30)
+  * [FEATURE] Open exercise description in split view (https://github.com/thepieterdc/dodona-plugin-vscode/issues/34)
+  * [FEATURE] UX improvements exercise panel (https://github.com/thepieterdc/dodona-plugin-vscode/issues/35)
+  * [BUG] Dodona exercises panel doesn't update when entering an API token (https://github.com/thepieterdc/dodona-plugin-vscode/issues/31)
+  * [BUG] First line in exercise is a .json file (https://github.com/thepieterdc/dodona-plugin-vscode/issues/33)
+  * [BUG] Setting `dodona.automaticallyOpenExerciseDescription` has no effect (https://github.com/thepieterdc/dodona-plugin-vscode/issues/37)
+  * [BUG] Command `Submit to Dodona` resulted in an error (listener is not a function) (https://github.com/thepieterdc/dodona-plugin-vscode/issues/38)
+
 ## 1.0.0 - September 27, 2020
 * [Stijn De Clercq (@stijndcl)](https://github.com/stijndcl)
   * Display exercise descriptions in Visual Studio Code.
