@@ -34,7 +34,7 @@ export function activate(context: ExtensionContext) {
 
     const refreshTreeView = commands.registerCommand(
         "dodona.treeview.refresh",
-        async () => {
+        () => {
             treeDataProvider.refresh();
         },
     );
