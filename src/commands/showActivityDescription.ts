@@ -18,8 +18,10 @@ const descriptionPanels = new Array<WebviewPanel>();
  * @param activity the activity to open the description for
  * @param viewColumn the column in which the description must be shown
  */
-async function openActivityDescription(activity: Activity,
-                                       viewColumn = ViewColumn.Beside) {
+async function openActivityDescription(
+    activity: Activity,
+    viewColumn = ViewColumn.Two,
+) {
     // Find an existing panel and reveal that.
     for (let i = descriptionPanels.length - 1; i >= 0; i--) {
         try {
@@ -38,7 +40,8 @@ async function openActivityDescription(activity: Activity,
         "activityDescription",
         activity.name,
         viewColumn,
-        { enableScripts: true });
+        { enableScripts: true },
+    );
     descriptionPanels.push(panel);
 
     // Load the activity description HTML.
@@ -53,8 +56,10 @@ async function openActivityDescription(activity: Activity,
  * @param activity the activity to load the description for
  * @param viewColumn the column in which to display the description
  */
-export async function showActivityDescription(activity?: Activity | AbstractActivityTreeItem,
-                                              viewColumn = ViewColumn.Beside) {
+export async function showActivityDescription(
+    activity?: Activity | AbstractActivityTreeItem,
+    viewColumn = ViewColumn.Two,
+) {
     // Coerce to correct type.
     if (activity instanceof AbstractActivityTreeItem) {
         activity = activity.activity;
