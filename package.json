@@ -132,7 +132,13 @@
           "icon": "assets/activity-bar-icon.svg"
         }
       ]
-    }
+    },
+    "viewsWelcome": [
+      {
+        "view": "dodona-activities",
+        "contents": "You have not yet configured an API token for your current environment. To correctly set up your token in Visual Studio Code, follow [these instructions](https://dodona-edu.github.io/en/guides/vs-code-extension/#_3-insert-api-token)."
+      }
+    ]
   },
   "scripts": {
     "compile": "tsc -p ./",
