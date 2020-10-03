@@ -121,10 +121,7 @@ export default async function execute<T>(call: DodonaCall<T>): Promise<T> {
                             ),
                         );
                     } else if (selection === settingsButton) {
-                        commands.executeCommand(
-                            "workbench.action.openSettings",
-                            `dodona.auth.${getApiEnvironment()}`,
-                        );
+                        commands.executeCommand("dodona.settings.token");
                     }
                 });
         }

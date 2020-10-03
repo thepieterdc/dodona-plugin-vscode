@@ -1,6 +1,7 @@
 import { commands, ExtensionContext, window, workspace } from "vscode";
 import RootDataProvider from "./treeView/dataProvider";
 import { createNewExercise } from "./commands/createNewExercise";
+import { getApiEnvironment } from "./configuration";
 import { submitSolution } from "./commands/submitSolution";
 import { showActivityDescription } from "./commands/showActivityDescription";
 import { completeContentPage } from "./commands/completeContentPage";
@@ -32,7 +33,7 @@ export function activate(context: ExtensionContext) {
         },
     );
 
-    // Command: Reload the list of activities in the tree view. 
+    // Command: Reload the list of activities in the tree view.
     const refreshTreeViewCommand = commands.registerCommand(
         "dodona.treeview.refresh",
         () => {
@@ -47,6 +48,17 @@ export function activate(context: ExtensionContext) {
             await submitSolution(() => {
                 treeDataProvider.refresh();
             });
+        },
+    );
+
+    // Command: Open the settings page to configure the relevant API token.
+    const settingsTokenCommand = commands.registerCommand(
+        "dodona.settings.token",
+        () => {
+            commands.executeCommand(
+                "workbench.action.openSettings",
+                `dodona.auth.${getApiEnvironment()}`,
+            );
         },
     );
 
