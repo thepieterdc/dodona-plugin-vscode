@@ -88,7 +88,8 @@
     "keybindings": [
       {
         "command": "dodona.submit",
-        "key": "alt+d"
+        "key": "alt+d",
+        "mac": "⌥ + d"
       }
     ],
     "menus": {
