@@ -67,6 +67,7 @@ export function activate(context: ExtensionContext) {
         completeContentPageCommand,
         createNewExerciseCommand,
         refreshTreeViewCommand,
+        settingsTokenCommand,
         showActivityDescriptionCommand,
         submitSolutionCommand,
     );
