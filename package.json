@@ -85,6 +85,12 @@
         }
       }
     },
+    "keybindings": [
+      {
+        "command": "dodona.submit",
+        "key": "alt+d"
+      }
+    ],
     "menus": {
       "commandPalette": [
         {
