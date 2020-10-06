@@ -17,6 +17,7 @@
   ],
   "icon": "assets/dodona.png",
   "activationEvents": [
+    "onStartupFinished",
     "onCommand:dodona.activity.description",
     "onCommand:dodona.submit",
     "onView:dodona.activity.description",
@@ -41,7 +42,8 @@
       },
       {
         "command": "dodona.notifications",
-        "title": "Dodona: Notifications"
+        "title": "Dodona: Notifications",
+        "icon": "assets/notification.svg"
       },
       {
         "command": "dodona.settings.token",
@@ -116,6 +118,11 @@
         }
       ],
       "view/title": [
+        {
+          "command": "dodona.notifications",
+          "when": "view == dodona-activities",
+          "group": "navigation"
+        },
         {
           "command": "dodona.treeview.refresh",
           "when": "view == dodona-activities",

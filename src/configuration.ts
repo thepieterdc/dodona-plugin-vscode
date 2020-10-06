@@ -24,8 +24,16 @@ export function config(): WorkspaceConfiguration {
  * @return the configured environment
  */
 export function getApiEnvironment(): DodonaEnvironment {
-    const environment = config().get("environment") as string;
-    return getDodonaEnvironment(environment);
+    return getDodonaEnvironment(getEnvironmentUrl());
+}
+
+/**
+ * Gets the complete API environment from the configuration.
+ *
+ * @return the configured environment's complete url.
+ */
+export function getEnvironmentUrl(): string {
+    return config().get("environment") as string;
 }
 
 /**

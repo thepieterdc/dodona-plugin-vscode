@@ -1,11 +1,15 @@
 import { commands, ExtensionContext, Uri, window, workspace } from "vscode";
 import RootDataProvider from "./treeView/dataProvider";
 import { createNewExercise } from "./commands/createNewExercise";
-import { config, getApiEnvironment } from "./configuration";
+import { getApiEnvironment } from "./configuration";
 import { submitSolution } from "./commands/submitSolution";
 import { showActivityDescription } from "./commands/showActivityDescription";
 import { completeContentPage } from "./commands/completeContentPage";
 import ContentPage from "./api/resources/activities/contentPage";
+import {
+    notificationsInterval,
+    openNotifications,
+} from "./commands/openNotifications";
 
 export function activate(context: ExtensionContext) {
     // Create a data provider for the tree view.
@@ -33,15 +37,10 @@ export function activate(context: ExtensionContext) {
         },
     );
 
-    // Command: Open the notifications page on Dodona/Naos
+    // Command: Starts a loop that checks for new unread notifications
     const notificationsCommand = commands.registerCommand(
         "dodona.notifications",
-        () => {
-            const url = Uri.parse(
-                `${config().get("environment") as string}/notifications`,
-            );
-            commands.executeCommand("vscode.open", url);
-        },
+        openNotifications,
     );
 
     // Command: Reload the list of activities in the tree view.
@@ -92,4 +91,6 @@ export function activate(context: ExtensionContext) {
     workspace.onDidChangeConfiguration(() => {
         treeDataProvider.refresh();
     });
+
+    notificationsInterval();
 }

@@ -10,6 +10,7 @@ import {
 } from "./managers";
 import "../prototypes/string";
 import { InvalidAccessToken } from "./errors/invalidAccessToken";
+import NotificationManager from "./managers/notificationManager";
 
 /**
  * A client for interfacing with Dodona.
@@ -17,6 +18,7 @@ import { InvalidAccessToken } from "./errors/invalidAccessToken";
 export interface DodonaClient {
     activities: ActivityManager;
     courses: CourseManager;
+    notifications: NotificationManager;
     series: SeriesManager;
     submissions: SubmissionManager;
 }
@@ -27,6 +29,7 @@ export interface DodonaClient {
 class DodonaClientImpl implements DodonaClient {
     public readonly activities: ActivityManager;
     public readonly courses: CourseManager;
+    public readonly notifications: NotificationManager;
     public readonly series: SeriesManager;
     public readonly submissions: SubmissionManager;
 
@@ -54,6 +57,7 @@ class DodonaClientImpl implements DodonaClient {
         // Initialise managers.
         this.activities = new ActivityManager(html, json);
         this.courses = new CourseManager(json);
+        this.notifications = new NotificationManager(json);
         this.series = new SeriesManager(json);
         this.submissions = new SubmissionManager(json);
     }
