@@ -40,6 +40,10 @@
         "title": "Dodona: Open exercise in editor"
       },
       {
+        "command": "dodona.notifications",
+        "title": "Dodona: Notifications"
+      },
+      {
         "command": "dodona.settings.token",
         "title": "Dodona: Open the settings page to configure your API token."
       },
@@ -100,6 +104,10 @@
         },
         {
           "command": "dodona.exercise.create",
+          "when": "false"
+        },
+        {
+          "command": "dodona.notifications",
           "when": "false"
         },
         {
