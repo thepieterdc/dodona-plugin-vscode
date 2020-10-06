@@ -42,7 +42,7 @@ Add the Dodona url of the exercise in VS Code as a comment on the **first line**
 > }
 > ```
 
-Execute the `Submit to Dodona`-command by opening the command palette using `Ctrl-Shift-P` by typing (parts of) `Submit to Dodona` and pressing `Enter`. You can also make a [shortcut](https://code.visualstudio.com/docs/getstarted/keybindings#_keyboard-shortcuts-editor) for this.
+Execute the `Submit to Dodona`-command by opening the command palette using `Ctrl-Shift-P` by typing (parts of) `Submit to Dodona` and pressing `Enter`. You can also make a [shortcut](https://code.visualstudio.com/docs/getstarted/keybindings#_keyboard-shortcuts-editor) for this. By default, the shortcut is set to `Alt-D` (`Option-D` for Mac users).
 
 ![Submit](assets/submit.png)
 
