@@ -15,26 +15,34 @@ import { CourseTreeItem } from "./items/courseTreeItem";
  * Data provider for the exercise tree view.
  */
 
-export default class RootDataProvider implements TreeDataProvider<AbstractTreeItem> {
-    private _onDidChangeTreeData: EventEmitter<AbstractTreeItem | undefined> = new EventEmitter<AbstractTreeItem | undefined>();
-    readonly onDidChangeTreeData: Event<AbstractTreeItem | undefined> = this._onDidChangeTreeData.event;
+export default class RootDataProvider
+    implements TreeDataProvider<AbstractTreeItem> {
+    private _onDidChangeTreeData: EventEmitter<
+        AbstractTreeItem | undefined
+    > = new EventEmitter<AbstractTreeItem | undefined>();
+    readonly onDidChangeTreeData: Event<AbstractTreeItem | undefined> = this
+        ._onDidChangeTreeData.event;
 
-    getChildren(element?: AbstractTreeItem): ProviderResult<AbstractTreeItem[]> {
+    getChildren(
+        element?: AbstractTreeItem,
+    ): ProviderResult<AbstractTreeItem[]> {
         if (element) {
             // Element in the tree.
             return element.getChildren();
         }
 
         // Get the courses the user is subscribed to.
-        return execute(dodona => dodona.courses.subscribed)
-            // Sort them alphabetically.
-            .then(cs =>
-                cs.sort((a, b) =>
-                    a.name < b.name ? -1 : a.name > b.name ? 1 : 0,
-                ),
-            )
-            // Convert them to tree items.
-            .then(cs => cs.map(c => new CourseTreeItem(c)));
+        return (
+            execute(dodona => dodona.courses.subscribed)
+                // Sort them alphabetically.
+                .then(cs =>
+                    cs.sort((a, b) =>
+                        a.name < b.name ? -1 : a.name > b.name ? 1 : 0,
+                    ),
+                )
+                // Convert them to tree items.
+                .then(cs => cs.map(c => new CourseTreeItem(c)))
+        );
     }
 
     getTreeItem(element: AbstractTreeItem): TreeItem {

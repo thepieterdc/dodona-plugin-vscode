@@ -1,7 +1,7 @@
-import { commands, ExtensionContext, window, workspace } from "vscode";
+import { commands, ExtensionContext, Uri, window, workspace } from "vscode";
 import RootDataProvider from "./treeView/dataProvider";
 import { createNewExercise } from "./commands/createNewExercise";
-import { getApiEnvironment } from "./configuration";
+import { config, getApiEnvironment } from "./configuration";
 import { submitSolution } from "./commands/submitSolution";
 import { showActivityDescription } from "./commands/showActivityDescription";
 import { completeContentPage } from "./commands/completeContentPage";
@@ -30,6 +30,17 @@ export function activate(context: ExtensionContext) {
             await completeContentPage(() => {
                 treeDataProvider.refresh();
             }, contentPage);
+        },
+    );
+
+    // Command: Open the notifications page on Dodona/Naos
+    const notificationsCommand = commands.registerCommand(
+        "dodona.notifications",
+        () => {
+            const url = Uri.parse(
+                `${config().get("environment") as string}/notifications`,
+            );
+            commands.executeCommand("vscode.open", url);
         },
     );
 
@@ -66,6 +77,7 @@ export function activate(context: ExtensionContext) {
     context.subscriptions.push(
         completeContentPageCommand,
         createNewExerciseCommand,
+        notificationsCommand,
         refreshTreeViewCommand,
         settingsTokenCommand,
         showActivityDescriptionCommand,
