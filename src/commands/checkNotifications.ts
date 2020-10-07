@@ -22,22 +22,19 @@ export function openNotifications() {
 async function checkNotifications(): Promise<boolean> {
     return await execute(dodona => dodona.notifications.newNotifications).then(
         notifications => {
-            let anyNew = false;
-            notifications.forEach(notification => {
-                const newDate =
-                    new Date(notification.updated_at).getTime() * 1000;
-                if (
-                    !notification.read &&
-                    // Check if the unread notification's timestamp is more recent
-                    // than the most recent one to avoid spam
-                    newDate > lastNotification
-                ) {
-                    lastNotification = newDate;
-                    anyNew = true;
-                    return;
-                }
-            });
-            return anyNew;
+            const newestNotification = notifications
+                .filter(notification => !notification.read)
+                .map(
+                    notification =>
+                        new Date(notification.updated_at).getTime() * 1000,
+                )
+                .max();
+
+            if (newestNotification > lastNotification) {
+                lastNotification = newestNotification;
+                return true;
+            }
+            return false;
         },
     );
 }
