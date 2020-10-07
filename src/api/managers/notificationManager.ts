@@ -5,7 +5,7 @@ export default class NotificationManager {
     private readonly jsonApi: Got;
 
     /**
-     * CourseManager constructor.
+     * NotificationManager constructor.
      *
      * @param jsonApi json request fac>tory
      */
