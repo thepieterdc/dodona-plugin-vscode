@@ -9,7 +9,7 @@ import ContentPage from "./api/resources/activities/contentPage";
 import {
     notificationsInterval,
     openNotifications,
-} from "./commands/openNotifications";
+} from "./commands/checkNotifications";
 
 export function activate(context: ExtensionContext) {
     // Create a data provider for the tree view.
