@@ -1,5 +1,5 @@
 import { commands, Uri, window } from "vscode";
-import { getEnvironmentUrl, getApiEnvironment } from "./../configuration";
+import { getEnvironmentUrl, getApiEnvironment } from "../configuration";
 import execute from "../api/client";
 
 // Create a default date with timestamp 0
@@ -56,7 +56,7 @@ export async function notificationsInterval(): Promise<void> {
         if (await checkNotifications()) {
             showNotification();
         }
-    }, 30000);
+    }, 60000);
 }
 
 function showNotification(): void {
