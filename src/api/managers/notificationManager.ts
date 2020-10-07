@@ -1,6 +1,4 @@
 import { Got } from "got";
-import { InvalidAccessToken } from "../errors/invalidAccessToken";
-import { getEnvironmentUrl } from "../../configuration";
 import { Notification } from "../resources/notification";
 
 export default class NotificationManager {
