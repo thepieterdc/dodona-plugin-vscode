@@ -1,4 +1,4 @@
-import { commands, ExtensionContext, Uri, window, workspace } from "vscode";
+import { commands, ExtensionContext, window, workspace } from "vscode";
 import RootDataProvider from "./treeView/dataProvider";
 import { createNewExercise } from "./commands/createNewExercise";
 import { getApiEnvironment } from "./configuration";
