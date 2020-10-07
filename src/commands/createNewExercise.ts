@@ -15,9 +15,35 @@ import Exercise from "../api/resources/activities/exercise";
 export async function createNewExercise(exercise: Exercise) {
     // Find the active workspace.
     if (!workspace.rootPath) {
-        window.showErrorMessage(
-            "No active workspace found. Make sure you have opened a folder in Visual Studio Code and try again.",
-        );
+        const openButton = "Open Folder";
+        window
+            .showErrorMessage(
+                "No active workspace found. Make sure you have opened a folder in Visual Studio Code and try again.",
+                openButton,
+            )
+            .then(selection => {
+                if (selection == openButton) {
+                    // Configure dialogoptions so the user can't choose a file
+                    // instead of a folder
+                    const options: vscode.OpenDialogOptions = {
+                        canSelectMany: false,
+                        canSelectFolders: true,
+                        canSelectFiles: false,
+                    };
+
+                    // Show a dialog where the user can choose a folder to open
+                    vscode.window.showOpenDialog(options).then(folders => {
+                        // Check if the user selected anything
+                        if (folders != null && folders.length > 0) {
+                            // Open the selected folder
+                            vscode.commands.executeCommand(
+                                "vscode.openFolder",
+                                folders[0],
+                            );
+                        }
+                    });
+                }
+            });
         return;
     }
 
