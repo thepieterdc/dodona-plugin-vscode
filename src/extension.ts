@@ -2,6 +2,7 @@ import { commands, ExtensionContext, window, workspace } from "vscode";
 import RootDataProvider from "./treeView/dataProvider";
 import { createNewExercise } from "./commands/createNewExercise";
 import { getApiEnvironment } from "./configuration";
+import { openSeries } from "./commands/openSeries";
 import { submitSolution } from "./commands/submitSolution";
 import { showActivityDescription } from "./commands/showActivityDescription";
 import { completeContentPage } from "./commands/completeContentPage";
@@ -43,6 +44,11 @@ export function activate(context: ExtensionContext) {
         openNotifications,
     );
 
+    const openSeriesCommand = commands.registerCommand(
+        "dodona.series.open",
+        openSeries,
+    );
+
     // Command: Reload the list of activities in the tree view.
     const refreshTreeViewCommand = commands.registerCommand(
         "dodona.treeview.refresh",
@@ -78,6 +84,7 @@ export function activate(context: ExtensionContext) {
         createNewExerciseCommand,
         notificationsCommand,
         refreshTreeViewCommand,
+        openSeriesCommand,
         settingsTokenCommand,
         showActivityDescriptionCommand,
         submitSolutionCommand,
