@@ -1,6 +1,7 @@
 import { commands, Uri, window } from "vscode";
 import { getEnvironmentUrl, getApiEnvironment } from "../configuration";
 import execute from "../api/client";
+import "../prototypes/array";
 
 // Create a default date with timestamp 0
 // so everything is always more recent on startup
