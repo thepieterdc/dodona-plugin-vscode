@@ -8,6 +8,7 @@ export interface Series extends Resource {
     exercises: string;
     name: string;
     order: number;
+    url: string;
 }
 
 export default Series;
