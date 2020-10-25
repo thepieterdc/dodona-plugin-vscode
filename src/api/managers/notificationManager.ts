@@ -7,7 +7,7 @@ export default class NotificationManager {
     /**
      * NotificationManager constructor.
      *
-     * @param jsonApi json request fac>tory
+     * @param jsonApi json request factory
      */
     constructor(jsonApi: Got) {
         this.jsonApi = jsonApi;

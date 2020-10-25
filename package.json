@@ -19,6 +19,7 @@
   "activationEvents": [
     "onStartupFinished",
     "onCommand:dodona.activity.description",
+    "onCommand:dodona.series.open",
     "onCommand:dodona.submit",
     "onView:dodona.activity.description",
     "onView:dodona-activities"
@@ -44,6 +45,11 @@
         "command": "dodona.notifications",
         "title": "Dodona: Notifications",
         "icon": "assets/notification.svg"
+      },
+      {
+        "command": "dodona.series.open",
+        "title": "Dodona: Open this series in your browser",
+        "icon": "assets/open-description.svg"
       },
       {
         "command": "dodona.settings.token",
@@ -113,6 +119,10 @@
           "when": "false"
         },
         {
+          "command": "dodona.series.open",
+          "when": "false"
+        },
+        {
           "command": "dodona.settings.token",
           "when": "false"
         }
@@ -143,6 +153,11 @@
         {
           "command": "dodona.exercise.create",
           "when": "view == dodona-activities && viewItem == activity-exercise"
+        },
+        {
+          "command": "dodona.series.open",
+          "when": "view == dodona-activities && viewItem == item-series",
+          "group": "inline"
         }
       ]
     },
