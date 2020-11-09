@@ -1,3 +1,8 @@
+## 1.2.0 - November 9, 2020
+* [Stijn De Clercq (@stijndcl)](https://github.com/stijndcl)
+  * [FEATURE] Show notifications if there is a new annotation on your code [#62](https://github.com/thepieterdc/dodona-plugin-vscode/issues/62)
+  * [FEATURE] Separate icons for light/dark mode [#63](https://github.com/thepieterdc/dodona-plugin-vscode/issues/63)
+
 ## 1.1.2 - September 28, 2020
 * [Stijn De Clercq (@stijndcl)](https://github.com/stijndcl)
   * [BUG] `Dodona: show activity description` of exercise opens new split view [#52](https://github.com/thepieterdc/dodona-plugin-vscode/issues/52)
