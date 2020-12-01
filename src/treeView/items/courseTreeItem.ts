@@ -8,7 +8,7 @@ import { SeriesTreeItem } from "./seriesTreeItem";
  * TreeView item for a course.
  */
 export class CourseTreeItem extends AbstractTreeItem {
-    private readonly course: Course;
+    public readonly course: Course;
 
     /**
      * CourseItem constructor.
@@ -18,6 +18,7 @@ export class CourseTreeItem extends AbstractTreeItem {
     constructor(course: Course) {
         super(course.name, TreeItemCollapsibleState.Collapsed);
         this.course = course;
+        this.contextValue = "item-course";
     }
 
     getChildren(): ProviderResult<AbstractTreeItem[]> {
@@ -27,9 +28,7 @@ export class CourseTreeItem extends AbstractTreeItem {
                 // Sort them by their order.
                 .then(ss => ss.sort((a, b) => a.order - b.order))
                 // Convert them to tree items.
-                .then(ss =>
-                    ss.map(s => new SeriesTreeItem(s)),
-                )
+                .then(ss => ss.map(s => new SeriesTreeItem(s)))
         );
     }
 }

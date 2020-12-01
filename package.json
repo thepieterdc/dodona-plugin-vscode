@@ -38,6 +38,11 @@
         "icon": "assets/content-page-read.svg"
       },
       {
+        "command": "dodona.course.open",
+        "title": "Dodona: Open this course in your browser",
+        "icon": "assets/edit.svg"
+      },
+      {
         "command": "dodona.exercise.create",
         "title": "Dodona: Open exercise in editor"
       },
@@ -112,6 +117,10 @@
           "when": "false"
         },
         {
+          "command": "dodona.course.open",
+          "when": "false"
+        },
+        {
           "command": "dodona.exercise.create",
           "when": "false"
         },
@@ -154,6 +163,11 @@
         {
           "command": "dodona.contentPage.read",
           "when": "view == dodona-activities && viewItem == activity-contentpage",
+          "group": "inline"
+        },
+        {
+          "command": "dodona.course.open",
+          "when": "view == dodona-activities && viewItem == item-course",
           "group": "inline"
         },
         {
