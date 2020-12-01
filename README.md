@@ -44,7 +44,7 @@ The first line of the newly created file will contain the link to the selected e
 
 ## Submit exercises via Dodona extension (Usage)
 
-Once you've solved the exercise, it's easy to submit your solution. Execute the `Dodona: Submit solution`-command by opening the command palette using `Ctrl+Shift+P` by typing (parts of) `Dodona: Submit solution` and pressing `Enter`. You can also use the `Alt+D` shortcut (`Option-D` for Mac users) for this. You can also assign a [different shortcut](https://code.visualstudio.com/docs/getstarted/keybindings#_keyboard-shortcuts-editor). This command will submit your code to Dodona and trigger an automatic test.
+Once you've solved the exercise, it's easy to submit your solution. Execute the `Dodona: Submit solution`-command by opening the command palette using `Ctrl+Shift+P` by typing (parts of) `Dodona: Submit solution` and pressing `Enter`. You can also use the `Alt+D` shortcut (`Option-D` for Mac users) for this, or assign a [different shortcut](https://code.visualstudio.com/docs/getstarted/keybindings#_keyboard-shortcuts-editor). This command will submit your code to Dodona and trigger an automatic test.
 
 ![Submit](assets/submit2.png)
 
