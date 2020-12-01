@@ -2,6 +2,7 @@ import { commands, ExtensionContext, window, workspace } from "vscode";
 import RootDataProvider from "./treeView/dataProvider";
 import { createNewExercise } from "./commands/createNewExercise";
 import { getApiEnvironment } from "./configuration";
+import { openCourse } from "./commands/openCourse";
 import { openSeries } from "./commands/openSeries";
 import { submitSolution } from "./commands/submitSolution";
 import { showActivityDescription } from "./commands/showActivityDescription";
@@ -44,6 +45,11 @@ export function activate(context: ExtensionContext) {
         openNotifications,
     );
 
+    const openCourseCommand = commands.registerCommand(
+        "dodona.course.open",
+        openCourse,
+    );
+
     const openSeriesCommand = commands.registerCommand(
         "dodona.series.open",
         openSeries,
@@ -84,6 +90,7 @@ export function activate(context: ExtensionContext) {
         createNewExerciseCommand,
         notificationsCommand,
         refreshTreeViewCommand,
+        openCourseCommand,
         openSeriesCommand,
         settingsTokenCommand,
         showActivityDescriptionCommand,
