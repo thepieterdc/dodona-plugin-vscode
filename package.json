@@ -57,7 +57,8 @@
       },
       {
         "command": "dodona.submit",
-        "title": "Dodona: Submit solution"
+        "title": "Dodona: Submit solution",
+        "icon": "assets/content-page-read.svg"
       },
       {
         "command": "dodona.treeview.refresh",
@@ -129,14 +130,19 @@
       ],
       "view/title": [
         {
-          "command": "dodona.notifications",
-          "when": "view == dodona-activities",
-          "group": "navigation"
-        },
-        {
           "command": "dodona.treeview.refresh",
           "when": "view == dodona-activities",
-          "group": "navigation"
+          "group": "navigation@0"
+        },
+        {
+          "command": "dodona.notifications",
+          "when": "view == dodona-activities",
+          "group": "navigation@1"
+        },
+        {
+          "command": "dodona.submit",
+          "when": "view == dodona-activities",
+          "group": "navigation@2"
         }
       ],
       "view/item/context": [
