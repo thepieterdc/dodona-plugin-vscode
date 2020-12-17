@@ -100,6 +100,17 @@
           "type": "boolean",
           "default": true,
           "description": "Specifies whether or not creating a new exercise should automatically open its description in a new window."
+        },
+        "dodona.treeview.sort": {
+          "type": "string",
+          "default": "Alphabetic (ascending)",
+          "enum": [
+            "Academic year (ascending)",
+            "Academic year (descending)",
+            "Alphabetic (ascending)",
+            "Alphabetic (descending)"
+          ],
+          "description": "Specifies how the courses in the Tree View should be sorted."
         }
       }
     },

@@ -54,3 +54,12 @@ export function getApiToken(): ApiToken | null {
 export function getAutoDescription(): boolean {
     return config().get("exercise.description.auto") || false;
 }
+
+/**
+ * Gets the SortOption dropdown from the configuration.
+ *
+ * @return the current value of the dropdown field
+ */
+export function getSortOption(): string {
+    return config().get("treeview.sort") || "Alphabetic (ascending)";
+}

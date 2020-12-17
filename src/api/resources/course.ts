@@ -6,6 +6,7 @@ import { Resource } from "./resource";
 export interface Course extends Resource {
     name: string;
     series: string;
+    year: string;
 }
 
 export default Course;
