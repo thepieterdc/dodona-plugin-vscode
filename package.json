@@ -103,14 +103,30 @@
         },
         "dodona.treeview.sort": {
           "type": "string",
-          "default": "Alphabetic (ascending)",
+          "default": "Academic year (descending)",
           "enum": [
             "Academic year (ascending)",
             "Academic year (descending)",
             "Alphabetic (ascending)",
             "Alphabetic (descending)"
           ],
+          "enumDescriptions": [
+            "Academic year first (ascending), alphabetic second",
+            "Academic year first (descending), alphabetic second",
+            "Alphabetic first (ascending), academic year second",
+            "Alphabetic first (descending), academic year second"
+          ],
           "description": "Specifies how the courses in the Tree View should be sorted."
+        },
+        "dodona.treeview.years": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "Specifies academic years of which courses should be visible, leave empty if no courses should be hidden. Academic years should be supplied using the `YYYY` format, and separated by comma's.\nExample: to only show courses from `2016-2017` and `2020-2021`, you would use `2016,2020`."
+        },
+        "dodona.treeview.courses": {
+          "type": "string",
+          "default": "",
+          "description": "Specifies which course id's should be visible, leave empty if no courses should be hidden. Course id's should be separated by comma's.\nExample: to only show the courses with id's `123` and `456`, use `123,456`."
         }
       }
     },

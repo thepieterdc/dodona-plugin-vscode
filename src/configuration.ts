@@ -61,5 +61,23 @@ export function getAutoDescription(): boolean {
  * @return the current value of the dropdown field
  */
 export function getSortOption(): string {
-    return config().get("treeview.sort") || "Alphabetic (ascending)";
+    return config().get("treeview.sort") || "Academic year (descending)";
+}
+
+/**
+ * Gets the academic year filter from the configuration.
+ *
+ * @return the current value of the input field
+ */
+export function getYearFilter(): string {
+    return config().get("treeview.years") || "";
+}
+
+/**
+ * Gets the course id filter from the configuration.
+ *
+ * @return the current value of the input field
+ */
+export function getCourseFilter(): string {
+    return config().get("treeview.courses") || "";
 }
