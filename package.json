@@ -121,12 +121,12 @@
         "dodona.treeview.years": {
           "type": "string",
           "default": "",
-          "markdownDescription": "Specifies academic years of which courses should be visible, leave empty if no courses should be hidden. Academic years should be supplied using the `YYYY` format, and separated by comma's.\nExample: to only show courses from `2016-2017` and `2020-2021`, you would use `2016,2020`."
+          "markdownDescription": "Specifies academic years of which courses should be visible, leave empty if no courses should be hidden. Academic years should be supplied using the `YYYY` format, and separated by comma's. Example: to only show courses from `2016-2017` and `2020-2021`, you would use `2016,2020`."
         },
         "dodona.treeview.courses": {
           "type": "string",
           "default": "",
-          "description": "Specifies which course id's should be visible, leave empty if no courses should be hidden. Course id's should be separated by comma's.\nExample: to only show the courses with id's `123` and `456`, use `123,456`."
+          "markdownDescription": "Specifies which course id's should be visible, leave empty if no courses should be hidden. Course id's should be separated by comma's. Example: to only show the courses with id's `123` and `456`, use `123,456`."
         }
       }
     },
