@@ -3,6 +3,7 @@ import { ProviderResult, TreeItemCollapsibleState } from "vscode";
 import execute from "../../api/client";
 import { AbstractTreeItem } from "./abstractTreeItem";
 import { SeriesTreeItem } from "./seriesTreeItem";
+import { Console } from "console";
 
 /**
  * TreeView item for a course.
