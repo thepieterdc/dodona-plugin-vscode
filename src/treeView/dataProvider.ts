@@ -55,15 +55,14 @@ export default class RootDataProvider
     sortCourses(courses: Course[]): Course[] {
         const sortOption = getSortOption();
 
+        // Asc/Desc is just switching the 1's and -1's,
+        // so this can be made a bit abstract to avoid duplication
         const priority = sortOption.includes("ascending") ? -1 : 1;
 
-        // Sorting always puts the second option descending to make it more logical
+        // Sorting always puts the second option descending to make it easier to read
 
         // Sort by name first
         if (sortOption.startsWith("Alphabetic")) {
-            // Ascending or descending, year second
-            // Asc/Desc is just switching the 1's and -1's,
-            // so this can be made a bit abstract
             return courses.sort((a, b) =>
                 a.name < b.name
                     ? priority
