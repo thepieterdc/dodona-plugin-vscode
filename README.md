@@ -66,7 +66,7 @@ Academic years should be supplied using the `YYYY` format, and be separated by c
 
 Course id's can be found at the end of a course's URL, and should be separated by comma's. For example, to only show courses with id's `123` and `456`, you would use `123,456`.
 
-![FilterCOurses](assets/filter-courses-example.png)
+![FilterCourses](assets/filter-courses-example.png)
 
 To show _all_ courses or remove your filters, you can just leave the fields blank (default).
 
