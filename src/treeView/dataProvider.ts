@@ -41,7 +41,9 @@ export default class RootDataProvider
         return (
             execute(dodona => dodona.courses.subscribed)
                 // Sort courses & apply filters
-                .then(cs => this.sortCourses(this.filterCourses(cs)))
+                .then(cs =>
+                    RootDataProvider.sortCourses(this.filterCourses(cs)),
+                )
                 // Convert them to tree items.
                 .then(cs => cs.map(c => new CourseTreeItem(c)))
         );
@@ -56,7 +58,7 @@ export default class RootDataProvider
         this._onDidChangeTreeData.fire(undefined);
     }
 
-    sortCourses(courses: Course[]): Course[] {
+    static sortCourses(courses: Course[]): Course[] {
         const sortOption = getSortOption();
 
         // Asc/Desc is just switching the 1's and -1's,
