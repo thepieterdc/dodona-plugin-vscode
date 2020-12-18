@@ -17,10 +17,10 @@ You can authenticate by creating an API token. Using such token, VS Code can sub
 
 1. <img src="assets/sideview.png" alt="cogwheel" width=30px;/> Dodona icon in the Activity Bar (icon in left column)
 2. `Open Settings`
-![API token](assets/api-token2.png)
+   ![API token](assets/api-token2.png)
 3. Paste the API token you just made in text box.
 4. In the left column you get an overview of the exercise series of the course (expand it if necessary).
-![API token](assets/api-token3.png)
+   ![API token](assets/api-token3.png)
 
 ## Creating new exercises via Dodona extension (Usage)
 
@@ -49,6 +49,26 @@ Once you've solved the exercise, it's easy to submit your solution. Execute the 
 ![Submit](assets/submit2.png)
 
 After a few seconds, you should see a popup in the bottom right corner containing the result of your submission. If you click the `View results` button, the result should open in a new browser window.
+
+## Sorting and filtering courses (Usage)
+
+You can change the order in which courses are shown using the `dodona.treeview.sort` dropdown in the settings. By default, this will be set to sort by `Academic year first (descending), alphabetic second`.
+
+![Sorting](assets/sort-example.png)
+
+When subscribed to a lot of courses, it can often become difficult to find the relevant ones. In case you are a teacher, it could also happen that you want to give a presentation to your students, but don't want to flash your exams and tasks in the sidebar.
+
+You can apply filters to _only_ show courses of certain academic years, or courses with certain id's, by using the `dodona.treeview.courses` and `dodona.treeview.years` fields. Both of these filters can be applied _at the same time_, and they will count as an **AND** filter, meaning that only courses meeting both filters will be shown.
+
+Academic years should be supplied using the `YYYY` format, and be separated by comma's. For example, to only show courses from `2016-2017` and `2020-2021`, you would use `2016,2020`.
+
+![FilterYears](assets/filter-years-example.png)
+
+Course id's can be found at the end of a course's URL, and should be separated by comma's. For example, to only show courses with id's `123` and `456`, you would use `123,456`.
+
+![FilterCOurses](assets/filter-courses-example.png)
+
+To show _all_ courses or remove your filters, you can just leave the fields blank (default).
 
 ## Credits
 
