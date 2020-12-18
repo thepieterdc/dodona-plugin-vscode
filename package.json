@@ -236,6 +236,7 @@
     "compile": "tsc -p ./",
     "lint": "eslint . --ext .ts,.tsx",
     "package": "vsce package",
+    "vscode:publish": "vsce publish --yarn",
     "vscode:prepublish": "yarn run compile",
     "watch": "tsc -watch -p ./"
   },
