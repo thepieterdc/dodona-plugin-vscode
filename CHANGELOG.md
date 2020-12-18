@@ -1,3 +1,10 @@
+## 1.3.0 - December 18, 2020
+* [Stijn De Clercq (@stijndcl)](https://github.com/stijndcl)
+  * [FEATURE] Use `open-in-new` icon to open series and course description in browser [#70](https://github.com/thepieterdc/dodona-plugin-vscode/issues/70)
+  * [FEATURE] Add a checkmark button in sidebar to submit to Dodona [#72](https://github.com/thepieterdc/dodona-plugin-vscode/issues/72)
+  * [FEATURE] Toggle to only show favorite courses [#74](https://github.com/thepieterdc/dodona-plugin-vscode/issues/74)
+  * [FEATURE] Add new filters to readme [#75](https://github.com/thepieterdc/dodona-plugin-vscode/issues/75)
+
 ## 1.2.0 - November 9, 2020
 * [Stijn De Clercq (@stijndcl)](https://github.com/stijndcl)
   * [FEATURE] Show notifications if there is a new annotation on your code [#62](https://github.com/thepieterdc/dodona-plugin-vscode/issues/62)
