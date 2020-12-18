@@ -121,7 +121,7 @@
         "dodona.treeview.years": {
           "type": "string",
           "default": "",
-          "markdownDescription": "Specifies academic years of which courses should be visible, leave empty if no courses should be hidden. Academic years should be supplied using the `YYYY` format, and be separated by comma's."
+          "markdownDescription": "Specifies academic years of which courses should be visible, leave empty if no courses should be hidden. Academic years should be supplied using the `YYYY` format, and be separated by commas."
         },
         "dodona.treeview.courses": {
           "type": "string",
