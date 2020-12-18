@@ -126,7 +126,7 @@
         "dodona.treeview.courses": {
           "type": "string",
           "default": "",
-          "markdownDescription": "Specifies which course id's should be visible, leave empty if no courses should be hidden. Course id's should be separated by comma's."
+          "markdownDescription": "Specifies which course ids should be visible, leave empty if no courses should be hidden. Course id's should be separated by commas."
         }
       }
     },
