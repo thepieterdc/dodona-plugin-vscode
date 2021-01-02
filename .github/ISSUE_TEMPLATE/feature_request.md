@@ -3,7 +3,7 @@ name: Feature request
 about: Request a new feature to be added to the plugin.
 title: "[FEATURE] "
 labels: 'feature :star:'
-assignees: thepieterdc
+assignees: stijndcl
 
 ---
 
