@@ -60,7 +60,7 @@ After a few seconds, you should see a popup in the bottom right corner containin
 |       <img src="assets/refresh.svg" alt="refresh" width=15px;/>        | Reload the list of activities.                                                                                                                                                        |
 |  <img src="assets/notification.svg" alt="notification" width=15px;/>   | Notifies users in case of unread feedback. The icon links to https://dodona.ugent.be/notifications.                                                                                   |
 | <img src="assets/content-page-read.svg" alt="checkmark" width=15px;/>  | Submit solution to Dodona. Alternative for `Alt+D` and `Ctrl+Shift+P`, `Dodona: Submit Solution`.                                                                                     |
-|          <img src="assets/edit.svg" alt="edit" width=15px;/>           | Opens the description of an exercise series or course in a new browser window. (Hover with your cursor above an exercise series or course in the left column with Dodona activities.) |
+|          <img src="assets/edit.svg" alt="edit" width=15px;/>           | Opens the description of a series or course in a new browser window. (Hover with your cursor over a series or course in the left column with Dodona activities.) |
 | <img src="assets/open-description.svg" alt="description" width=15px;/> | Show the exercise description in VS Code. (Hover with your cursor over an exercise in the left column with Dodona activities.)                                                       |
 
 ## Sorting and filtering courses (Usage)
