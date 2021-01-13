@@ -46,7 +46,7 @@ The first line of the newly created file will contain the link to the selected e
 
 Once you've solved the exercise, it's easy to submit your solution. There are three ways to submit a solution:
 
-* Click the checkmark ( <img src="assets/content-page-read.svg" alt="checkmark" width=15px;/> ) in the left panel with the Dodona activities.
+* Click the checkmark ( <img src="assets/content-page-read.svg" alt="checkmark" width=15px;/> ) in the left panel with the Dodona activities.![Checkmark](assets/check-mark.png)
 * You can also use the `Alt+D` shortcut (`Option-D` for Mac users) for this, or assign a [different shortcut](https://code.visualstudio.com/docs/getstarted/keybindings#_keyboard-shortcuts-editor).
 * Another option is to execute the `Dodona: Submit solution`-command by opening the command palette using `Ctrl+Shift+P` and typing (parts of) `Dodona: Submit solution` and pressing `Enter`.![Submit](assets/submit2.png)
 
