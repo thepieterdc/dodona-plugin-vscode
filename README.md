@@ -17,10 +17,10 @@ You can authenticate by creating an API token. Using such token, VS Code can sub
 
 1. <img src="assets/sideview.png" alt="cogwheel" width=30px;/> Dodona icon in the Activity Bar (icon in left column)
 2. `Open Settings`
-   ![API token](assets/api-token2.png)
+   ![Open settings](assets/open-settings.png)
 3. Paste the API token you just made in text box.
 4. In the left column you get an overview of the exercise series of the course (expand it if necessary).
-   ![API token](assets/api-token3.png)
+   ![API token](assets/api-token.png)
 
 ## Creating new exercises via Dodona extension (Usage)
 
