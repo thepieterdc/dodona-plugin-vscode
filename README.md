@@ -48,22 +48,20 @@ Once you've solved the exercise, it's easy to submit your solution. There are th
 
 * Click the checkmark ( <img src="assets/content-page-read.svg" alt="checkmark" width=15px;/> ) in the left panel with the Dodona activities.
 * You can also use the `Alt+D` shortcut (`Option-D` for Mac users) for this, or assign a [different shortcut](https://code.visualstudio.com/docs/getstarted/keybindings#_keyboard-shortcuts-editor).
-* Another option is to execute the `Dodona: Submit solution`-command by opening the command palette using `Ctrl+Shift+P` and typing (parts of) `Dodona: Submit solution` and pressing `Enter`.
+* Another option is to execute the `Dodona: Submit solution`-command by opening the command palette using `Ctrl+Shift+P` and typing (parts of) `Dodona: Submit solution` and pressing `Enter`.![Submit](assets/submit2.png)
 
 This command will submit your code to Dodona and trigger an automatic test.
-
-![Submit](assets/submit2.png)
 
 After a few seconds, you should see a popup in the bottom right corner containing the result of your submission. If you click the `View results` button, the result with the difference between your output and the expected output should open in a new browser window.
 
 ## Other functionality
 |                                 Symbol                                 | Meaning                                                                                                                                                                               |
-| :--------------------------------------------------------------------: | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| :--------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 |       <img src="assets/refresh.svg" alt="refresh" width=15px;/>        | Reload the list of activities.                                                                                                                                                        |
 |  <img src="assets/notification.svg" alt="notification" width=15px;/>   | Notifies users in case of unread feedback. The icon links to https://dodona.ugent.be/notifications.                                                                                   |
 | <img src="assets/content-page-read.svg" alt="checkmark" width=15px;/>  | Submit solution to Dodona. Alternative for `Alt+D` and `Ctrl+Shift+P`, `Dodona: Submit Solution`.                                                                                     |
 |          <img src="assets/edit.svg" alt="edit" width=15px;/>           | Opens the description of an exercise series or course in a new browser window. (Hover with your cursor above an exercise series or course in the left column with Dodona activities.) |
-| <img src="assets/open-description.svg" alt="description" width=15px;/> | Show the exercise description in VS Code. (Hover with your cursor above an exercise in the left column with Dodona activities.).                                                      |
+| <img src="assets/open-description.svg" alt="description" width=15px;/> | Show the exercise description in VS Code. (Hover with your cursor above an exercise in the left column with Dodona activities.)                                                       |
 
 ## Sorting and filtering courses (Usage)
 
