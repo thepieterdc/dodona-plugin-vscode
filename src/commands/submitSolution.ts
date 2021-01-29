@@ -5,9 +5,148 @@ import { getApiEnvironment } from "../configuration";
 import execute from "../api/client";
 import { sleep } from "../util";
 import { SubmissionEvaluatedListener } from "../listeners";
+import Submission from "../api/resources/submission";
 
 // TODO only show command in palette if an exercise is opened
 //      (can be done using "when" in package.json)
+
+// Define a feedback action to open the exercise in a web browser.
+const FEEDBACK_VIEW_RESULTS = "View results";
+
+/**
+ * Submits the solution to Dodona and waits for the result.
+ *
+ * @param identification the exercise
+ * @param code the student solution
+ * @return the submission result after evaluation
+ */
+async function evaluateSubmission(
+    identification: IdentificationData,
+    code: string,
+): Promise<Submission> {
+    // Submit the code to Dodona.
+    const submitResp = await execute(dodona =>
+        dodona.submissions.create(identification, code),
+    );
+
+    // Send a notification message.
+    window.showInformationMessage("Solution submitted!");
+
+    // Set the status bar.
+    window.setStatusBarMessage("Evaluating submission...");
+
+    // Poll the submission url every 5 seconds until it is evaluated.
+    for (let attempt = 0; attempt < 25; ++attempt) {
+        // Wait for 5 seconds before fetching the result. The sleep comes first,
+        // because the solution cannot be evaluated right after it has been
+        // submitted to Dodona.
+        await sleep(5000);
+
+        // Get the result.
+        const submission = await execute(dodona =>
+            dodona.submissions.byUrl(submitResp!.url),
+        );
+
+        // Validate the result.
+        if (submission.status !== "queued" && submission.status !== "running") {
+            // Submission evaluated. Clear the status bar and return it.
+            window.setStatusBarMessage("");
+            return submission;
+        }
+    }
+
+    // Timeout reached. Clear the status bar and raise an error.
+    window.setStatusBarMessage("");
+    throw new Error("Your solution took too long to evaluate.");
+}
+
+/**
+ * Attempts to find the identification of an exercise, based on the url in the
+ * solution. Will show an error message if this has failed.
+ *
+ * @param code the student solution to parse
+ * @return the identification if found
+ */
+async function handleIdentify(
+    code: string,
+): Promise<IdentificationData | null> {
+    try {
+        // Identify the exercise.
+        return identify(code);
+    } catch (error) {
+        if (error instanceof AssertionError) {
+            // Show an error dialog.
+            const tryAgain = "Try Again";
+            const selection = await window.showErrorMessage(
+                "No exercise link found. Make sure the first line of the file contains a comment with the link to the exercise.",
+                tryAgain,
+            );
+
+            // Retry the action if the user chooses to.
+            if (selection === tryAgain) {
+                commands.executeCommand("dodona.submit");
+            }
+
+            return null;
+        }
+
+        // Something else went wrong, rethrow error.
+        throw error;
+    }
+}
+
+/**
+ * Displays a feedback message depending on the submission result.
+ *
+ * @param submission the submission result
+ * @return the feedback message to display
+ */
+async function showFeedback(
+    submission: Submission,
+): Promise<string | undefined> {
+    // Correct solution.
+    if (submission.status === "correct") {
+        return window.showInformationMessage(
+            "Solution was correct!",
+            ...[FEEDBACK_VIEW_RESULTS],
+        );
+    }
+
+    // Incorrect solution.
+    if (submission!.status === "wrong") {
+        return window.showWarningMessage(
+            "Solution was incorrect.",
+            ...[FEEDBACK_VIEW_RESULTS],
+        );
+    }
+
+    // Unknown error.
+    return window.showErrorMessage(
+        submission.summary ||
+            "An unknown error occurred while evaluating your submission.",
+        ...[FEEDBACK_VIEW_RESULTS],
+    );
+}
+
+/**
+ * Validates that the identified environment matches the active one. If not,
+ * this will show an error message.
+ *
+ * @param identification the identification to validate
+ */
+function validateEnvironment(identification: IdentificationData): boolean {
+    const apiEnvironment = getApiEnvironment();
+    if (identification.environment === apiEnvironment) {
+        // All good.
+        return true;
+    }
+
+    // Show an error message.
+    window.showErrorMessage(
+        `You are trying to submit an exercise to the ${identification.environment.titlecase()} environment, but ${apiEnvironment.titlecase()} is configured as your active environment in the settings.`,
+    );
+    return false;
+}
 
 /**
  * Action to submit a solution to Dodona.
@@ -18,124 +157,36 @@ export async function submitSolution(
     listener: SubmissionEvaluatedListener,
 ): Promise<void> {
     const editor = window.activeTextEditor;
-    if (editor) {
-        // Get the code.
-        const code = editor.document.getText();
-
-        // Identify the exercise.
-        let identification: IdentificationData;
-        try {
-            identification = identify(code);
-        } catch (error) {
-            // Display a proper error message instead of raising an error
-            if (error instanceof AssertionError) {
-                const tryAgain = "Try Again";
-                window
-                    .showErrorMessage(
-                        "No exercise link found. Make sure the first line of the file contains a comment with the link to the exercise.",
-                        tryAgain,
-                    )
-                    .then(selection => {
-                        // Retry when the user clicks Try Again
-                        if (selection === tryAgain) {
-                            commands.executeCommand("dodona.submit");
-                        }
-                    });
-                return;
-            }
-
-            // Something else went wrong, rethrow error.
-            throw error;
-        }
-
-        // Validate that the environment is correct.
-        const apiEnvironment = getApiEnvironment();
-        if (identification.environment !== apiEnvironment) {
-            window.showErrorMessage(
-                `You are trying to submit an exercise to ${identification.environment.titlecase()}, but your environment is configured as ${apiEnvironment.titlecase()}.`,
-            );
-            return;
-        }
-
-        // Submit the code to Dodona.
-        const submitResp = await execute(dodona =>
-            dodona.submissions.create(identification, code),
-        );
-
-        // Send a notification message.
-        window.showInformationMessage("Solution submitted!");
-
-        // Set the status bar.
-        window.setStatusBarMessage("Evaluating submission...");
-
-        // Get the result.
-        let submission = await execute(dodona =>
-            dodona.submissions.byUrl(submitResp!.url),
-        );
-
-        // Poll the submission url every 5 seconds until it is evaluated.
-        let totalDelay = 0;
-        while (["queued", "running"].includes(submission!.status)) {
-            // Validate the timeout.
-            if (totalDelay >= 120000) {
-                throw new Error("Timeout reached for submission.");
-            }
-
-            // Wait the delay.
-            await sleep(5000);
-
-            // Refresh the response.
-            submission = await execute(dodona =>
-                dodona.submissions.byUrl(submitResp!.url),
-            );
-
-            totalDelay += 5000;
-        }
-
-        // Clear the status bar.
-        window.setStatusBarMessage("");
-
-        // Define an action to open the submission details in a browser.
-        const viewResultsAction = "View results";
-
-        // Analyse the result.
-        const url = Uri.parse(submission!.url.replace(".json", ""));
-        if (submission!.status === "correct") {
-            window
-                .showInformationMessage(
-                    "Solution was correct!",
-                    ...[viewResultsAction],
-                )
-                .then(selection => {
-                    if (selection === viewResultsAction) {
-                        commands.executeCommand("vscode.open", url);
-                    }
-                });
-        } else if (submission!.status === "wrong") {
-            window
-                .showWarningMessage(
-                    "Solution was incorrect.",
-                    ...[viewResultsAction],
-                )
-                .then(selection => {
-                    if (selection === viewResultsAction) {
-                        commands.executeCommand("vscode.open", url);
-                    }
-                });
-        } else {
-            window
-                .showErrorMessage(
-                    submission!.summary || "Unknown error.",
-                    ...[viewResultsAction],
-                )
-                .then(selection => {
-                    if (selection === viewResultsAction) {
-                        commands.executeCommand("vscode.open", url);
-                    }
-                });
-        }
-
-        // Notify listeners.
-        listener(submission!);
+    if (!editor) {
+        return;
     }
+
+    // Get the code.
+    const code = editor.document.getText();
+
+    // Find the exercise.
+    const identification = await handleIdentify(code);
+    if (!identification) {
+        return;
+    }
+
+    // Validate that the environment is correct.
+    if (!validateEnvironment(identification)) {
+        return;
+    }
+
+    // Evaluate the submission.
+    const submission = await evaluateSubmission(identification, code);
+
+    // Display a feedback message.
+    if ((await showFeedback(submission)) === FEEDBACK_VIEW_RESULTS) {
+        // Get the url to the submission results.
+        const url = Uri.parse(submission.url.replace(".json", ""));
+
+        // Open the results in a browser.
+        commands.executeCommand("vscode.open", url);
+    }
+
+    // Notify listeners.
+    listener(submission!);
 }
