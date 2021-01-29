@@ -6,6 +6,7 @@ import execute from "../api/client";
 import { sleep } from "../util";
 import { SubmissionEvaluatedListener } from "../listeners";
 import Submission from "../api/resources/submission";
+import { Activity } from "../api/resources/activities";
 
 // TODO only show command in palette if an exercise is opened
 //      (can be done using "when" in package.json)
@@ -22,6 +23,7 @@ const FEEDBACK_VIEW_RESULTS = "View results";
  */
 async function evaluateSubmission(
     identification: IdentificationData,
+    exercise: Activity,
     code: string,
 ): Promise<Submission> {
     // Submit the code to Dodona.
@@ -30,7 +32,9 @@ async function evaluateSubmission(
     );
 
     // Send a notification message.
-    window.showInformationMessage("Solution submitted!");
+    window.showInformationMessage(
+        `Your solution to "${exercise.name}" has been submitted!`,
+    );
 
     // Set the status bar.
     window.setStatusBarMessage("Evaluating submission...");
@@ -102,12 +106,13 @@ async function handleIdentify(
  * @return the feedback message to display
  */
 async function showFeedback(
+    exercise: Activity,
     submission: Submission,
 ): Promise<string | undefined> {
     // Correct solution.
     if (submission.status === "correct") {
         return window.showInformationMessage(
-            "Solution was correct!",
+            `Solution to "${exercise.name}" has been accepted!`,
             ...[FEEDBACK_VIEW_RESULTS],
         );
     }
@@ -115,7 +120,7 @@ async function showFeedback(
     // Incorrect solution.
     if (submission!.status === "wrong") {
         return window.showWarningMessage(
-            "Solution was incorrect.",
+            `Solution to "${exercise.name}" was not incorrect: ${submission.summary}`,
             ...[FEEDBACK_VIEW_RESULTS],
         );
     }
@@ -164,7 +169,7 @@ export async function submitSolution(
     // Get the code.
     const code = editor.document.getText();
 
-    // Find the exercise.
+    // Infer the exercise from the solution comment.
     const identification = await handleIdentify(code);
     if (!identification) {
         return;
@@ -175,11 +180,16 @@ export async function submitSolution(
         return;
     }
 
+    // Get the exercise information.
+    const exercise = await execute(dodona =>
+        dodona.activities.get(identification),
+    );
+
     // Evaluate the submission.
-    const submission = await evaluateSubmission(identification, code);
+    const submission = await evaluateSubmission(identification, exercise, code);
 
     // Display a feedback message.
-    if ((await showFeedback(submission)) === FEEDBACK_VIEW_RESULTS) {
+    if ((await showFeedback(exercise, submission)) === FEEDBACK_VIEW_RESULTS) {
         // Get the url to the submission results.
         const url = Uri.parse(submission.url.replace(".json", ""));
 

@@ -1,6 +1,7 @@
 export {};
 
 declare global {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     interface Array<T> {
         /**
          * Finds max element in an Array.
