@@ -1,6 +1,7 @@
 ## 1.4.0 - Unreleased
 * [Pieter De Clercq (@thepieterdc)](https://github.com/thepieterdc)
   * [FEATURE] Display exercise name in submission dialog [#71](https://github.com/thepieterdc/dodona-plugin-vscode/issues/71)
+  * [BUG] Don't show 401 message when token is invalid [#43](https://github.com/thepieterdc/dodona-plugin-vscode/issues/43)
 
 
 ## 1.3.0 - December 18, 2020

@@ -3,7 +3,7 @@ import IdentificationData, { identify } from "../identification";
 import { AssertionError } from "assert";
 import { getApiEnvironment } from "../configuration";
 import execute from "../api/client";
-import { sleep } from "../util";
+import { canonicalUrl, sleep } from "../util";
 import { SubmissionEvaluatedListener } from "../listeners";
 import Submission from "../api/resources/submission";
 import { Activity } from "../api/resources/activities";
@@ -50,12 +50,13 @@ async function evaluateSubmission(
         const submission = await execute(dodona =>
             dodona.submissions.byUrl(submitResp!.url),
         );
+        if (!submission) break;
 
         // Validate the result.
         if (submission.status !== "queued" && submission.status !== "running") {
             // Submission evaluated. Clear the status bar and return it.
             window.setStatusBarMessage("");
-            return submission;
+            return submission!;
         }
     }
 
@@ -102,6 +103,7 @@ async function handleIdentify(
 /**
  * Displays a feedback message depending on the submission result.
  *
+ * @param exercise the exercise to show feedback for
  * @param submission the submission result
  * @return the feedback message to display
  */
@@ -184,17 +186,17 @@ export async function submitSolution(
     const exercise = await execute(dodona =>
         dodona.activities.get(identification),
     );
+    if (!exercise) {
+        return;
+    }
 
     // Evaluate the submission.
     const submission = await evaluateSubmission(identification, exercise, code);
 
     // Display a feedback message.
     if ((await showFeedback(exercise, submission)) === FEEDBACK_VIEW_RESULTS) {
-        // Get the url to the submission results.
-        const url = Uri.parse(submission.url.replace(".json", ""));
-
         // Open the results in a browser.
-        commands.executeCommand("vscode.open", url);
+        commands.executeCommand("vscode.open", canonicalUrl(submission));
     }
 
     // Notify listeners.
