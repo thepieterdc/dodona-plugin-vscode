@@ -11,14 +11,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      # TODO build extension here.
-      - name: Read the changelog
-        id: read-changelog
-        uses: juliangruber/read-file-action@v1
+      - name: Install Node.js 14.x
+        uses: actions/setup-node@v2-beta
         with:
-          path: ./CHANGELOG.md
-      - name: Get changes in this version
-        run: echo ${{ steps.read-changelog.outputs.content }}
+          node-version: '14'
+      # TODO build extension here.
+      - name: Get the version from package.json
+        id: version
+        run: node scripts/get-version.js
+#      - name: Read the changelog
+#        id: read-changelog
+#        uses: juliangruber/read-file-action@v1
+#        with:
+#          path: ./CHANGELOG.md
+#      - name: Get changes in this version
+#        run: echo ${{ steps.read-changelog.outputs.content }}
       - name: Create Release
         uses: actions/create-release@v1
         env:

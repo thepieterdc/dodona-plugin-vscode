@@ -4,6 +4,7 @@
 # Git stuff
 .github/
 .git/
+scripts/
 
 # Source files
 src/
