@@ -1,4 +1,4 @@
-import { commands, env, Uri, window, workspace } from "vscode";
+import { commands, env, window, workspace } from "vscode";
 import { ApiToken, getApiEnvironment, getApiToken } from "../configuration";
 import { DodonaEnvironments } from "../dodonaEnvironment";
 import got, { HTTPError } from "got";
@@ -11,6 +11,12 @@ import {
 import "../prototypes/string";
 import { InvalidAccessToken } from "./errors/invalidAccessToken";
 import NotificationManager from "./managers/notificationManager";
+import {
+    OPEN_SETTINGS_ACTION,
+    VIEW_INSTRUCTIONS_ACTION,
+} from "../constants/actions";
+import { TOKEN_INSTUCTIONS_URL } from "../constants/urls";
+import { INVALID_TOKEN_MSG, MISSING_TOKEN_MSG } from "../constants/messages";
 
 /**
  * A client for interfacing with Dodona.
@@ -110,29 +116,23 @@ export default async function execute<T>(
         ) {
             // Display an error message to inform the user that an invalid or
             // empty API token was configured.
-            const instructionsButton = "Instructions";
-            const settingsButton = "Open Settings";
-            let msg = `You have not yet configured an API token for the ${getApiEnvironment().titlecase()} environment.`;
-            if (getApiToken()) {
-                msg = `You have configured an invalid API token for the ${getApiEnvironment().titlecase()} environment.`;
-            }
+            const environment = getApiEnvironment();
+            const msg = getApiToken()
+                ? INVALID_TOKEN_MSG(environment)
+                : MISSING_TOKEN_MSG(environment);
 
             // Get the user's action.
             const selectedButton = await window.showErrorMessage(
                 `${msg} To correctly set up your token in Visual Studio Code, click the Instructions button below.`,
-                instructionsButton,
-                settingsButton,
+                VIEW_INSTRUCTIONS_ACTION,
+                OPEN_SETTINGS_ACTION,
             );
 
             // Handle the action.
-            if (selectedButton === instructionsButton) {
+            if (selectedButton === VIEW_INSTRUCTIONS_ACTION) {
                 // Open the instructions in the user's web browser.
-                env.openExternal(
-                    Uri.parse(
-                        "https://dodona-edu.github.io/en/guides/vs-code-extension/#_3-insert-api-token",
-                    ),
-                );
-            } else if (selectedButton === settingsButton) {
+                env.openExternal(TOKEN_INSTUCTIONS_URL);
+            } else if (selectedButton === OPEN_SETTINGS_ACTION) {
                 // Open the token settings.
                 commands.executeCommand("dodona.settings.token");
             }
