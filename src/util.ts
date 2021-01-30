@@ -1,3 +1,16 @@
+import { Resource } from "./api/resources/resource";
+import { Uri } from "vscode";
+
+/**
+ * Gets the canonical url of the resource, being the url without any extension.
+ *
+ * @param resource the resource to consider
+ * @return the canonical url
+ */
+export function canonicalUrl(resource: Resource): Uri {
+    return Uri.parse(resource.url.replace(".json", ""));
+}
+
 /**
  * Returns either the singular or the plural form of the word, depending on the
  * amount.

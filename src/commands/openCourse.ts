@@ -1,9 +1,9 @@
-import { commands, Uri } from "vscode";
+import { commands } from "vscode";
 import { Course } from "../api/resources/course";
 import { CourseTreeItem } from "../treeView/items/courseTreeItem";
+import { canonicalUrl } from "../util";
 
 export function openCourse(courseTreeItem: CourseTreeItem) {
     const course: Course = courseTreeItem.course;
-    const url = Uri.parse(course.url.replace(".json", ""));
-    commands.executeCommand("vscode.open", url);
+    commands.executeCommand("vscode.open", canonicalUrl(course));
 }

@@ -6,6 +6,7 @@ import { getSyntax } from "../commentSyntax";
 import { getAutoDescription } from "../configuration";
 import { showActivityDescription } from "./showActivityDescription";
 import Exercise from "../api/resources/activities/exercise";
+import { canonicalUrl } from "../util";
 
 /**
  * Action to create a new file for an exercise.
@@ -75,7 +76,7 @@ export async function createNewExercise(exercise: Exercise) {
             const edit = new vscode.WorkspaceEdit();
             const commentedUrl = getSyntax(
                 exercise.programming_language,
-                removeJson(exercise.url),
+                canonicalUrl(exercise).toString(),
             );
             const boilerplate =
                 exercise.boilerplate != null ? exercise.boilerplate : "";
@@ -145,17 +146,4 @@ async function applyEdit(edit: vscode.WorkspaceEdit): Promise<void> {
             );
         }
     });
-}
-
-/**
- * Removes the .json extension from the url.
- *
- * @param url the url to process
- */
-function removeJson(url: string): string {
-    if (url.endsWith(".json")) {
-        url = url.slice(0, url.length - 5);
-    }
-
-    return url;
 }
