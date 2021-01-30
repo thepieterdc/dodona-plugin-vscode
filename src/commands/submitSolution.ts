@@ -120,7 +120,7 @@ async function showFeedback(
     // Incorrect solution.
     if (submission!.status === "wrong") {
         return window.showWarningMessage(
-            `Solution to "${exercise.name}" was not incorrect: ${submission.summary}`,
+            `Solution to "${exercise.name}" was not correct: ${submission.summary}`,
             ...[FEEDBACK_VIEW_RESULTS],
         );
     }
