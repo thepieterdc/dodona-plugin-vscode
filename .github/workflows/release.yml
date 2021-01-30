@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - 'release/**'
-  workflow_dispatch:
 
 jobs:
   release:
@@ -20,7 +19,9 @@ jobs:
         run: |
           echo ::set-output name=version::v$(node scripts/get-version.js)
           echo ::set-output name=version-raw::$(node scripts/get-version.js)
-        # TODO VALIDATE VERSION NAME DOES NOT CONTAIN SNAPSHOT
+      - name: Do not release snapshot versions
+        if: ${{ contains(steps.version.outputs.version, 'SNAPSHOT') }}
+        run: exit 0
       - name: Get the changes in ${{steps.version.outputs.version}}
         id: changelog
         run: |
