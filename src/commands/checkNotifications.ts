@@ -4,6 +4,10 @@ import execute from "../api/client";
 import "../prototypes/array";
 import { UNREAD_NOTIFICATION_MSG } from "../constants/messages";
 import { OPEN_NOTIFICATIONS_ACTION } from "../constants/actions";
+import { Notification } from "../api/resources/notification";
+
+// Create a timestamp to keep track of the latest unread notification.
+let lastNotification = 0;
 
 /**
  * A loop that checks for new notifications every minute and triggers a message
@@ -11,17 +15,23 @@ import { OPEN_NOTIFICATIONS_ACTION } from "../constants/actions";
  */
 export async function notificationsInterval(): Promise<void> {
     // Startup.
-    unreadNotifications().then(amount => {
-        if (amount > 0) {
-            showNotificationMessage(amount);
+    unreadNotifications().then(notifications => {
+        if (notifications.length > 0) {
+            showNotificationMessage(notifications.length);
+            lastNotification = notifications
+                .map(notif => new Date(notif.updated_at).getTime())
+                .max();
         }
     });
 
     // Check every minute.
     setInterval(async () => {
         const unread = await unreadNotifications();
-        if (unread > 0) {
-            showNotificationMessage(unread);
+        lastNotification = unread
+            .map(notif => new Date(notif.updated_at).getTime())
+            .max();
+        if (unread.length > 0) {
+            showNotificationMessage(unread.length);
         }
     }, 60000);
 }
@@ -56,14 +66,18 @@ async function showNotificationMessage(amount: number): Promise<void> {
  *
  * @returns the amount of unread notifications
  */
-async function unreadNotifications(): Promise<number> {
+async function unreadNotifications(): Promise<Notification[]> {
     // Get all the notifications.
     const notifications = await execute(dodona => dodona.notifications.list);
     if (!notifications || notifications.length === 0) {
         // No notifications were found (or an error has occurred).
-        return 0;
+        return [];
     }
 
-    // Get the amount of unread notifications.
-    return notifications.filter(notification => !notification.read).length;
+    // Get the unread notifications.
+    return notifications.filter(
+        notification =>
+            !notification.read &&
+            new Date(notification.updated_at).getTime() > lastNotification,
+    );
 }
