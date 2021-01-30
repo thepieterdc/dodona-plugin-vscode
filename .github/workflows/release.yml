@@ -21,7 +21,12 @@ jobs:
         run: echo ::set-output name=version::v$(node scripts/get-version.js)
       - name: Get the changes in ${{steps.version.outputs.version}}
         id: changelog
-        run: echo ::set-output name=changelog::$(node scripts/get-changes.js)
+        run: |
+          CHANGES=$(node scripts/get-changes.js)
+          CHANGES="${CHANGES//'%'/'%25'}"
+          CHANGES="${CHANGES//$'\n'/'%0A'}"
+          CHANGES="${CHANGES//$'\r'/'%0D'}"
+          echo "::set-output name=changelog::$CHANGES"
       - name: Create Release
         uses: actions/create-release@v1
         env:
@@ -29,7 +34,6 @@ jobs:
         with:
           tag_name: "test"
           release_name: ${{steps.version.outputs.version}}
-          body: |
-            echo ${{steps.changelog.outputs.changelog}}
+          body: ${{steps.changelog.outputs.changelog}}
           draft: true
           prerelease: true
