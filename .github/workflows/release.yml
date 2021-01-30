@@ -11,6 +11,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      # TODO build extension here.
+      - name: Read the changelog
+        id: changelog
+        uses: juliangruber/read-file-action@v1
+        with:
+          path: ./CHANGELOG.md
+      - name: Get changes in this version
+        run: echo ${{ steps.
       - name: Create Release
         uses: actions/create-release@v1
         env:
