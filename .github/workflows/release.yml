@@ -61,8 +61,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.release.outputs.upload_url }}
-          asset_path: ./dodona-plugin-vscode-${{ steps.version.outputs.version-raw }}-SNAPSHOT.vsix
-          asset_name: dodona-plugin-vscode-${{ steps.version.outputs.version-raw }}-SNAPSHOT.vsix
+          asset_path: ./dodona-plugin-vscode-${{ steps.version.outputs.version-raw }}.vsix
+          asset_name: dodona-plugin-vscode-${{ steps.version.outputs.version-raw }}.vsix
           asset_content_type: application/octet-stream
       # TODO RELEASE TO VSCE MARKETPLACE
       # TODO MAKE NEW COMMIT
