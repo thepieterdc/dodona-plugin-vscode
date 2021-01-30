@@ -45,9 +45,14 @@ async function openActivityDescription(
     descriptionPanels.push(panel);
 
     // Load the activity description HTML.
-    panel.webview.html = await execute(dodona =>
+    const description = await execute(dodona =>
         dodona.activities.description(activity),
     );
+    if (description) {
+        panel.webview.html = description;
+    } else {
+        panel.dispose();
+    }
 }
 
 /**
@@ -114,5 +119,5 @@ export async function showActivityDescription(
     );
 
     // Open the description.
-    return openActivityDescription(exercise, viewColumn);
+    return exercise && openActivityDescription(exercise, viewColumn);
 }

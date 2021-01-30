@@ -26,7 +26,7 @@ export class CourseTreeItem extends AbstractTreeItem {
         return (
             execute(dodona => dodona.series.inCourse(this.course))
                 // Sort them by their order.
-                .then(ss => ss.sort((a, b) => a.order - b.order))
+                .then(ss => (ss && ss.sort((a, b) => a.order - b.order)) || [])
                 // Convert them to tree items.
                 .then(ss => ss.map(s => new SeriesTreeItem(s)))
         );

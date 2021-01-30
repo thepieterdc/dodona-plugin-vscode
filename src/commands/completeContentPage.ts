@@ -3,6 +3,7 @@ import execute from "../api/client";
 import { ContentPageReadListener } from "../listeners";
 import ContentPage from "../api/resources/activities/contentPage";
 import { AbstractActivityTreeItem } from "../treeView/items/activityTreeItem";
+import { READING_ACTIVITY_COMPLETED_MSG } from "../constants/messages";
 
 // TODO only show command in palette if an exercise is opened
 //      (can be done using "when" in package.json)
@@ -43,11 +44,11 @@ export async function completeContentPage(
     );
 
     // Send a notification message.
-    window.showInformationMessage("Successfully completed the reading activity.");
+    window.showInformationMessage(READING_ACTIVITY_COMPLETED_MSG);
 
     // Clear the status bar.
     window.setStatusBarMessage("");
 
     // Notify listeners.
-    listener(ret);
+    ret && listener(ret);
 }

@@ -42,7 +42,7 @@ export default class RootDataProvider
             execute(dodona => dodona.courses.subscribed)
                 // Sort courses & apply filters
                 .then(cs =>
-                    RootDataProvider.sortCourses(this.filterCourses(cs)),
+                    RootDataProvider.sortCourses(this.filterCourses(cs || [])),
                 )
                 // Convert them to tree items.
                 .then(cs => cs.map(c => new CourseTreeItem(c)))
