@@ -1,14 +1,17 @@
 name: NodeJS
 
-on: [ push ]
+on:
+  push:
+    branches-ignore:
+      - 'release/**'
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Use Node.js 14.x
-        uses: actions/setup-node@v2-beta
+      - name: Install Node.js 14.x
+        uses: actions/setup-node@v2
         with:
           node-version: '14'
       - name: Get the Yarn cache directory

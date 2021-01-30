@@ -1,18 +1,35 @@
 name: Release
 
 on:
-  release: 
-    types: [published]
+  push:
+    branches:
+      - 'release/**'
 
 jobs:
   release:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Use Node.js 14.x
+      - name: Install Node.js 14.x
         uses: actions/setup-node@v2-beta
         with:
           node-version: '14'
+      - name: Get the version from package.json
+        id: version
+        run: |
+          echo ::set-output name=version::v$(node scripts/get-version.js)
+          echo ::set-output name=version-raw::$(node scripts/get-version.js)
+      - name: Do not release snapshot versions
+        if: ${{ contains(steps.version.outputs.version, 'SNAPSHOT') }}
+        run: exit 1
+      - name: Get the changes in ${{ steps.version.outputs.version }}
+        id: changelog
+        run: |
+          CHANGES=$(node scripts/get-changes.js)
+          CHANGES="${CHANGES//'%'/'%25'}"
+          CHANGES="${CHANGES//$'\n'/'%0A'}"
+          CHANGES="${CHANGES//$'\r'/'%0D'}"
+          echo "::set-output name=changelog::$CHANGES"
       - name: Get the Yarn cache directory
         id: yarn-cache
         run: |
@@ -24,11 +41,50 @@ jobs:
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
-      - run: yarn install
-      - run: yarn run vscode:publish
+      - name: Install Yarn dependencies
+        run: yarn install
+      - name: Package the extension
+        run: yarn package
+      - name: Create tag
+        uses: mathieudutour/github-tag-action@v5.1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          custom_tag: ${{ steps.version.outputs.version-raw }}
+      - name: Create release
+        id: release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.version.outputs.version }}
+          release_name: ${{ steps.version.outputs.version }}
+          body: ${{ steps.changelog.outputs.changelog }}
+          draft: true
+          prerelease: true
+      - name: Attach artifact to release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.release.outputs.upload_url }}
+          asset_path: ./dodona-plugin-vscode-${{ steps.version.outputs.version-raw }}.vsix
+          asset_name: dodona-plugin-vscode-${{ steps.version.outputs.version-raw }}.vsix
+          asset_content_type: application/octet-stream
+      - name: Publish to Azure Marketplace
+        run: yarn run vscode:publish
         env:
           VSCE_PAT: ${{ secrets.VSCE_PAT }}
-      - uses: actions/upload-artifact@v2
+      - name: Prepare package.json for next version
+        run: node scripts/prepare-next-snapshot.js
+      - name: Push new development commit
+        uses: EndBug/add-and-commit@v7
         with:
-          path: |
-            *.vsix
+          add: 'package.json'
+          message: 'Prepare next development cycle'
+          signoff: true
+      - name: Open a pull request
+        uses: repo-sync/pull-request@v2
+        with:
+          destination_branch: "master"
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          pr_title: Release ${{ steps.version.outputs.version }}
