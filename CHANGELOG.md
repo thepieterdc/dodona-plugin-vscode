@@ -1,3 +1,8 @@
+## 1.4.0 - Unreleased
+* [Pieter De Clercq (@thepieterdc)](https://github.com/thepieterdc)
+  * [FEATURE] Display exercise name in submission dialog [#71](https://github.com/thepieterdc/dodona-plugin-vscode/issues/71)
+
+
 ## 1.3.0 - December 18, 2020
 * [Stijn De Clercq (@stijndcl)](https://github.com/stijndcl)
   * [FEATURE] Use `open-in-new` icon to open series and course description in browser [#70](https://github.com/thepieterdc/dodona-plugin-vscode/issues/70)
