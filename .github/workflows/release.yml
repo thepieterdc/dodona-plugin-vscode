@@ -75,7 +75,7 @@ jobs:
           message: 'Prepare next development cycle'
           signoff: true
       - name: Open a pull request
-        uses: peter-evans/create-pull-request@v3
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PASS_IF_EXISTS: 'true'
+        uses: repo-sync/pull-request@v2
+        with:
+          destination_branch: "master"
+          github_token: ${{ secrets.GITHUB_TOKEN }}
