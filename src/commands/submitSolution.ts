@@ -1,4 +1,4 @@
-import { commands, Uri, window } from "vscode";
+import { commands, window } from "vscode";
 import IdentificationData, { identify } from "../identification";
 import { AssertionError } from "assert";
 import { getApiEnvironment } from "../configuration";
