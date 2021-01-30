@@ -32,7 +32,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: "test"
-          release_name: ${{steps.version.outputs[0]}}
+          release_name: ${{steps.version.outputs.version}}
           body: |
             body test
           draft: true
