@@ -1,0 +1,9 @@
+# IDE stuff
+.idea/
+
+# Git stuff
+.github/
+.git/
+
+# Source files
+src/
