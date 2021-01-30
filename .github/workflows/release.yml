@@ -15,10 +15,10 @@ jobs:
         uses: actions/setup-node@v2-beta
         with:
           node-version: '14'
-      # TODO build extension here.
       - name: Get the version from package.json
         id: version
         run: echo ::set-output name=version::v$(node scripts/get-version.js)
+        # TODO VALIDATE VERSION NAME DOES NOT CONTAIN SNAPSHOT
       - name: Get the changes in ${{steps.version.outputs.version}}
         id: changelog
         run: |
@@ -27,6 +27,21 @@ jobs:
           CHANGES="${CHANGES//$'\n'/'%0A'}"
           CHANGES="${CHANGES//$'\r'/'%0D'}"
           echo "::set-output name=changelog::$CHANGES"
+      - name: Get the Yarn cache directory
+        id: yarn-cache
+        run: |
+          echo "::set-output name=dir::$(yarn cache dir)"
+      - name: Cache Yarn dependencies
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.yarn-cache.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+      - name: Install Yarn dependencies
+        run: yarn install
+      - name: Package the extension
+        run: yarn package
       - name: Create Release
         uses: actions/create-release@v1
         env:
