@@ -18,7 +18,7 @@ jobs:
       # TODO build extension here.
       - name: Get the version from package.json
         id: version
-        run: echo ::set-output name=version::$(node scripts/get-version.js)
+        run: echo ::set-output name=version::v$(node scripts/get-version.js)
 #      - name: Read the changelog
 #        id: read-changelog
 #        uses: juliangruber/read-file-action@v1
