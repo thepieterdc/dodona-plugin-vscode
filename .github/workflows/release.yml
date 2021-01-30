@@ -17,7 +17,9 @@ jobs:
           node-version: '14'
       - name: Get the version from package.json
         id: version
-        run: echo ::set-output name=version::v$(node scripts/get-version.js)
+        run: |
+          echo ::set-output name=version::v$(node scripts/get-version.js)
+          echo ::set-output name=version-raw::$(node scripts/get-version.js)
         # TODO VALIDATE VERSION NAME DOES NOT CONTAIN SNAPSHOT
       - name: Get the changes in ${{steps.version.outputs.version}}
         id: changelog
@@ -43,6 +45,7 @@ jobs:
       - name: Package the extension
         run: yarn package
       - name: Create Release
+        id: release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -52,5 +55,14 @@ jobs:
           body: ${{steps.changelog.outputs.changelog}}
           draft: true
           prerelease: true
+      - name: Attach artifact to release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.release.outputs.upload_url }}
+          asset_path: ./dodona-plugin-vscode-${{ steps.version.outputs.version-raw }}-SNAPSHOT.vsix
+          asset_name: dodona-plugin-vscode-${{ steps.version.outputs.version-raw }}-SNAPSHOT.vsix
+          asset_content_type: application/octet-stream
       # TODO RELEASE TO VSCE MARKETPLACE
       # TODO MAKE NEW COMMIT
