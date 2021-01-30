@@ -29,6 +29,7 @@ jobs:
         with:
           tag_name: "test"
           release_name: ${{steps.version.outputs.version}}
-          body: ${{steps.changelog.outputs.changelog}}
+          body: |
+            echo ${{steps.changelog.outputs.changelog}}
           draft: true
           prerelease: true
