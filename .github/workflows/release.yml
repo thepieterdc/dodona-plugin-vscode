@@ -32,8 +32,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: "test"
+          tag_name: ${{steps.version.outputs.version}}
           release_name: ${{steps.version.outputs.version}}
           body: ${{steps.changelog.outputs.changelog}}
           draft: true
           prerelease: true
+      # TODO RELEASE TO VSCE MARKETPLACE
+      # TODO MAKE NEW COMMIT
