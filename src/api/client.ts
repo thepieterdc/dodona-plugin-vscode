@@ -96,39 +96,49 @@ workspace.onDidChangeConfiguration(e => {
  * @param call the call to execute
  * @return the result of the call, or error handling
  */
-export default async function execute<T>(call: DodonaCall<T>): Promise<T> {
-    return call(client).catch(error => {
+export default async function execute<T>(
+    call: DodonaCall<T>,
+): Promise<T | null> {
+    try {
+        // Execute the call.
+        return await call(client);
+    } catch (error) {
+        // Handle invalid tokens.
         if (
             (error instanceof HTTPError && error.response.statusCode === 401) ||
             error instanceof InvalidAccessToken
         ) {
-            // Display a warning notification if no API token has been configured.
+            // Display an error message to inform the user that an invalid or
+            // empty API token was configured.
             const instructionsButton = "Instructions";
             const settingsButton = "Open Settings";
-            let msg = `You have not yet configured an API token for ${getApiEnvironment().titlecase()}.`;
+            let msg = `You have not yet configured an API token for the ${getApiEnvironment().titlecase()} environment.`;
             if (getApiToken()) {
-                msg = `You have configured an invalid API token for ${getApiEnvironment().titlecase()}.`;
+                msg = `You have configured an invalid API token for the ${getApiEnvironment().titlecase()} environment.`;
             }
 
-            window
-                .showErrorMessage(
-                    `${msg} To correctly set up your token in Visual Studio Code, click the Instructions button below.`,
-                    instructionsButton,
-                    settingsButton,
-                )
-                .then(selection => {
-                    // Open the page when the user clicks the button
-                    if (selection === instructionsButton) {
-                        env.openExternal(
-                            Uri.parse(
-                                "https://dodona-edu.github.io/en/guides/vs-code-extension/#_3-insert-api-token",
-                            ),
-                        );
-                    } else if (selection === settingsButton) {
-                        commands.executeCommand("dodona.settings.token");
-                    }
-                });
+            // Get the user's action.
+            const selectedButton = await window.showErrorMessage(
+                `${msg} To correctly set up your token in Visual Studio Code, click the Instructions button below.`,
+                instructionsButton,
+                settingsButton,
+            );
+
+            // Handle the action.
+            if (selectedButton === instructionsButton) {
+                // Open the instructions in the user's web browser.
+                env.openExternal(
+                    Uri.parse(
+                        "https://dodona-edu.github.io/en/guides/vs-code-extension/#_3-insert-api-token",
+                    ),
+                );
+            } else if (selectedButton === settingsButton) {
+                // Open the token settings.
+                commands.executeCommand("dodona.settings.token");
+            }
         }
-        return Promise.reject(error);
-    });
+
+        // Empty response.
+        return null;
+    }
 }
