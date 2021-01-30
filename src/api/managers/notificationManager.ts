@@ -14,11 +14,11 @@ export default class NotificationManager {
     }
 
     /**
-     * Gets the user's notifications
+     * Gets the notifications of the user.
      *
      * @return a list of notifications
      */
-    public get newNotifications(): Promise<Notification[]> {
+    public get list(): Promise<Notification[]> {
         return this.jsonApi.get("notifications.json").json();
     }
 }
