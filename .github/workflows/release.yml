@@ -21,7 +21,7 @@ jobs:
           echo ::set-output name=version-raw::$(node scripts/get-version.js)
       - name: Do not release snapshot versions
         if: ${{ contains(steps.version.outputs.version, 'SNAPSHOT') }}
-        uses: andymckay/cancel-action@0.2
+        run: exit 1
       - name: Get the changes in ${{steps.version.outputs.version}}
         id: changelog
         run: |
