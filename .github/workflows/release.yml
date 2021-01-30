@@ -79,3 +79,4 @@ jobs:
         with:
           destination_branch: "master"
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          pr_title: Release ${{ steps.version.outputs.version }}
