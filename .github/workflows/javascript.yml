@@ -1,9 +1,6 @@
 name: NodeJS
 
-on:
-  push:
-    branches-ignore:
-      - 'release/**'
+on: [ push ]
 
 jobs:
   build:
