@@ -19,13 +19,9 @@ jobs:
       - name: Get the version from package.json
         id: version
         run: echo ::set-output name=version::v$(node scripts/get-version.js)
-#      - name: Read the changelog
-#        id: read-changelog
-#        uses: juliangruber/read-file-action@v1
-#        with:
-#          path: ./CHANGELOG.md
-#      - name: Get changes in this version
-#        run: echo ${{ steps.read-changelog.outputs.content }}
+      - name: Get the changes in ${{steps.version.outputs.version}}
+        id: changelog
+        run: echo ::set-output name=changelog::$(node scripts/get-changes.js)
       - name: Create Release
         uses: actions/create-release@v1
         env:
@@ -33,7 +29,6 @@ jobs:
         with:
           tag_name: "test"
           release_name: ${{steps.version.outputs.version}}
-          body: |
-            body test
+          body: ${{steps.changelog.outputs.changelog}}
           draft: true
           prerelease: true
