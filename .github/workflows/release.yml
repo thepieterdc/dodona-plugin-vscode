@@ -45,7 +45,7 @@ jobs:
         run: yarn install
       - name: Package the extension
         run: yarn package
-      - name: Create Release
+      - name: Create release
         id: release
         uses: actions/create-release@v1
         env:
@@ -66,4 +66,11 @@ jobs:
           asset_name: dodona-plugin-vscode-${{ steps.version.outputs.version-raw }}.vsix
           asset_content_type: application/octet-stream
       # TODO RELEASE TO VSCE MARKETPLACE
-      # TODO MAKE NEW COMMIT
+      - name: Prepare package.json for next version
+        run: node scripts/prepare-next-snapshot.js
+      - name: Push new development commit
+        uses: EndBug/add-and-commit@v7
+        with:
+          add: 'package.json'
+          message: 'Prepare next development cycle'
+          signoff: true
