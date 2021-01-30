@@ -13,12 +13,12 @@ jobs:
       - uses: actions/checkout@v2
       # TODO build extension here.
       - name: Read the changelog
-        id: changelog
+        id: read-changelog
         uses: juliangruber/read-file-action@v1
         with:
           path: ./CHANGELOG.md
       - name: Get changes in this version
-        run: echo ${{ steps.
+        run: echo ${{ steps.read-changelog.outputs.content }}
       - name: Create Release
         uses: actions/create-release@v1
         env:
