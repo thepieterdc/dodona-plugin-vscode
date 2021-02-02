@@ -100,15 +100,22 @@ workspace.onDidChangeConfiguration(e => {
  * Executes a call on Dodona.
  *
  * @param call the call to execute
+ * @param handleErrors true if errors need to be handled in this function, false
  * @return the result of the call, or error handling
  */
 export default async function execute<T>(
     call: DodonaCall<T>,
+    handleErrors = true,
 ): Promise<T | null> {
     try {
         // Execute the call.
         return await call(client);
     } catch (error) {
+        // Validate whether errors need to be handled.
+        if (!handleErrors) {
+            return null;
+        }
+
         // Handle invalid tokens.
         if (
             (error instanceof HTTPError && error.response.statusCode === 401) ||
