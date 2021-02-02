@@ -68,7 +68,10 @@ async function showNotificationMessage(amount: number): Promise<void> {
  */
 async function unreadNotifications(): Promise<Notification[]> {
     // Get all the notifications.
-    const notifications = await execute(dodona => dodona.notifications.list);
+    const notifications = await execute(
+        dodona => dodona.notifications.list,
+        false,
+    );
     if (!notifications || notifications.length === 0) {
         // No notifications were found (or an error has occurred).
         return [];
