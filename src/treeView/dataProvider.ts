@@ -7,7 +7,7 @@ import {
 } from "vscode";
 import { AbstractTreeItem } from "./items/abstractTreeItem";
 import execute from "../api/client";
-import { CourseTreeItem } from "./items/courseTreeItem";
+import { YearTreeItem } from "./items/yearTreeItem";
 import {
     getSortOption,
     getYearFilter,
@@ -45,8 +45,39 @@ export default class RootDataProvider
                     RootDataProvider.sortCourses(this.filterCourses(cs || [])),
                 )
                 // Convert them to tree items.
-                .then(cs => cs.map(c => new CourseTreeItem(c)))
+                .then(cs =>
+                    this.getYears(cs).map(
+                        y => new YearTreeItem(y, this.getCoursesForYear(y, cs)),
+                    ),
+                )
         );
+    }
+
+    /**
+     * Get all academic years in a list of courses
+     * @param courses
+     */
+    getYears(courses: Course[]): string[] {
+        const yearArray: string[] = [];
+
+        /**
+         * Create a unique array of all academic years
+         * Can't use a set because order is important
+         */
+        courses.forEach(function (course) {
+            if (!yearArray.includes(course.year)) {
+                yearArray.push(course.year);
+            }
+        });
+
+        return yearArray;
+    }
+
+    /**
+     * Get all courses with a given academic year
+     */
+    getCoursesForYear(year: string, courses: Course[]): Course[] {
+        return courses.filter(c => c.year == year);
     }
 
     getTreeItem(element: AbstractTreeItem): TreeItem {
