@@ -96,35 +96,18 @@ export default class RootDataProvider
         // so this can be made a bit abstract to avoid duplication
         const priority = sortOption.includes("ascending") ? -1 : 1;
 
-        // Sorting always puts the second option descending to make it easier to read
-
-        // Sort by name first
-        if (sortOption.startsWith("Alphabetic")) {
-            return courses.sort((a, b) =>
-                a.name < b.name
-                    ? priority
-                    : a.name > b.name
-                    ? -priority
-                    : a.year < b.year
-                    ? -1
-                    : a.year > b.year
-                    ? 1
-                    : 0,
-            );
-        } else {
-            // Sort by year first
-            return courses.sort((a, b) =>
-                a.year < b.year
-                    ? priority
-                    : a.year > b.year
-                    ? -priority
-                    : a.name < b.name
-                    ? -1
-                    : a.name > b.name
-                    ? 1
-                    : 0,
-            );
-        }
+        // Sort by year (descending) first, name second
+        return courses.sort((a, b) =>
+            a.year < b.year
+                ? 1
+                : a.year > b.year
+                ? -1
+                : a.name < b.name
+                ? priority
+                : a.name > b.name
+                ? -priority
+                : 0,
+        );
     }
 
     filterCourses(courses: Course[]): Course[] {
