@@ -55,7 +55,6 @@ export default class RootDataProvider
 
     /**
      * Get all academic years in a list of courses
-     * @param courses
      */
     getYears(courses: Course[]): string[] {
         const yearArray: string[] = [];
