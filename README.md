@@ -46,26 +46,27 @@ The first line of the newly created file will contain the link to the selected e
 
 Once you've solved the exercise, it's easy to submit your solution. There are three ways to submit a solution:
 
-* Click the checkmark ( <img src="assets/readme/content-page-read.png" alt="checkmark" width=15px;/> ) in the left panel with the Dodona activities.![Checkmark](assets/readme/check-mark.png)
-* You can also use the `Alt+D` shortcut (`Option-D` for Mac users) for this, or assign a [different shortcut](https://code.visualstudio.com/docs/getstarted/keybindings#_keyboard-shortcuts-editor).
-* Another option is to execute the `Dodona: Submit solution`-command by opening the command palette using `Ctrl+Shift+P` and typing (parts of) `Dodona: Submit solution` and pressing `Enter`.![Submit](assets/readme/submit2.png)
+-   Click the checkmark ( <img src="assets/readme/content-page-read.png" alt="checkmark" width=15px;/> ) in the left panel with the Dodona activities.![Checkmark](assets/readme/check-mark.png)
+-   You can also use the `Alt+D` shortcut (`Option-D` for Mac users) for this, or assign a [different shortcut](https://code.visualstudio.com/docs/getstarted/keybindings#_keyboard-shortcuts-editor).
+-   Another option is to execute the `Dodona: Submit solution`-command by opening the command palette using `Ctrl+Shift+P` and typing (parts of) `Dodona: Submit solution` and pressing `Enter`.![Submit](assets/readme/submit2.png)
 
 This command will submit your code to Dodona and trigger an automatic test.
 
 After a few seconds, you should see a popup in the bottom right corner containing the result of your submission. If you click the `View results` button, the result with the difference between your output and the expected output should open in a new browser window.
 
 ## Other functionality
-|                                 Symbol                                 | Meaning                                                                                                                                                                               |
-| :--------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-|       <img src="assets/readme/refresh.png" alt="refresh" width=15px;/>        | Reload the list of activities.                                                                                                                                                        |
-|  <img src="assets/readme/notification.png" alt="notification" width=15px;/>   | Notifies users in case of unread feedback. The icon links to https://dodona.ugent.be/notifications.                                                                                   |
-| <img src="assets/readme/content-page-read.png" alt="checkmark" width=15px;/>  | Submit solution to Dodona. Alternative for `Alt+D` and `Ctrl+Shift+P`, `Dodona: Submit Solution`.                                                                                     |
+
+|                                    Symbol                                     | Meaning                                                                                                                                                          |
+| :---------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|       <img src="assets/readme/refresh.png" alt="refresh" width=15px;/>        | Reload the list of activities.                                                                                                                                   |
+|  <img src="assets/readme/notification.png" alt="notification" width=15px;/>   | Notifies users in case of unread feedback. The icon links to https://dodona.ugent.be/notifications.                                                              |
+| <img src="assets/readme/content-page-read.png" alt="checkmark" width=15px;/>  | Submit solution to Dodona. Alternative for `Alt+D` and `Ctrl+Shift+P`, `Dodona: Submit Solution`.                                                                |
 |          <img src="assets/readme/edit.png" alt="edit" width=15px;/>           | Opens the description of a series or course in a new browser window. (Hover with your cursor over a series or course in the left column with Dodona activities.) |
-| <img src="assets/readme/open-description.png" alt="description" width=15px;/> | Show the exercise description in VS Code. (Hover with your cursor over an exercise in the left column with Dodona activities.)                                                       |
+| <img src="assets/readme/open-description.png" alt="description" width=15px;/> | Show the exercise description in VS Code. (Hover with your cursor over an exercise in the left column with Dodona activities.)                                   |
 
 ## Sorting and filtering courses (Usage)
 
-You can change the order in which courses are shown using the `dodona.treeview.sort` dropdown in the settings. By default, this will be set to sort by `Academic year first (descending), alphabetic second`.
+You can change the order in which courses are shown using the `dodona.treeview.sort` dropdown in the settings. By default, this will be set to sort by `Alphabetic (ascending)`.
 
 ![Sorting](assets/readme/sort-example.png)
 
