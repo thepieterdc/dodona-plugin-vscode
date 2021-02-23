@@ -66,7 +66,7 @@ After a few seconds, you should see a popup in the bottom right corner containin
 
 ## Sorting and filtering courses (Usage)
 
-You can change the order in which courses are shown using the `dodona.treeview.sort` dropdown in the settings. By default, this will be set to sort by `Alphabetic (ascending)`.
+You can change the order in which courses are shown using the `dodona.treeview.sort` dropdown in the settings. By default, this will be set to sort by `Alphabetic (ascending)`. Courses are always sorted by `Academic Year (descending)` primarily, so that your most recent courses are always on top of the list.
 
 ![Sorting](assets/readme/sort-example.png)
 

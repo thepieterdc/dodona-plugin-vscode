@@ -103,18 +103,14 @@
         },
         "dodona.treeview.sort": {
           "type": "string",
-          "default": "Academic year (descending)",
+          "default": "Alphabetic (ascending)",
           "enum": [
-            "Academic year (ascending)",
-            "Academic year (descending)",
             "Alphabetic (ascending)",
             "Alphabetic (descending)"
           ],
           "enumDescriptions": [
-            "Academic year first (ascending), alphabetic second",
-            "Academic year first (descending), alphabetic second",
-            "Alphabetic first (ascending), academic year second",
-            "Alphabetic first (descending), academic year second"
+            "Academic year first (descending), alphabetic second (ascending)",
+            "Academic year first (descending), alphabetic second (descending)"
           ],
           "description": "Specifies how the courses in the Tree View should be sorted."
         },
