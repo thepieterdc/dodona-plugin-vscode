@@ -57,19 +57,9 @@ export default class RootDataProvider
      * Get all academic years in a list of courses
      */
     getYears(courses: Course[]): string[] {
-        const yearArray: string[] = [];
-
-        /**
-         * Create a unique array of all academic years
-         * Can't use a set because order is important
-         */
-        courses.forEach(function (course) {
-            if (!yearArray.includes(course.year)) {
-                yearArray.push(course.year);
-            }
-        });
-
-        return yearArray;
+        return courses
+            .map(course => course.year)
+            .filter((y, i, self) => self.indexOf(y) === i);
     }
 
     /**
