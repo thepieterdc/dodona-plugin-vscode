@@ -1,11 +1,15 @@
-## 1.4.0 - January 30, 2021
-* [Pieter De Clercq (@thepieterdc)](https://github.com/thepieterdc)
-  * [BUG] Catch notification errors [#85](https://github.com/thepieterdc/dodona-plugin-vscode/issues/85)
+## 1.5.0 - February 23, 2021
+* [Stijn De Clercq (@stijndcl)](https://github.com/stijndcl)
+  * [FEATURE] Split courses by academic year [#88](https://github.com/thepieterdc/dodona-plugin-vscode/issues/88)
 
 ## 1.4.1 - February 5, 2021
 * [Pieter De Clercq (@thepieterdc)](https://github.com/thepieterdc)
   * [FEATURE] Display exercise name in submission dialog [#71](https://github.com/thepieterdc/dodona-plugin-vscode/issues/71)
   * [BUG] Don't show 401 message when token is invalid [#43](https://github.com/thepieterdc/dodona-plugin-vscode/issues/43)
+
+## 1.4.0 - January 30, 2021
+* [Pieter De Clercq (@thepieterdc)](https://github.com/thepieterdc)
+  * [BUG] Catch notification errors [#85](https://github.com/thepieterdc/dodona-plugin-vscode/issues/85)
 
 ## 1.3.0 - December 18, 2020
 * [Stijn De Clercq (@stijndcl)](https://github.com/stijndcl)
