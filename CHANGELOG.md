@@ -1,3 +1,7 @@
+## 1.5.1 - March 7, 2021
+* [Pieter De Clercq (@thepieterdc)](https://github.com/thepieterdc)
+  * [BUG] Support duplicate exercise names [#93](https://github.com/thepieterdc/dodona-plugin-vscode/issues/93)
+
 ## 1.5.0 - February 23, 2021
 * [Stijn De Clercq (@stijndcl)](https://github.com/stijndcl)
   * [FEATURE] Split courses by academic year [#88](https://github.com/thepieterdc/dodona-plugin-vscode/issues/88)

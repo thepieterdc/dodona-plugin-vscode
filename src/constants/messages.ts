@@ -1,5 +1,5 @@
 import { DodonaEnvironment } from "../dodonaEnvironment";
-import { pluralise } from "../util";
+import { pluralise } from "../util/base";
 
 export const INVALID_TOKEN_MSG = (env: DodonaEnvironment) =>
     `You have configured an invalid API token for the ${env.titlecase()} environment.`;
