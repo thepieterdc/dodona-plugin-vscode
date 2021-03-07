@@ -3,7 +3,7 @@ import IdentificationData, { identify } from "../identification";
 import { AssertionError } from "assert";
 import { getApiEnvironment } from "../configuration";
 import execute from "../api/client";
-import { canonicalUrl, sleep } from "../util";
+import { canonicalUrl, sleep } from "../util/base";
 import { SubmissionEvaluatedListener } from "../listeners";
 import Submission from "../api/resources/submission";
 import { Activity } from "../api/resources/activities";
