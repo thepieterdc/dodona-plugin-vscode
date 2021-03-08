@@ -1,3 +1,9 @@
+## 1.5.2 - March 8, 2021
+* [Stijn De Clercq (@stijndcl)](https://github.com/stijndcl)
+  * [BUG] Open exercise descriptions in the right column [#98](https://github.com/thepieterdc/dodona-plugin-vscode/issues/98)
+  * [BUG] Open exercise descriptions when file name was duplicate [#97](https://github.com/thepieterdc/dodona-plugin-vscode/issues/97)
+  * [BUG] First line of boilerplate is commented along with the URL
+
 ## 1.5.1 - March 7, 2021
 * [Pieter De Clercq (@thepieterdc)](https://github.com/thepieterdc)
   * [BUG] Support duplicate exercise names [#93](https://github.com/thepieterdc/dodona-plugin-vscode/issues/93)
