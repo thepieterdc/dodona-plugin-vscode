@@ -31,7 +31,8 @@ export async function createNewExercise(exercise: Exercise) {
         if (identification && identification.activity === exercise.id) {
             // Exercise already exists, open it.
             const document = await workspace.openTextDocument(filePath);
-            window.showTextDocument(document);
+            await window.showTextDocument(document, ViewColumn.One);
+            showActivityDescription(exercise);
             return;
         }
 
@@ -56,12 +57,12 @@ export async function createNewExercise(exercise: Exercise) {
     const boilerplate = exercise.boilerplate || "";
 
     // Write the file contents.
-    const contents = `${commentedUrl}${boilerplate}\n`;
+    const contents = `${commentedUrl}\n\n${boilerplate}\n`;
     fs.writeFileSync(filePath, contents);
 
     // Open the file in the editor.
     const document = await workspace.openTextDocument(Uri.file(filePath));
-    window.showTextDocument(document, { viewColumn: ViewColumn.One });
+    await window.showTextDocument(document, { viewColumn: ViewColumn.One });
 
     // Open the description of the exercise if configured.
     if (getAutoDescription()) {

@@ -42,6 +42,7 @@ async function openActivityDescription(
         viewColumn,
         { enableScripts: true },
     );
+
     descriptionPanels.push(panel);
 
     // Load the activity description HTML.
