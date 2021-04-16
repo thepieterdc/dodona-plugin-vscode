@@ -1,11 +1,12 @@
 ## 1.5.3 - April 17, 2021
 * [Pieter De Clercq (@thepieterdc)](https://github.com/thepieterdc)
-    * [BUG] Fix loading exercise descriptions [#101](https://github.com/thepieterdc/dodona-plugin-vscode/issues/101)
+  * [FEATURE] Generate clean filenames [#91](https://github.com/thepieterdc/dodona-plugin-vscode/issues/91)
+  * [BUG] Fix loading exercise descriptions [#101](https://github.com/thepieterdc/dodona-plugin-vscode/issues/101)
 
 ## 1.5.2 - March 8, 2021
 * [Stijn De Clercq (@stijndcl)](https://github.com/stijndcl)
-  * [BUG] Open exercise descriptions in the right column [#98](https://github.com/thepieterdc/dodona-plugin-vscode/issues/98)
   * [BUG] Open exercise descriptions when file name was duplicate [#97](https://github.com/thepieterdc/dodona-plugin-vscode/issues/97)
+  * [BUG] Open exercise descriptions in the right column [#98](https://github.com/thepieterdc/dodona-plugin-vscode/issues/98)
   * [BUG] First line of boilerplate is commented along with the URL
 
 ## 1.5.1 - March 7, 2021
@@ -70,16 +71,13 @@
   * Support for multiple Dodona environments.
 
 ## 0.1.2 - July 6, 2020
-
 * [Pieter De Clercq (@thepieterdc)](https://github.com/thepieterdc)
   * Add link to view submission details after feedback.
 
 ## 0.1.1 - July 5, 2020
-
 * [Brecht Willems (@BTWS2)](https://github.com/BTWS2)
   * Clarified readme and added icon.
 
 ## 0.1.0 - June 20, 2020
-
 * [Pieter De Clercq (@thepieterdc)](https://github.com/thepieterdc)
   * Implement initial version that allows submitting to an exercise by including the url as a comment.

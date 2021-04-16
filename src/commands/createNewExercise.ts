@@ -7,6 +7,7 @@ import Exercise from "../api/resources/activities/exercise";
 import { canonicalUrl, readFirstLine, workspaceRoot } from "../util/base";
 import { identify } from "../identification";
 import { comment } from "../util/comments";
+import { generateFilename } from "../util/naming";
 
 /**
  * Action to create a new file for an exercise.
@@ -71,18 +72,6 @@ export async function createNewExercise(exercise: Exercise) {
     if (editor && getAutoDescription()) {
         await showActivityDescription(exercise);
     }
-}
-
-/**
- * Generates the file name for the given exercise.
- *
- * @param exercise the exercise to generate a file name for
- * @return the file name
- */
-function generateFilename(exercise: Exercise): string {
-    // TODO https://github.com/thepieterdc/dodona-plugin-vscode/issues/91.
-    const extension = exercise.programming_language?.extension || "txt";
-    return `${exercise.name}.${extension}`;
 }
 
 /**
