@@ -9,7 +9,7 @@
     "url": "https://github.com/thepieterdc/dodona-plugin-vscode"
   },
   "engines": {
-    "vscode": "^1.34.0"
+    "vscode": "^1.40.0"
   },
   "license": "MIT",
   "categories": [
