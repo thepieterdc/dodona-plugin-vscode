@@ -1,3 +1,7 @@
+## 1.5.3 - April 17, 2021
+* [Pieter De Clercq (@thepieterdc)](https://github.com/thepieterdc)
+    * [BUG] Fix loading exercise descriptions [#101](https://github.com/thepieterdc/dodona-plugin-vscode/issues/101)
+
 ## 1.5.2 - March 8, 2021
 * [Stijn De Clercq (@stijndcl)](https://github.com/stijndcl)
   * [BUG] Open exercise descriptions in the right column [#98](https://github.com/thepieterdc/dodona-plugin-vscode/issues/98)

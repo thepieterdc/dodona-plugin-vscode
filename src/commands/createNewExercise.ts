@@ -32,7 +32,7 @@ export async function createNewExercise(exercise: Exercise) {
             // Exercise already exists, open it.
             const document = await workspace.openTextDocument(filePath);
             await window.showTextDocument(document, ViewColumn.One);
-            showActivityDescription(exercise);
+            await showActivityDescription(exercise);
             return;
         }
 
@@ -62,11 +62,14 @@ export async function createNewExercise(exercise: Exercise) {
 
     // Open the file in the editor.
     const document = await workspace.openTextDocument(Uri.file(filePath));
-    await window.showTextDocument(document, { viewColumn: ViewColumn.One });
+    const editor = await window.showTextDocument(document, {
+        viewColumn: ViewColumn.One,
+    });
 
-    // Open the description of the exercise if configured.
-    if (getAutoDescription()) {
-        showActivityDescription(exercise);
+    // Open the description of the exercise if configured. Make sure the editor
+    // is loaded before we load the description.
+    if (editor && getAutoDescription()) {
+        await showActivityDescription(exercise);
     }
 }
 
