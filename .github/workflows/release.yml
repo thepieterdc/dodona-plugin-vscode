@@ -46,7 +46,7 @@ jobs:
       - name: Package the extension
         run: yarn package
       - name: Create tag
-        uses: mathieudutour/github-tag-action@v5.5
+        uses: mathieudutour/github-tag-action@v5.6
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           custom_tag: ${{ steps.version.outputs.version-raw }}
