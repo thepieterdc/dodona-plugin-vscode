@@ -1,39 +1,49 @@
 name: Release
 
 on:
-  push:
-    branches:
-      - 'release/**'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Version number
+        required: true
 
 jobs:
   release:
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      pull-requests: write
+
     steps:
       - uses: actions/checkout@v2
+
+      - name: Create a release branch
+        run: |
+          git checkout -b release
+          git push -u origin/release
+
       - name: Install Node.js 14.x
         uses: actions/setup-node@v2-beta
         with:
           node-version: '14'
-      - name: Get the version from package.json
-        id: version
-        run: |
-          echo ::set-output name=version::v$(node scripts/get-version.js)
-          echo ::set-output name=version-raw::$(node scripts/get-version.js)
-      - name: Do not release snapshot versions
-        if: ${{ contains(steps.version.outputs.version, 'SNAPSHOT') }}
-        run: exit 1
-      - name: Get the changes in ${{ steps.version.outputs.version }}
-        id: changelog
-        run: |
-          CHANGES=$(node scripts/get-changes.js)
-          CHANGES="${CHANGES//'%'/'%25'}"
-          CHANGES="${CHANGES//$'\n'/'%0A'}"
-          CHANGES="${CHANGES//$'\r'/'%0D'}"
-          echo "::set-output name=changelog::$CHANGES"
+
+      - name: Set the version in package.json
+        run: node scripts/set-version.js ${{ github.event.inputs.version }}
+
+      - name: Create a release commit
+        uses: EndBug/add-and-commit@v7
+        with:
+          add: 'package.json'
+          message: Release v${{ github.event.inputs.version }}
+          push: false
+          signoff: true
+
       - name: Get the Yarn cache directory
         id: yarn-cache
         run: |
           echo "::set-output name=dir::$(yarn cache dir)"
+
       - name: Cache Yarn dependencies
         uses: actions/cache@v2
         with:
@@ -41,50 +51,58 @@ jobs:
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
+
       - name: Install Yarn dependencies
         run: yarn install
+
       - name: Package the extension
         run: yarn package
+
       - name: Create tag
-        uses: mathieudutour/github-tag-action@v5.5
+        uses: mathieudutour/github-tag-action@v5.6
         with:
+          custom_tag: v${{ github.event.inputs.version }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          custom_tag: ${{ steps.version.outputs.version-raw }}
+
       - name: Create release
         id: release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ steps.version.outputs.version }}
-          release_name: ${{ steps.version.outputs.version }}
-          body: ${{ steps.changelog.outputs.changelog }}
           draft: false
           prerelease: false
+          release_name: v${{ github.event.inputs.version }}
+          tag_name: v${{ github.event.inputs.version }}
+
       - name: Attach artifact to release
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.release.outputs.upload_url }}
-          asset_path: ./dodona-plugin-vscode-${{ steps.version.outputs.version-raw }}.vsix
-          asset_name: dodona-plugin-vscode-${{ steps.version.outputs.version-raw }}.vsix
           asset_content_type: application/octet-stream
+          asset_name: dodona-plugin-vscode-${{ github.event.inputs.version }}.vsix
+          asset_path: ./dodona-plugin-vscode-${{ github.event.inputs.version }}.vsix
+          upload_url: ${{ steps.release.outputs.upload_url }}
+
       - name: Publish to Azure Marketplace
         run: yarn run vscode:publish
         env:
           VSCE_PAT: ${{ secrets.VSCE_PAT }}
+
       - name: Prepare package.json for next version
         run: node scripts/prepare-next-snapshot.js
+
       - name: Push new development commit
         uses: EndBug/add-and-commit@v7
         with:
           add: 'package.json'
           message: 'Prepare next development cycle'
           signoff: true
+
       - name: Open a pull request
         uses: repo-sync/pull-request@v2
         with:
           destination_branch: "master"
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          pr_title: Release ${{ steps.version.outputs.version }}
+          pr_title: Release v${{ github.event.inputs.version }}
