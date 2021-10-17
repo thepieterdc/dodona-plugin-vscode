@@ -23,10 +23,10 @@ jobs:
           git checkout -b release
           git push -u origin/release
 
-      - name: Install Node.js 14.x
-        uses: actions/setup-node@v2-beta
+      - name: Install Node.js 16.x
+        uses: actions/setup-node@v2
         with:
-          node-version: '14'
+          node-version: '16'
 
       - name: Set the version in package.json
         run: node scripts/set-version.js ${{ github.event.inputs.version }}
