@@ -240,7 +240,7 @@
     "got": "^11.8.2"
   },
   "devDependencies": {
-    "@types/node": "^16.11.1",
+    "@types/node": "^16.11.2",
     "@types/vscode": "^1.55.0",
     "@typescript-eslint/eslint-plugin": "^5.1.0",
     "@typescript-eslint/parser": "^5.0.0",
