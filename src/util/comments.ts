@@ -2,6 +2,7 @@ import ProgrammingLanguage from "../api/resources/programmingLanguage";
 
 // Comment functions.
 const dashes = (text: string) => `-- ${text}`;
+const exclamation = (text: string) => `<!-- ${text} -->`;
 const hashtag = (text: string) => `# ${text}`;
 const percentage = (text: string) => `% ${text}`;
 const slashes = (text: string) => `// ${text}`;
@@ -12,12 +13,14 @@ const commentMapping: { [key: string]: CallableFunction } = {
     "c++": slashes,
     "c#": slashes,
     haskell: dashes,
+    html: exclamation,
     java: slashes,
     javascript: slashes,
     maple: hashtag,
     prolog: percentage,
     python: hashtag,
     ruby: hashtag,
+    sql: dashes,
 };
 
 /**
