@@ -31,7 +31,7 @@ const commentMapping: { [key: string]: CallableFunction } = {
  */
 export function comment(
     text: string,
-    language: ProgrammingLanguage | null,
+    language: ProgrammingLanguage | null = null,
 ): string {
     // Get the name of the language.
     const name = language && language.name && language.name.toLowerCase();
