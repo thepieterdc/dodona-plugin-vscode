@@ -1,5 +1,6 @@
 # IDE stuff
 .idea/
+.vscode/
 
 # Git stuff
 .github/
@@ -8,3 +9,10 @@ scripts/
 
 # Source files
 src/
+
+# Testing
+*.test.js
+.nyc_output
+.vscode-test
+coverage/
+out/test/

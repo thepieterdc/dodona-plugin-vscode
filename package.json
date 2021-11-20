@@ -80,6 +80,12 @@
           "markdownDescription": "Specifies which API token should be used to authorize to Dodona.\n\nFollow [these instructions](https://dodona-edu.github.io/en/guides/vs-code-extension/#_3-insert-api-token) to get an API token.",
           "scope": "application"
         },
+        "dodona.auth.local": {
+          "type": "string",
+          "default": null,
+          "markdownDescription": "Specifies which API token should be used to authorize to your local Dodona instance.\n\nFollow [these instructions](https://dodona-edu.github.io/en/guides/vs-code-extension/#_3-insert-api-token) to get an API token.",
+          "scope": "application"
+        },
         "dodona.auth.naos": {
           "type": "string",
           "default": null,
@@ -91,6 +97,7 @@
           "default": "https://dodona.ugent.be",
           "enum": [
             "https://dodona.ugent.be",
+            "http://localhost:3000",
             "https://naos.ugent.be"
           ],
           "description": "Specifies which Dodona environment should be used.",
@@ -232,6 +239,8 @@
     "compile": "tsc -p ./",
     "lint": "eslint . --ext .ts,.tsx",
     "package": "vsce package",
+    "test:integration": "yarn run compile && node ./out/test/runner.js",
+    "test:unit": "nyc --reporter=lcov mocha -r ts-node/register src/**/*.test.ts",
     "vscode:publish": "vsce publish --yarn",
     "vscode:prepublish": "yarn run compile",
     "watch": "tsc -watch -p ./"
@@ -240,12 +249,18 @@
     "got": "^11.8.3"
   },
   "devDependencies": {
+    "@istanbuljs/nyc-config-typescript": "^1.0.1",
+    "@types/mocha": "^9.0.0",
     "@types/node": "^16.11.9",
     "@types/vscode": "^1.55.0",
     "@typescript-eslint/eslint-plugin": "^5.4.0",
     "@typescript-eslint/parser": "^5.4.0",
+    "@vscode/test-electron": "^1.6.2",
     "eslint": "^8.2.0",
+    "mocha": "^9.1.3",
+    "nyc": "^15.1.0",
     "prettier": "^2.4.1",
+    "ts-mocha": "^8.0.0",
     "typescript": "^4.5.2",
     "vsce": "^2.3.0"
   }

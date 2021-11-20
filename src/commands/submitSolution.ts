@@ -17,14 +17,17 @@ const FEEDBACK_VIEW_RESULTS = "View results";
 /**
  * Submits the solution to Dodona and waits for the result.
  *
- * @param identification the exercise
+ * @param identification the exercise identification
+ * @param exercise the exercise information
  * @param code the student solution
+ * @param maxAttempts the maximum amount of polling attempts
  * @return the submission result after evaluation
  */
 async function evaluateSubmission(
     identification: IdentificationData,
     exercise: Activity,
     code: string,
+    maxAttempts: number
 ): Promise<Submission> {
     // Submit the code to Dodona.
     const submitResp = await execute(dodona =>
@@ -40,7 +43,7 @@ async function evaluateSubmission(
     window.setStatusBarMessage("Evaluating submission...");
 
     // Poll the submission url every 5 seconds until it is evaluated.
-    for (let attempt = 0; attempt < 25; ++attempt) {
+    for (let attempt = 0; attempt < maxAttempts; ++attempt) {
         // Wait for 5 seconds before fetching the result. The sleep comes first,
         // because the solution cannot be evaluated right after it has been
         // submitted to Dodona.
@@ -130,7 +133,7 @@ async function showFeedback(
     // Unknown error.
     return window.showErrorMessage(
         submission.summary ||
-            "An unknown error occurred while evaluating your submission.",
+        "An unknown error occurred while evaluating your submission.",
         ...[FEEDBACK_VIEW_RESULTS],
     );
 }
@@ -159,9 +162,11 @@ function validateEnvironment(identification: IdentificationData): boolean {
  * Action to submit a solution to Dodona.
  *
  * @param listener function that is called when a submission is evaluated
+ * @param maxAttempts maximum amount of polling attempts
  */
 export async function submitSolution(
-    listener: SubmissionEvaluatedListener,
+    listener: SubmissionEvaluatedListener | null = null,
+    maxAttempts = 25,
 ): Promise<void> {
     const editor = window.activeTextEditor;
     if (!editor) {
@@ -190,8 +195,9 @@ export async function submitSolution(
         return;
     }
 
+
     // Evaluate the submission.
-    const submission = await evaluateSubmission(identification, exercise, code);
+    const submission = await evaluateSubmission(identification, exercise, code, maxAttempts);
 
     // Display a feedback message.
     if ((await showFeedback(exercise, submission)) === FEEDBACK_VIEW_RESULTS) {
@@ -200,5 +206,5 @@ export async function submitSolution(
     }
 
     // Notify listeners.
-    listener(submission!);
+    listener && listener(submission!);
 }
