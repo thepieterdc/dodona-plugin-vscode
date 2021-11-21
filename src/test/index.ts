@@ -30,6 +30,7 @@ export async function run(): Promise<void> {
     const testRoot = path.resolve(__dirname, ".");
 
     // Add the files to the suite.
+    mocha.addFile(path.resolve(testRoot, "commands/completeContentPage.test.js"));
     mocha.addFile(path.resolve(testRoot, "commands/submitSolution.test.js"));
 
     // Run the suite.
