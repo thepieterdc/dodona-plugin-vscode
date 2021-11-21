@@ -8,7 +8,7 @@ import Submission from "../../api/resources/submission";
 import { canonicalUrl } from "../../util/base";
 
 suite("submitSolution", () => {
-    test("Submit empty solution.", async () => {
+    test("Submit empty solution", async () => {
         // Set the zeus authentication token.
         const config = vscode.workspace.getConfiguration(CONFIG_KEY);
         await config.update("auth.local", "zeus", true);
@@ -23,11 +23,11 @@ suite("submitSolution", () => {
             resolveBodyOnly: true,
             responseType: "json",
         });
-        const activity = activities.filter(a => a.type === "Exercise")[0];
+        const exercise = activities.filter(a => a.type === "Exercise")[0];
 
         // Build the solution code.
         const uniqueIdentifier = `submitSolutionTest_${new Date().valueOf()}`;
-        const content = `# ${activity.url}
+        const content = `# ${exercise.url}
         ${uniqueIdentifier}
         `;
 
@@ -42,7 +42,7 @@ suite("submitSolution", () => {
         await assert.rejects(async () => await submitSolution(null, 0), { message: "Your solution took too long to evaluate." });
 
         // Get the submissions to the exercise.
-        const submissions: Submission[] = await got(`${canonicalUrl(activity)}/submissions`, {
+        const submissions: Submission[] = await got(`${canonicalUrl(exercise)}/submissions`, {
             headers: {
                 Accept: "application/json",
                 Authorization: "zeus",
