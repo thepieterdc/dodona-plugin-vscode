@@ -16,3 +16,4 @@ src/
 .vscode-test
 coverage/
 out/test/
+testOutput/
