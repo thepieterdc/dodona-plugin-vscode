@@ -1,4 +1,4 @@
-import * as assert from "assert";
+import * as nodeAssert from "assert";
 import * as vscode from "vscode";
 import got from "got";
 import { submitSolution } from "../../commands/submitSolution";
@@ -6,6 +6,7 @@ import { CONFIG_KEY } from "../../configuration";
 import { Activity } from "../../api/resources/activities";
 import Submission from "../../api/resources/submission";
 import { canonicalUrl } from "../../util/base";
+import { assert } from "chai";
 
 suite("submitSolution", () => {
     test("Submit empty solution", async () => {
@@ -39,7 +40,7 @@ suite("submitSolution", () => {
 
         // Submit the file. We make this throw an error since the local Dodona
         // instance cannot run a judge.
-        await assert.rejects(async () => await submitSolution(null, 0), { message: "Your solution took too long to evaluate." });
+        await nodeAssert.rejects(async () => await submitSolution(null, 0), { message: "Your solution took too long to evaluate." });
 
         // Get the submissions to the exercise.
         const submissions: Submission[] = await got(`${canonicalUrl(exercise)}/submissions`, {
@@ -61,6 +62,6 @@ suite("submitSolution", () => {
             resolveBodyOnly: true,
             responseType: "json",
         });
-        assert.match(code, new RegExp(uniqueIdentifier));
+        assert.include(code, uniqueIdentifier);
     });
 });

@@ -1,5 +1,5 @@
-import * as assert from "assert";
 import * as vscode from "vscode";
+import { assert } from "chai";
 import got from "got";
 import { CONFIG_KEY } from "../../configuration";
 import { Activity, ContentPage } from "../../api/resources/activities";
@@ -24,7 +24,7 @@ suite("completeContentPage", () => {
         let contentPage = activities.filter(a => a.type === "ContentPage" && !(a as ContentPage).has_read)[0] as ContentPage;
 
         // Validate that the content page is not read.
-        assert.equal(contentPage.has_read, false);
+        assert.isFalse(contentPage.has_read);
 
         // Mark the content page as read.
         await completeContentPage(() => null, contentPage);
@@ -38,6 +38,6 @@ suite("completeContentPage", () => {
             resolveBodyOnly: true,
             responseType: "json",
         });
-        assert.equal(contentPage.has_read, true);
+        assert.isTrue(contentPage.has_read);
     });
 });
