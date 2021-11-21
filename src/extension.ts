@@ -1,7 +1,7 @@
 import { commands, ExtensionContext, window, workspace } from "vscode";
 import RootDataProvider from "./treeView/dataProvider";
 import { createNewExercise } from "./commands/createNewExercise";
-import { getApiEnvironment } from "./configuration";
+import { CONFIG_KEY, getApiEnvironment } from "./configuration";
 import { openCourse } from "./commands/openCourse";
 import { openSeries } from "./commands/openSeries";
 import { submitSolution } from "./commands/submitSolution";
@@ -99,11 +99,12 @@ export function activate(context: ExtensionContext) {
 
     // Register and create the activity tree view for the plugin.
     window.registerTreeDataProvider("dodona-activities", treeDataProvider);
-    window.createTreeView("dodona-activities", { treeDataProvider });
 
     // Refresh the treeview when the API domain is changed.
-    workspace.onDidChangeConfiguration(() => {
-        treeDataProvider.refresh();
+    workspace.onDidChangeConfiguration(e => {
+        if (e.affectsConfiguration(CONFIG_KEY)) {
+            treeDataProvider.refresh();
+        }
     });
 
     notificationsInterval();

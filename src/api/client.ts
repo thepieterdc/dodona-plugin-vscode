@@ -128,21 +128,22 @@ export default async function execute<T>(
                 ? INVALID_TOKEN_MSG(environment)
                 : MISSING_TOKEN_MSG(environment);
 
-            // Get the user's action.
-            const selectedButton = await window.showErrorMessage(
+            // Get the user's action. We cannot use async/await here since this
+            // will block processing.
+            window.showErrorMessage(
                 `${msg} To correctly set up your token in Visual Studio Code, click the Instructions button below.`,
                 VIEW_INSTRUCTIONS_ACTION,
                 OPEN_SETTINGS_ACTION,
-            );
-
-            // Handle the action.
-            if (selectedButton === VIEW_INSTRUCTIONS_ACTION) {
-                // Open the instructions in the user's web browser.
-                env.openExternal(TOKEN_INSTUCTIONS_URL);
-            } else if (selectedButton === OPEN_SETTINGS_ACTION) {
-                // Open the token settings.
-                commands.executeCommand("dodona.settings.token");
-            }
+            ).then(action => {
+                // Handle the action.
+                if (action === VIEW_INSTRUCTIONS_ACTION) {
+                    // Open the instructions in the user's web browser.
+                    env.openExternal(TOKEN_INSTUCTIONS_URL);
+                } else if (action === OPEN_SETTINGS_ACTION) {
+                    // Open the token settings.
+                    commands.executeCommand("dodona.settings.token");
+                }
+            });
         }
 
         // Empty response.
