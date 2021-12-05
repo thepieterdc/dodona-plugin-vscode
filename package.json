@@ -255,7 +255,7 @@
     "@types/mocha": "^9.0.0",
     "@types/node": "^16.11.11",
     "@types/vscode": "^1.55.0",
-    "@typescript-eslint/eslint-plugin": "^5.4.0",
+    "@typescript-eslint/eslint-plugin": "^5.5.0",
     "@typescript-eslint/parser": "^5.4.0",
     "@vscode/test-electron": "^1.6.2",
     "chai": "^4.3.4",
