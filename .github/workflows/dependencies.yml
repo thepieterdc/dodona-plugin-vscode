@@ -1,7 +1,9 @@
 name: Dependencies
 
 on:
-  pull_request_target
+  pull_request_target:
+    branches:
+      - 'dependabot/**'
 
 jobs:
   approve-dependabot:
