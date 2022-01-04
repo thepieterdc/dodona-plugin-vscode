@@ -4,6 +4,9 @@ on:
   pull_request_target:
     branches:
       - 'dependabot/**'
+  push:
+    branches:
+      - 'dependabot/**'
 
 jobs:
   approve-dependabot:
