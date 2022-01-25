@@ -23,6 +23,12 @@ You can authenticate by creating an API token. Using such token, VS Code can sub
 4. In the left column you get an overview of the exercises and series of the course (expand it if necessary).
    ![API token](assets/readme/api-token.png)
 
+## Disable `Http: System Certificates` on Windows
+
+In order to allow the connection with Dodona on Windows, you have to disable the `Http: System Certificates` in the Visual Studio Code settings as illustrated below.
+
+<img src="assets/readme/http-error.png" alt="http-setting"/>
+
 ## Creating new exercises via Dodona extension (Usage)
 
 1. <img src="assets/readme/sideview.png" alt="sideview" width=30px;/> Dodona icon in the Activity Bar (icon in left column).

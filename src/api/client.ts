@@ -145,6 +145,10 @@ export default async function execute<T>(
                 }
             });
         }
+        // Display every other error as popup
+        else {
+            window.showErrorMessage(`${error}`);
+        }
 
         // Empty response.
         return null;
