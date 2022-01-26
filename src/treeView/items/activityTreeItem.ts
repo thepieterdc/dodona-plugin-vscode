@@ -7,7 +7,6 @@ import Exercise, {
     findExerciseStatus,
 } from "../../api/resources/activities/exercise";
 import { ProviderResult, TreeItemCollapsibleState, ViewColumn } from "vscode";
-import { fstat } from "fs";
 
 // Icon to display next to completed content pages.
 const CONTENT_PAGE_COMPLETED_ICON = path.join(__filename, "..", "..", "..", "..", "assets", "content-page-completed.svg");
