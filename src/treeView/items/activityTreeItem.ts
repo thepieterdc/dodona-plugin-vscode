@@ -7,6 +7,7 @@ import Exercise, {
     findExerciseStatus,
 } from "../../api/resources/activities/exercise";
 import { ProviderResult, TreeItemCollapsibleState, ViewColumn } from "vscode";
+import { fstat } from "fs";
 
 // Icon to display next to completed content pages.
 const CONTENT_PAGE_COMPLETED_ICON = path.join(__filename, "..", "..", "..", "..", "assets", "content-page-completed.svg");
@@ -72,6 +73,14 @@ class ContentPageTreeItem extends AbstractActivityTreeItem {
         // Set the icon based on the status.
         if (contentPage.has_read) {
             this.iconPath = CONTENT_PAGE_COMPLETED_ICON;
+        } else {
+            this.iconPath = path.join(__filename,
+                "..",
+                "..",
+                "..",
+                "..",
+                "assets",
+                "language-read.svg");
         }
 
     }
@@ -106,8 +115,16 @@ class ExerciseTreeItem extends AbstractActivityTreeItem {
                 "..",
                 "..",
                 "assets",
-                `exercise-${status}.svg`,
-            );
+                `exercise-${status}.svg`);
+        } else {
+            this.iconPath = path.join(
+                __filename,
+                "..",
+                "..",
+                "..",
+                "..",
+                "assets",
+                `language-${String(exercise.programming_language?.extension)}.svg`);
         }
     }
 }
