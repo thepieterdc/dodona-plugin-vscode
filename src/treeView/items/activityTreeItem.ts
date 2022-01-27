@@ -123,7 +123,7 @@ class ExerciseTreeItem extends AbstractActivityTreeItem {
                 "..",
                 "..",
                 "assets",
-                `language-${String(exercise.programming_language?.extension)}.svg`);
+                `language-${String(exercise.programming_language?.name)}.svg`);
         }
     }
 }
