@@ -20,7 +20,7 @@ export function generateFilename(exercise: Exercise): string {
         // Replace all whitespace by underscores.
         .replace(WHITESPACE, "_");
 
-    if(exercise.programming_language?.extension == "py"){
+    if(exercise.programming_language?.extension === "py"){
         basename = basename.toLowerCase();
     }
 
