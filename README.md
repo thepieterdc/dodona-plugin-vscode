@@ -29,6 +29,10 @@ In order to allow the connection with Dodona on Windows, you have to disable the
 
 <img src="assets/readme/http-error.png" alt="http-setting"/>
 
+Skipping this step will result in an error: `RequestError: certificate has expired`.
+
+<img src="assets/readme/certificate-error.png" alt="certificate-error"/>
+
 ## Creating new exercises via Dodona extension (Usage)
 
 1. <img src="assets/readme/sideview.png" alt="sideview" width=30px;/> Dodona icon in the Activity Bar (icon in left column).
