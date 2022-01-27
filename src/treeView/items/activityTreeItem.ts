@@ -104,7 +104,7 @@ class ExerciseTreeItem extends AbstractActivityTreeItem {
             title: "Create Exercise",
         };
 
-        // Set the icon based on the status.
+        // Set the icon based on the status and programming language (language-text.svg as default).
         const status = findExerciseStatus(exercise);
         if (status !== ExerciseStatus.NOT_STARTED) {
             this.iconPath = path.join(
@@ -115,15 +115,6 @@ class ExerciseTreeItem extends AbstractActivityTreeItem {
                 "..",
                 "assets",
                 `exercise-${status}.svg`);
-        } else if (exercise.programming_language == null) {
-            this.iconPath = path.join(
-                __filename,
-                "..",
-                "..",
-                "..",
-                "..",
-                "assets",
-                `language-text.svg`);
         } else {
             this.iconPath = path.join(
                 __filename,
@@ -132,7 +123,7 @@ class ExerciseTreeItem extends AbstractActivityTreeItem {
                 "..",
                 "..",
                 "assets",
-                `language-${String(exercise.programming_language?.name)}.svg`);
+                `language-${exercise.programming_language?.name + '.svg' || 'text.svg'}`);
         }
     }
 }
