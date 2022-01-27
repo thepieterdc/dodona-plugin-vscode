@@ -115,6 +115,15 @@ class ExerciseTreeItem extends AbstractActivityTreeItem {
                 "..",
                 "assets",
                 `exercise-${status}.svg`);
+        } else if (exercise.programming_language == null) {
+            this.iconPath = path.join(
+                __filename,
+                "..",
+                "..",
+                "..",
+                "..",
+                "assets",
+                `language-text.svg`);
         } else {
             this.iconPath = path.join(
                 __filename,
