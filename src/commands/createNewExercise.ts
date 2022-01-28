@@ -39,6 +39,7 @@ export async function createNewExercise(exercise: Exercise) {
 
         // File already exists, but it is a different exercise. Ask the user to
         // provide a different filename.
+        window.showWarningMessage("This filename is already in use for a different exercise. Choose a different name for this exercise.");
         const defaultUri = Uri.file(filePath);
         const saved = await window.showSaveDialog({ defaultUri });
         if (!saved) {
