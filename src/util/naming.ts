@@ -14,11 +14,15 @@ export function generateFilename(exercise: Exercise): string {
     // TODO Support generation of Java class names.
 
     // Get the basename.
-    const basename = exercise.name
+    let basename = exercise.name
         // Strip out all non-alphanumeric characters.
         .replace(NON_ALPHA, "")
         // Replace all whitespace by underscores.
         .replace(WHITESPACE, "_");
+
+    if(exercise.programming_language?.extension === "py"){
+        basename = basename.toLowerCase();
+    }
 
     // Append the extension of the programming language.
     return `${basename}.${exercise.programming_language?.extension || "txt"}`;
