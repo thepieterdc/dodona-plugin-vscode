@@ -31,7 +31,7 @@ In order to allow the connection with Dodona on Windows, you have to disable the
 
 Skipping this step will result in an error: `RequestError: certificate has expired`.
 
-<img src="assets/readme/certificate-error.png" alt="certificate-error"/>
+<img src="assets/readme/certificate-request-error.png" alt="certificate-request-error"/>
 
 ## Creating new exercises via Dodona extension (Usage)
 
