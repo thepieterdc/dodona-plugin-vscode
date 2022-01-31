@@ -2,7 +2,7 @@
   "name": "dodona-plugin-vscode",
   "displayName": "Dodona",
   "description": "Extension for Visual Studio Code to submit exercises to Dodona.",
-  "version": "1.9.0",
+  "version": "1.9.1-SNAPSHOT",
   "publisher": "thepieterdc",
   "repository": {
     "type": "git",
