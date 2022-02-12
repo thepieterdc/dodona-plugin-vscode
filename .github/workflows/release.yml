@@ -32,13 +32,12 @@ jobs:
         run: node scripts/set-version.js ${{ github.event.inputs.version }}
 
       - name: Create a release commit
-        uses: EndBug/add-and-commit@v7
+        uses: EndBug/add-and-commit@v8.0.2
         with:
           add: 'package.json'
-          branch: release
+          commit: '--signoff'
           message: Release v${{ github.event.inputs.version }}
           push: false
-          signoff: true
 
       - name: Get the Yarn cache directory
         id: yarn-cache
@@ -95,12 +94,11 @@ jobs:
         run: node scripts/prepare-next-snapshot.js
 
       - name: Push new development commit
-        uses: EndBug/add-and-commit@v7
+        uses: EndBug/add-and-commit@v8.0.2
         with:
           add: 'package.json'
-          branch: release
+          commit: '--signoff'
           message: 'Prepare next development cycle'
-          signoff: true
 
       - name: Open a pull request
         uses: repo-sync/pull-request@v2
