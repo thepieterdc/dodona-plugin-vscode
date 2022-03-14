@@ -160,7 +160,7 @@ export default async function execute<T>(
                 });
             }
             else {
-                window.showErrorMessage(`${error} test`);
+                window.showErrorMessage(`${error}`);
             }
         }
 
