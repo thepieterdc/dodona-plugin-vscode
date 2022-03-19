@@ -1,10 +1,10 @@
-import { commands, env, window, workspace, ConfigurationTarget } from "vscode";
+import { commands, ConfigurationTarget, env, window, workspace } from "vscode";
 import { ApiToken, getApiEnvironment, getApiToken } from "../configuration";
 import { DodonaEnvironments } from "../dodonaEnvironment";
 import got, { HTTPError, RequestError } from "got";
 import {
-    CourseManager,
     ActivityManager,
+    CourseManager,
     SeriesManager,
     SubmissionManager,
 } from "./managers";
@@ -14,7 +14,6 @@ import NotificationManager from "./managers/notificationManager";
 import {
     OPEN_SETTINGS_ACTION,
     VIEW_INSTRUCTIONS_ACTION,
-    FIX_ERROR,
 } from "../constants/actions";
 import { TOKEN_INSTUCTIONS_URL } from "../constants/urls";
 import { INVALID_TOKEN_MSG, MISSING_TOKEN_MSG } from "../constants/messages";
@@ -145,23 +144,21 @@ export default async function execute<T>(
                     commands.executeCommand("dodona.settings.token");
                 }
             });
-        }
-        // Display every other error as popup
-        else {
-            if (error instanceof RequestError) {
-                window.showErrorMessage("RequestError: certificate has expired. Click the button to disable HTTP System Certificates and solve the error.", FIX_ERROR).then(action => {
-                    if (action == FIX_ERROR) {
-                        commands.executeCommand("workbench.action.openSettings", "http.systemCertificates");
-                        workspace.getConfiguration().update('http.systemCertificates', false, ConfigurationTarget.Global).then(() => {
-                            window.showInformationMessage("Http System Certificates have been turned off to solve RequestError.");
-                            commands.executeCommand("dodona.treeview.refresh");
-                        });
-                    }
-                });
-            }
-            else {
+        } else if (error instanceof RequestError) {
+            // Attempt to fix the certificate error.
+            const key = "http.systemCertificates";
+            const config = workspace.getConfiguration();
+            if (config.get(key)) {
+                // The setting was true, flip it and retry the call.
+                await config.update(key, false, ConfigurationTarget.Global);
+                return execute(call, handleErrors);
+            } else {
+                // The setting was already turned off.
                 window.showErrorMessage(`${error}`);
             }
+        } else {
+            // Display every other error as popup
+            window.showErrorMessage(`${error}`);
         }
 
         // Empty response.
