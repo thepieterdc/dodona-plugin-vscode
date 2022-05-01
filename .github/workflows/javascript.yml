@@ -32,7 +32,7 @@ jobs:
       - run: yarn install
       - run: yarn compile
       - run: yarn package
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           path: |
             *.vsix
