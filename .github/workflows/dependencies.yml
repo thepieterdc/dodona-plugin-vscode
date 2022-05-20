@@ -7,11 +7,9 @@ jobs:
   dependabot-approve:
     runs-on: ubuntu-latest
 
-    # if: ${{ github.actor == 'dependabot[bot]'}}
+    # if: ${{ github.event.pull_request.user.login == 'dependabot[bot]'}}
 
     steps:
-      - run: echo "${{ github.actor }}"
-
       - uses: dependabot/fetch-metadata@v1.3.1
         id: metadata
         with:
