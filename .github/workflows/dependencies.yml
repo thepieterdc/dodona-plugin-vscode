@@ -4,7 +4,7 @@ on:
   pull_request
 
 jobs:
-  dependabot-approve:
+  merge:
     runs-on: ubuntu-latest
 
     # if: ${{ github.event.pull_request.user.login == 'dependabot[bot]'}}
@@ -15,4 +15,4 @@ jobs:
         with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
 
-      - run: echo "${{ steps.metadata.outputs }}"
+      - run: echo "${{ toJSON(steps.metadata.outputs) }}"
