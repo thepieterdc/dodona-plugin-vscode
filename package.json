@@ -247,7 +247,7 @@
     "watch": "tsc -watch -p ./"
   },
   "dependencies": {
-    "got": "^11.8.3"
+    "got": "^11.8.5"
   },
   "devDependencies": {
     "@istanbuljs/nyc-config-typescript": "^1.0.2",
