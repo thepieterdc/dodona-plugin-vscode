@@ -30,7 +30,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
       - run: yarn install
-      - run: yarn compile
+      - run: yarn build
       - run: yarn package
       - uses: actions/upload-artifact@v3
         with:
