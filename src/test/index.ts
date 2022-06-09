@@ -1,3 +1,4 @@
+import * as Mocha from "mocha";
 import * as path from "path";
 
 
