@@ -17,6 +17,7 @@ import {
 } from "../constants/actions";
 import { TOKEN_INSTUCTIONS_URL } from "../constants/urls";
 import { INVALID_TOKEN_MSG, MISSING_TOKEN_MSG } from "../constants/messages";
+import * as packageJson from "../../package.json";
 
 /**
  * A client for interfacing with Dodona.
@@ -44,6 +45,7 @@ class DodonaClientImpl implements DodonaClient {
             headers: {
                 Accept: "text/html",
                 Authorization: token || "",
+                "user-agent": `Plugin/VSCode-${packageJson.version}`
             },
             prefixUrl: host,
             resolveBodyOnly: true,
@@ -54,6 +56,7 @@ class DodonaClientImpl implements DodonaClient {
             headers: {
                 Accept: "application/json",
                 Authorization: token || "",
+                "user-agent": `Plugin/VSCode-${packageJson.version}`
             },
             prefixUrl: host,
             resolveBodyOnly: true,
