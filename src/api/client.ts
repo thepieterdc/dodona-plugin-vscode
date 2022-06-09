@@ -1,4 +1,11 @@
-import { commands, ConfigurationTarget, env, window, workspace } from "vscode";
+import {
+    commands,
+    ConfigurationTarget,
+    env,
+    extensions,
+    window,
+    workspace,
+} from "vscode";
 import { ApiToken, getApiEnvironment, getApiToken } from "../configuration";
 import { DodonaEnvironments } from "../dodonaEnvironment";
 import got, { HTTPError, RequestError } from "got";
@@ -17,7 +24,6 @@ import {
 } from "../constants/actions";
 import { TOKEN_INSTUCTIONS_URL } from "../constants/urls";
 import { INVALID_TOKEN_MSG, MISSING_TOKEN_MSG } from "../constants/messages";
-import packageJson from "package.json";
 
 /**
  * A client for interfacing with Dodona.
@@ -41,11 +47,14 @@ class DodonaClientImpl implements DodonaClient {
     public readonly submissions: SubmissionManager;
 
     constructor(host: string, token: ApiToken | null) {
+        // Get the extension version.
+        const version = extensions.getExtension("thepieterdc.dodona-plugin-vscode")?.packageJSON.version;
+
         const html = got.extend({
             headers: {
                 Accept: "text/html",
                 Authorization: token || "",
-                "user-agent": `Plugin/VSCode-${packageJson.version}`,
+                "user-agent": `Plugin/VSCode-${version}`,
             },
             prefixUrl: host,
             resolveBodyOnly: true,
@@ -56,7 +65,7 @@ class DodonaClientImpl implements DodonaClient {
             headers: {
                 Accept: "application/json",
                 Authorization: token || "",
-                "user-agent": `Plugin/VSCode-${packageJson.version}`,
+                "user-agent": `Plugin/VSCode-${version}`,
             },
             prefixUrl: host,
             resolveBodyOnly: true,

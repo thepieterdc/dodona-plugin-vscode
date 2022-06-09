@@ -266,11 +266,5 @@
     "ts-mocha": "^10.0.0",
     "typescript": "^4.7.3",
     "vsce": "^2.9.1"
-  },
-  "__metadata": {
-    "id": "4a14767b-a068-406e-a11c-951e97ff356f",
-    "isPreReleaseVersion": false,
-    "publisherDisplayName": "Pieter De Clercq - Stijn De Clercq",
-    "publisherId": "d3add6ac-9767-4f1b-bfaf-4759069d347e"
   }
 }
