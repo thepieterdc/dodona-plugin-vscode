@@ -1,4 +1,4 @@
-import { Uri, ViewColumn, window, workspace } from "vscode";
+import { commands, Uri, ViewColumn, window, workspace } from "vscode";
 import * as path from "path";
 import * as fs from "fs";
 import { getAutoDescription } from "../configuration";
@@ -39,7 +39,9 @@ export async function createNewExercise(exercise: Exercise) {
 
         // File already exists, but it is a different exercise. Ask the user to
         // provide a different filename.
-        window.showWarningMessage("This filename is already in use for a different exercise. Choose a different name for this exercise.");
+        window.showWarningMessage(
+            "This filename is already in use for a different exercise. Choose a different name for this exercise.",
+        );
         const defaultUri = Uri.file(filePath);
         const saved = await window.showSaveDialog({ defaultUri });
         if (!saved) {
@@ -88,6 +90,30 @@ async function workspaceFolder(): Promise<string | undefined> {
     }
 
     // No folder is opened, ask the user to select one.
-    const selected = await window.showWorkspaceFolderPick();
-    return selected && selected.uri.fsPath;
+    const selectFolder = "Open Folder";
+    const cancel = "Cancel";
+
+    const choice = await window.showInformationMessage(
+        "In order to create new files, you should first open a folder.",
+        selectFolder,
+        cancel,
+    );
+
+    // If the user decided to cancel for whatever reason, do nothing
+    if (!choice || choice === cancel) {
+        return undefined;
+    }
+
+    const selected = await window.showOpenDialog({
+        canSelectFiles: false,
+        canSelectFolders: true,
+        canSelectMany: false,
+        title: "Choose a folder to work in",
+    });
+
+    if (!selected) return undefined;
+
+    const uri = selected[0];
+    await commands.executeCommand("vscode.openFolder", uri);
+    return uri.fsPath;
 }
