@@ -7,7 +7,7 @@ import { canonicalUrl, sleep } from "../util/base";
 import { SubmissionEvaluatedListener } from "../listeners";
 import Submission from "../api/resources/submission";
 import { Activity } from "../api/resources/activities";
-import { getOpenResultAuto } from "../configuration";
+import { getAutoOpenResult } from "../configuration";
 
 // TODO only show command in palette if an exercise is opened
 //      (can be done using "when" in package.json)
@@ -200,7 +200,8 @@ export async function submitSolution(
     // Evaluate the submission.
     const submission = await evaluateSubmission(identification, exercise, code, maxAttempts);
 
-    if(getOpenResultAuto() || (await showFeedback(exercise, submission)) === FEEDBACK_VIEW_RESULTS){
+    //open the results page if auto opening is enabled, else, display a popup with the option to open the page.
+    if(getAutoOpenResult() || (await showFeedback(exercise, submission)) === FEEDBACK_VIEW_RESULTS){
         commands.executeCommand("vscode.open", canonicalUrl(submission));
     }
 
