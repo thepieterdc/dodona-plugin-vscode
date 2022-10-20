@@ -1,13 +1,12 @@
 import { commands, window } from "vscode";
 import IdentificationData, { identify } from "../identification";
 import { AssertionError } from "assert";
-import { getApiEnvironment } from "../configuration";
+import { getApiEnvironment, getAutoOpenResult } from "../configuration";
 import execute from "../api/client";
 import { canonicalUrl, sleep } from "../util/base";
 import { SubmissionEvaluatedListener } from "../listeners";
 import Submission from "../api/resources/submission";
 import { Activity } from "../api/resources/activities";
-import { getAutoOpenResult } from "../configuration";
 
 // TODO only show command in palette if an exercise is opened
 //      (can be done using "when" in package.json)
@@ -28,7 +27,7 @@ async function evaluateSubmission(
     identification: IdentificationData,
     exercise: Activity,
     code: string,
-    maxAttempts: number
+    maxAttempts: number,
 ): Promise<Submission> {
     // Submit the code to Dodona.
     const submitResp = await execute(dodona =>
@@ -134,7 +133,7 @@ async function showFeedback(
     // Unknown error.
     return window.showErrorMessage(
         submission.summary ||
-        "An unknown error occurred while evaluating your submission.",
+            "An unknown error occurred while evaluating your submission.",
         ...[FEEDBACK_VIEW_RESULTS],
     );
 }
@@ -196,12 +195,19 @@ export async function submitSolution(
         return;
     }
 
-
     // Evaluate the submission.
-    const submission = await evaluateSubmission(identification, exercise, code, maxAttempts);
+    const submission = await evaluateSubmission(
+        identification,
+        exercise,
+        code,
+        maxAttempts,
+    );
 
     //open the results page if auto opening is enabled, else, display a popup with the option to open the page.
-    if(getAutoOpenResult() || (await showFeedback(exercise, submission)) === FEEDBACK_VIEW_RESULTS){
+    if (
+        getAutoOpenResult() ||
+        (await showFeedback(exercise, submission)) === FEEDBACK_VIEW_RESULTS
+    ) {
         commands.executeCommand("vscode.open", canonicalUrl(submission));
     }
 

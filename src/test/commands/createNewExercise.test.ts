@@ -1,4 +1,4 @@
-import {assert} from "chai";
+import { assert } from "chai";
 import * as vscode from "vscode";
 import got from "got";
 import { CONFIG_KEY } from "../../configuration";
@@ -16,14 +16,17 @@ suite("createNewExercise", () => {
         await config.update("environment", "http://localhost:3000", true);
 
         // Get an available exercise.
-        const activities: Activity[] = await got("http://localhost:3000/activities", {
-            headers: {
-                Accept: "application/json",
-                Authorization: "zeus",
+        const activities: Activity[] = await got(
+            "http://localhost:3000/activities",
+            {
+                headers: {
+                    Accept: "application/json",
+                    Authorization: "zeus",
+                },
+                resolveBodyOnly: true,
+                responseType: "json",
             },
-            resolveBodyOnly: true,
-            responseType: "json",
-        });
+        );
         exercise = activities.filter(a => a.type === "Exercise")[0] as Exercise;
     });
 

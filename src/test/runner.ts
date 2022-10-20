@@ -10,14 +10,26 @@ async function main(): Promise<void> {
     const extensionTestsPath = path.resolve(__dirname, "index");
 
     // Path to the workspace.
-    const testWorkspace = path.resolve(__dirname, "..", "..", "src", "test", "test.code-workspace");
+    const testWorkspace = path.resolve(
+        __dirname,
+        "..",
+        "..",
+        "src",
+        "test",
+        "test.code-workspace",
+    );
 
     try {
         // Run the tests.
         await runTests({
             extensionDevelopmentPath,
             extensionTestsPath,
-            launchArgs: [testWorkspace, "--disable-extensions", "--install-extension", "thepieterdc.dodona-plugin-vscode"],
+            launchArgs: [
+                testWorkspace,
+                "--disable-extensions",
+                "--install-extension",
+                "thepieterdc.dodona-plugin-vscode",
+            ],
         });
     } catch (err) {
         console.error(err);

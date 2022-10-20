@@ -28,11 +28,14 @@ export default class CourseManager {
      * @return the courses
      */
     public get subscribed(): Promise<Course[]> {
-        return this.jsonApi.get("").json().then(resp => {
-            if ((<RootResponse>resp).user) {
-                return (<RootResponse>resp).user.subscribed_courses;
-            }
-            throw new InvalidAccessToken();
-        });
+        return this.jsonApi
+            .get("")
+            .json()
+            .then(resp => {
+                if ((<RootResponse>resp).user) {
+                    return (<RootResponse>resp).user.subscribed_courses;
+                }
+                throw new InvalidAccessToken();
+            });
     }
 }

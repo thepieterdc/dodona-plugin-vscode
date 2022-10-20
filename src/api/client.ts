@@ -48,7 +48,9 @@ class DodonaClientImpl implements DodonaClient {
 
     constructor(host: string, token: ApiToken | null) {
         // Get the extension version.
-        const version = extensions.getExtension("thepieterdc.dodona-plugin-vscode")?.packageJSON.version;
+        const version = extensions.getExtension(
+            "thepieterdc.dodona-plugin-vscode",
+        )?.packageJSON.version;
 
         const html = got.extend({
             headers: {
@@ -142,20 +144,22 @@ export default async function execute<T>(
 
             // Get the user's action. We cannot use async/await here since this
             // will block processing.
-            window.showErrorMessage(
-                `${msg} To correctly set up your token in Visual Studio Code, click the Instructions button below.`,
-                VIEW_INSTRUCTIONS_ACTION,
-                OPEN_SETTINGS_ACTION,
-            ).then(action => {
-                // Handle the action.
-                if (action === VIEW_INSTRUCTIONS_ACTION) {
-                    // Open the instructions in the user's web browser.
-                    env.openExternal(TOKEN_INSTUCTIONS_URL);
-                } else if (action === OPEN_SETTINGS_ACTION) {
-                    // Open the token settings.
-                    commands.executeCommand("dodona.settings.token");
-                }
-            });
+            window
+                .showErrorMessage(
+                    `${msg} To correctly set up your token in Visual Studio Code, click the Instructions button below.`,
+                    VIEW_INSTRUCTIONS_ACTION,
+                    OPEN_SETTINGS_ACTION,
+                )
+                .then(action => {
+                    // Handle the action.
+                    if (action === VIEW_INSTRUCTIONS_ACTION) {
+                        // Open the instructions in the user's web browser.
+                        env.openExternal(TOKEN_INSTUCTIONS_URL);
+                    } else if (action === OPEN_SETTINGS_ACTION) {
+                        // Open the token settings.
+                        commands.executeCommand("dodona.settings.token");
+                    }
+                });
         } else if (error instanceof RequestError) {
             // Attempt to fix the certificate error.
             const key = "http.systemCertificates";

@@ -7,7 +7,7 @@ import ProgrammingLanguage from "../programmingLanguage";
 export enum ExerciseStatus {
     CORRECT = "correct",
     NOT_STARTED = "not-started",
-    WRONG = "wrong"
+    WRONG = "wrong",
 }
 
 /**
