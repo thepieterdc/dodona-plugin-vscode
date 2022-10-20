@@ -200,6 +200,7 @@ export async function submitSolution(
     // Evaluate the submission.
     const submission = await evaluateSubmission(identification, exercise, code, maxAttempts);
 
+    //open the results page if auto opening is enabled, else, display a popup with the option to open the page.
     if(getOpenResultAuto() || (await showFeedback(exercise, submission)) === FEEDBACK_VIEW_RESULTS){
         commands.executeCommand("vscode.open", canonicalUrl(submission));
     }
