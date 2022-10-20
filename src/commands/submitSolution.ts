@@ -1,7 +1,10 @@
 import { commands, window } from "vscode";
 import IdentificationData, { identify } from "../identification";
 import { AssertionError } from "assert";
-import { getApiEnvironment, getAutoOpenResult } from "../configuration";
+import {
+    getApiEnvironment,
+    getAutoOpenSubmissionResult,
+} from "../configuration";
 import execute from "../api/client";
 import { canonicalUrl, sleep } from "../util/base";
 import { SubmissionEvaluatedListener } from "../listeners";
@@ -203,9 +206,10 @@ export async function submitSolution(
         maxAttempts,
     );
 
-    //open the results page if auto opening is enabled, else, display a popup with the option to open the page.
+    // Show the feedback. This can be automatic if the
+    // `submission.result.open-auto` checkbox is set to true in the settings.
     if (
-        getAutoOpenResult() ||
+        getAutoOpenSubmissionResult() ||
         (await showFeedback(exercise, submission)) === FEEDBACK_VIEW_RESULTS
     ) {
         commands.executeCommand("vscode.open", canonicalUrl(submission));

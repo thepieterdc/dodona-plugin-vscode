@@ -55,12 +55,12 @@ export function getAutoDescription(): boolean {
 }
 
 /**
- * Gets the Auto-Open-Description checkbox from the configuration.
+ * Gets the Auto-Open-Result checkbox from the configuration.
  *
  * @returns the current value of the checkbox
  */
-export function getAutoOpenResult(): boolean {
-    return config().get("exercise.openresult.auto") || false;
+export function getAutoOpenSubmissionResult(): boolean {
+    return config().get("submission.result.open-auto") || false;
 }
 
 /**

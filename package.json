@@ -108,7 +108,7 @@
           "default": true,
           "description": "Specifies whether or not creating a new exercise should automatically open its description in a new window."
         },
-        "dodona.exercise.openresult.auto": {
+        "dodona.submission.result.open-auto": {
           "type": "boolean",
           "default": false,
           "description": "Specifies whether or not the results page of your submission should be opened automatically when it is available."
