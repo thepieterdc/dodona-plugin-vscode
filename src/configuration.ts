@@ -45,7 +45,6 @@ export function getApiToken(): ApiToken | null {
     const environment = getApiEnvironment().toLowerCase();
     return config().get<string>(`auth.${environment}`) || null;
 }
-
 /**
  * Gets the Auto-Open-Description checkbox from the configuration.
  *
@@ -53,6 +52,15 @@ export function getApiToken(): ApiToken | null {
  */
 export function getAutoDescription(): boolean {
     return config().get("exercise.description.auto") || false;
+}
+
+/**
+ * Gets the Auto-Open-Result checkbox from the configuration.
+ *
+ * @returns the current value of the checkbox
+ */
+export function getAutoOpenSubmissionResult(): boolean {
+    return config().get("submission.result.open-auto") || false;
 }
 
 /**

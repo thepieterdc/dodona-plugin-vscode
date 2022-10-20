@@ -12,7 +12,7 @@ declare global {
     }
 }
 
-String.prototype.titlecase = function() {
+String.prototype.titlecase = function () {
     const orig = String(this);
     if (orig.length <= 1) {
         return orig;

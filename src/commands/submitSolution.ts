@@ -1,7 +1,10 @@
 import { commands, window } from "vscode";
 import IdentificationData, { identify } from "../identification";
 import { AssertionError } from "assert";
-import { getApiEnvironment } from "../configuration";
+import {
+    getApiEnvironment,
+    getAutoOpenSubmissionResult,
+} from "../configuration";
 import execute from "../api/client";
 import { canonicalUrl, sleep } from "../util/base";
 import { SubmissionEvaluatedListener } from "../listeners";
@@ -27,7 +30,7 @@ async function evaluateSubmission(
     identification: IdentificationData,
     exercise: Activity,
     code: string,
-    maxAttempts: number
+    maxAttempts: number,
 ): Promise<Submission> {
     // Submit the code to Dodona.
     const submitResp = await execute(dodona =>
@@ -133,7 +136,7 @@ async function showFeedback(
     // Unknown error.
     return window.showErrorMessage(
         submission.summary ||
-        "An unknown error occurred while evaluating your submission.",
+            "An unknown error occurred while evaluating your submission.",
         ...[FEEDBACK_VIEW_RESULTS],
     );
 }
@@ -195,13 +198,20 @@ export async function submitSolution(
         return;
     }
 
-
     // Evaluate the submission.
-    const submission = await evaluateSubmission(identification, exercise, code, maxAttempts);
+    const submission = await evaluateSubmission(
+        identification,
+        exercise,
+        code,
+        maxAttempts,
+    );
 
-    // Display a feedback message.
-    if ((await showFeedback(exercise, submission)) === FEEDBACK_VIEW_RESULTS) {
-        // Open the results in a browser.
+    // Show the feedback. This can be automatic if the
+    // `submission.result.open-auto` checkbox is set to true in the settings.
+    if (
+        getAutoOpenSubmissionResult() ||
+        (await showFeedback(exercise, submission)) === FEEDBACK_VIEW_RESULTS
+    ) {
         commands.executeCommand("vscode.open", canonicalUrl(submission));
     }
 

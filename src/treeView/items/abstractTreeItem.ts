@@ -10,7 +10,10 @@ export abstract class AbstractTreeItem extends TreeItem {
      * @param label the label to display
      * @param collapsibleState whether this level is collapsed or not
      */
-    protected constructor(label: string, collapsibleState: TreeItemCollapsibleState) {
+    protected constructor(
+        label: string,
+        collapsibleState: TreeItemCollapsibleState,
+    ) {
         super(label, collapsibleState);
     }
 

@@ -6,7 +6,7 @@ export interface SubmissionCreatedResponse {
 }
 
 export type SubmissionStatus =
-    "compilation error"
+    | "compilation error"
     | "correct"
     | "internal error"
     | "memory limit exceeded"

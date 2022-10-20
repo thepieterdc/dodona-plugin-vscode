@@ -13,15 +13,20 @@ suite("completeContentPage", () => {
         await config.update("environment", "http://localhost:3000", true);
 
         // Get an available content page.
-        const activities: Activity[] = await got("http://localhost:3000/activities", {
-            headers: {
-                Accept: "application/json",
-                Authorization: "zeus",
+        const activities: Activity[] = await got(
+            "http://localhost:3000/activities",
+            {
+                headers: {
+                    Accept: "application/json",
+                    Authorization: "zeus",
+                },
+                resolveBodyOnly: true,
+                responseType: "json",
             },
-            resolveBodyOnly: true,
-            responseType: "json",
-        });
-        let contentPage = activities.filter(a => a.type === "ContentPage" && !(a as ContentPage).has_read)[0] as ContentPage;
+        );
+        let contentPage = activities.filter(
+            a => a.type === "ContentPage" && !(a as ContentPage).has_read,
+        )[0] as ContentPage;
 
         // Validate that the content page is not read.
         assert.isFalse(contentPage.has_read);

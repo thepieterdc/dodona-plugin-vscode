@@ -9,14 +9,24 @@ import Exercise, {
 import { ProviderResult, TreeItemCollapsibleState, ViewColumn } from "vscode";
 
 // Icon to display next to completed content pages.
-const CONTENT_PAGE_COMPLETED_ICON = path.join(__filename, "..", "..", "..", "..", "assets", "content-page-completed.svg");
+const CONTENT_PAGE_COMPLETED_ICON = path.join(
+    __filename,
+    "..",
+    "..",
+    "..",
+    "..",
+    "assets",
+    "content-page-completed.svg",
+);
 
 /**
  * Creates an activity tree item.
  *
  * @param activity the activity to create an item for
  */
-export default function createActivityTreeItem(activity: Activity): AbstractTreeItem {
+export default function createActivityTreeItem(
+    activity: Activity,
+): AbstractTreeItem {
     if (activity.type === "Exercise") {
         return new ExerciseTreeItem(<Exercise>activity);
     }
@@ -73,15 +83,16 @@ class ContentPageTreeItem extends AbstractActivityTreeItem {
         if (contentPage.has_read) {
             this.iconPath = CONTENT_PAGE_COMPLETED_ICON;
         } else {
-            this.iconPath = path.join(__filename,
+            this.iconPath = path.join(
+                __filename,
                 "..",
                 "..",
                 "..",
                 "..",
                 "assets",
-                "language-read.svg");
+                "language-read.svg",
+            );
         }
-
     }
 }
 
@@ -114,7 +125,8 @@ class ExerciseTreeItem extends AbstractActivityTreeItem {
                 "..",
                 "..",
                 "assets",
-                `exercise-${status}.svg`);
+                `exercise-${status}.svg`,
+            );
         } else {
             this.iconPath = path.join(
                 __filename,
@@ -123,7 +135,8 @@ class ExerciseTreeItem extends AbstractActivityTreeItem {
                 "..",
                 "..",
                 "assets",
-                `language-${exercise.programming_language?.name || "text"}.svg`);
+                `language-${exercise.programming_language?.name || "text"}.svg`,
+            );
         }
     }
 }

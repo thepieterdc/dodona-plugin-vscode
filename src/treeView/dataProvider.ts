@@ -22,10 +22,12 @@ import { Course } from "../api/resources/course";
  */
 
 export default class RootDataProvider
-    implements TreeDataProvider<AbstractTreeItem> {
-    private _onDidChangeTreeData: EventEmitter<AbstractTreeItem | undefined> = new EventEmitter<AbstractTreeItem | undefined>();
-    readonly onDidChangeTreeData: Event<AbstractTreeItem | undefined> = this
-        ._onDidChangeTreeData.event;
+    implements TreeDataProvider<AbstractTreeItem>
+{
+    private _onDidChangeTreeData: EventEmitter<AbstractTreeItem | undefined> =
+        new EventEmitter<AbstractTreeItem | undefined>();
+    readonly onDidChangeTreeData: Event<AbstractTreeItem | undefined> =
+        this._onDidChangeTreeData.event;
 
     getChildren(
         element?: AbstractTreeItem,
@@ -36,19 +38,21 @@ export default class RootDataProvider
         }
 
         // Get the courses the user is subscribed to.
-        return execute(dodona => dodona.courses.subscribed)
-            // Sort courses & apply filters
-            .then(cs =>
-                RootDataProvider.sortCourses(this.filterCourses(cs || [])),
-            )
-            // Convert them to tree items.
-            .then(cs =>
-                this.getYears(cs).map(
-                    y => new YearTreeItem(y, this.getCoursesForYear(y, cs)),
-                ),
-            )
-            // Error handling.
-            .catch(() => []);
+        return (
+            execute(dodona => dodona.courses.subscribed)
+                // Sort courses & apply filters
+                .then(cs =>
+                    RootDataProvider.sortCourses(this.filterCourses(cs || [])),
+                )
+                // Convert them to tree items.
+                .then(cs =>
+                    this.getYears(cs).map(
+                        y => new YearTreeItem(y, this.getCoursesForYear(y, cs)),
+                    ),
+                )
+                // Error handling.
+                .catch(() => [])
+        );
     }
 
     /**
@@ -88,12 +92,12 @@ export default class RootDataProvider
             a.year < b.year
                 ? 1
                 : a.year > b.year
-                    ? -1
-                    : a.name < b.name
-                        ? priority
-                        : a.name > b.name
-                            ? -priority
-                            : 0,
+                ? -1
+                : a.name < b.name
+                ? priority
+                : a.name > b.name
+                ? -priority
+                : 0,
         );
     }
 

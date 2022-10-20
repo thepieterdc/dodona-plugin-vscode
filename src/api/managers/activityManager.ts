@@ -27,7 +27,9 @@ export default class ActivityManager {
      * @return HTML content of the description
      */
     public description(activity: Activity): Promise<string> {
-        return this.htmlApi.get(activity.description_url, { prefixUrl: "" }).text();
+        return this.htmlApi
+            .get(activity.description_url, { prefixUrl: "" })
+            .text();
     }
 
     /**

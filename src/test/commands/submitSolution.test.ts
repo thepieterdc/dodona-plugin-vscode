@@ -16,14 +16,17 @@ suite("submitSolution", () => {
         await config.update("environment", "http://localhost:3000", true);
 
         // Get an available exercise.
-        const activities: Activity[] = await got("http://localhost:3000/activities", {
-            headers: {
-                Accept: "application/json",
-                Authorization: "zeus",
+        const activities: Activity[] = await got(
+            "http://localhost:3000/activities",
+            {
+                headers: {
+                    Accept: "application/json",
+                    Authorization: "zeus",
+                },
+                resolveBodyOnly: true,
+                responseType: "json",
             },
-            resolveBodyOnly: true,
-            responseType: "json",
-        });
+        );
         const exercise = activities.filter(a => a.type === "Exercise")[0];
 
         // Build the solution code.
@@ -33,24 +36,31 @@ suite("submitSolution", () => {
         `;
 
         // Open an empty file.
-        await vscode.workspace.openTextDocument({
-            content,
-            language: "python",
-        }).then(d => vscode.window.showTextDocument(d, 1, false));
+        await vscode.workspace
+            .openTextDocument({
+                content,
+                language: "python",
+            })
+            .then(d => vscode.window.showTextDocument(d, 1, false));
 
         // Submit the file. We make this throw an error since the local Dodona
         // instance cannot run a judge.
-        await nodeAssert.rejects(async () => await submitSolution(null, 0), { message: "Your solution took too long to evaluate." });
+        await nodeAssert.rejects(async () => await submitSolution(null, 0), {
+            message: "Your solution took too long to evaluate.",
+        });
 
         // Get the submissions to the exercise.
-        const submissions: Submission[] = await got(`${canonicalUrl(exercise)}/submissions`, {
-            headers: {
-                Accept: "application/json",
-                Authorization: "zeus",
+        const submissions: Submission[] = await got(
+            `${canonicalUrl(exercise)}/submissions`,
+            {
+                headers: {
+                    Accept: "application/json",
+                    Authorization: "zeus",
+                },
+                resolveBodyOnly: true,
+                responseType: "json",
             },
-            resolveBodyOnly: true,
-            responseType: "json",
-        });
+        );
 
         // Validate the code of the last submission.
         const lastSubmission = submissions[0];

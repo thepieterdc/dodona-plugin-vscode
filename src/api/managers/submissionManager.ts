@@ -21,15 +21,17 @@ export default class SubmissionManager {
      * @param solution the solution
      * @return the response of the POST request
      */
-    public create(identification: IdentificationData,
-                  solution: string): Promise<SubmissionCreatedResponse> {
+    public create(
+        identification: IdentificationData,
+        solution: string,
+    ): Promise<SubmissionCreatedResponse> {
         // Build the POST data.
         const body = {
-            "submission": {
-                "code": solution,
-                "course_id": identification.course,
-                "series_id": identification.series,
-                "exercise_id": identification.activity,
+            submission: {
+                code: solution,
+                course_id: identification.course,
+                series_id: identification.series,
+                exercise_id: identification.activity,
             },
         };
 
