@@ -64,7 +64,7 @@ suite("submitSolution", () => {
 
         // Validate the code of the last submission.
         const lastSubmission = submissions[0];
-        const { code } = await got(lastSubmission.url, {
+        const { code }: { code: string } = await got(lastSubmission.url, {
             headers: {
                 Accept: "application/json",
                 Authorization: "zeus",
