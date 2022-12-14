@@ -266,7 +266,7 @@
     "chai": "^4.3.7",
     "eslint": "^8.29.0",
     "eslint-plugin-prettier": "^4.2.1",
-    "mocha": "^10.1.0",
+    "mocha": "^10.2.0",
     "nyc": "^15.1.0",
     "prettier": "^2.8.1",
     "ts-mocha": "^10.0.0",
