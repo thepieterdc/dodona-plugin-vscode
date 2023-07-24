@@ -37,6 +37,18 @@ export interface DodonaClient {
 }
 
 /**
+ * Error handling modes.
+ */
+export enum ErrorHandler {
+    // Display errors in a message.
+    DISPLAY,
+    // Ignore all errors silently.
+    IGNORE,
+    // Raise all errors to the caller.
+    RAISE,
+}
+
+/**
  * Implementation of a client for interfacing with Dodona.
  */
 class DodonaClientImpl implements DodonaClient {
@@ -51,12 +63,13 @@ class DodonaClientImpl implements DodonaClient {
         const version = extensions.getExtension(
             "thepieterdc.dodona-plugin-vscode",
         )?.packageJSON.version;
+        const userAgent = `Plugin/VSCode-${version}`;
 
         const html = got.extend({
             headers: {
                 Accept: "text/html",
                 Authorization: token || "",
-                "user-agent": `Plugin/VSCode-${version}`,
+                "user-agent": userAgent,
             },
             prefixUrl: host,
             resolveBodyOnly: true,
@@ -67,7 +80,7 @@ class DodonaClientImpl implements DodonaClient {
             headers: {
                 Accept: "application/json",
                 Authorization: token || "",
-                "user-agent": `Plugin/VSCode-${version}`,
+                "user-agent": userAgent,
             },
             prefixUrl: host,
             resolveBodyOnly: true,
@@ -114,19 +127,19 @@ workspace.onDidChangeConfiguration(e => {
  * Executes a call on Dodona.
  *
  * @param call the call to execute
- * @param handleErrors true if errors need to be handled in this function, false
+ * @param errorHandler the error handler to use
  * @return the result of the call, or error handling
  */
 export default async function execute<T>(
     call: DodonaCall<T>,
-    handleErrors = true,
+    errorHandler: ErrorHandler = ErrorHandler.DISPLAY,
 ): Promise<T | null> {
     try {
         // Execute the call.
         return await call(client);
     } catch (error) {
-        // Validate whether errors need to be handled.
-        if (!handleErrors) {
+        // Silence errors.
+        if (errorHandler === ErrorHandler.IGNORE) {
             return null;
         }
 
@@ -135,6 +148,11 @@ export default async function execute<T>(
             (error instanceof HTTPError && error.response.statusCode === 401) ||
             error instanceof InvalidAccessToken
         ) {
+            // Raise errors to the caller.
+            if (errorHandler === ErrorHandler.RAISE) {
+                throw error;
+            }
+
             // Display an error message to inform the user that an invalid or
             // empty API token was configured.
             const environment = getApiEnvironment();
@@ -167,7 +185,7 @@ export default async function execute<T>(
             if (config.get(key)) {
                 // The setting was true, flip it and retry the call.
                 await config.update(key, false, ConfigurationTarget.Global);
-                return execute(call, handleErrors);
+                return execute(call, errorHandler);
             } else {
                 // The setting was already turned off.
                 window.showErrorMessage(`${error}`);

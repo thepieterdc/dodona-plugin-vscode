@@ -2,7 +2,7 @@
  * All the supported Dodona environments.
  */
 export enum DodonaEnvironments {
-    DODONA = "https://dodona.ugent.be",
+    DODONA = "https://dodona.be",
     LOCAL = "http://localhost:3000",
     NAOS = "https://naos.ugent.be",
 }
