@@ -8,8 +8,7 @@ import { submitSolution } from "./commands/submitSolution";
 import { showActivityDescription } from "./commands/showActivityDescription";
 import { completeContentPage } from "./commands/completeContentPage";
 import ContentPage from "./api/resources/activities/contentPage";
-import {
-    notificationsInterval,
+import NotificationWatcher, {
     openNotifications,
 } from "./commands/checkNotifications";
 
@@ -40,7 +39,7 @@ export function activate(context: ExtensionContext) {
     );
 
     // Command: Starts a loop that checks for new unread notifications
-    const notificationsCommand = commands.registerCommand(
+    const openNotificationsCommand = commands.registerCommand(
         "dodona.notifications",
         openNotifications,
     );
@@ -88,7 +87,7 @@ export function activate(context: ExtensionContext) {
     context.subscriptions.push(
         completeContentPageCommand,
         createNewExerciseCommand,
-        notificationsCommand,
+        openNotificationsCommand,
         refreshTreeViewCommand,
         openCourseCommand,
         openSeriesCommand,
@@ -100,12 +99,18 @@ export function activate(context: ExtensionContext) {
     // Register and create the activity tree view for the plugin.
     window.registerTreeDataProvider("dodona-activities", treeDataProvider);
 
-    // Refresh the treeview when the API domain is changed.
+    // Create a notification watcher.
+    const notifications = new NotificationWatcher();
+
+    // Refresh the treeview when the API domain is changed, and re-enable the
+    // notification watcher.
     workspace.onDidChangeConfiguration(e => {
         if (e.affectsConfiguration(CONFIG_KEY)) {
             treeDataProvider.refresh();
+            notifications.enable();
         }
     });
 
-    notificationsInterval();
+    // Start the notification watcher.
+    notifications.watch();
 }

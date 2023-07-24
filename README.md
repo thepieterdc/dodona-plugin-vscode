@@ -4,7 +4,7 @@
 [![installs](https://img.shields.io/visual-studio-marketplace/i/thepieterdc.dodona-plugin-vscode)](https://marketplace.visualstudio.com/items?itemName=thepieterdc.dodona-plugin-vscode)
 [![codecov](https://codecov.io/gh/thepieterdc/dodona-plugin-vscode/branch/master/graph/badge.svg?token=4HIICY5WEZ)](https://codecov.io/gh/thepieterdc/dodona-plugin-vscode)
 
-Extension for Visual Studio Code to submit exercises to [Dodona](https://dodona.ugent.be/).
+Extension for Visual Studio Code to submit exercises to [Dodona](https://dodona.be/).
 
 ## Install the Dodona extension
 
@@ -47,7 +47,7 @@ The first line of the newly created file will contain the link to the selected e
 > **Example**
 >
 > ```javascript
-> // https://dodona.ugent.be/nl/activities/1545120484/
+> // https://dodona.be/nl/activities/1545120484/
 > function echo(i) {
 >     return i;
 > }
@@ -68,9 +68,9 @@ After a few seconds, you should see a popup in the bottom right corner containin
 ## Other functionality
 
 |                                    Symbol                                     | Meaning                                                                                                                                                          |
-| :---------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| :---------------------------------------------------------------------------: |:-----------------------------------------------------------------------------------------------------------------------------------------------------------------|
 |       <img src="assets/readme/refresh.png" alt="refresh" width=15px;/>        | Reload the list of activities.                                                                                                                                   |
-|  <img src="assets/readme/notification.png" alt="notification" width=15px;/>   | Notifies users in case of unread feedback. The icon links to https://dodona.ugent.be/notifications.                                                              |
+|  <img src="assets/readme/notification.png" alt="notification" width=15px;/>   | Notifies users in case of unread feedback. The icon links to https://dodona.be/notifications.                                                                    |
 | <img src="assets/readme/content-page-read.png" alt="checkmark" width=15px;/>  | Submit solution to Dodona. Alternative for `Alt+D` and `Ctrl+Shift+P`, `Dodona: Submit Solution`.                                                                |
 |          <img src="assets/readme/edit.png" alt="edit" width=15px;/>           | Opens the description of a series or course in a new browser window. (Hover with your cursor over a series or course in the left column with Dodona activities.) |
 | <img src="assets/readme/open-description.png" alt="description" width=15px;/> | Show the exercise description in VS Code. (Hover with your cursor over an exercise in the left column with Dodona activities.)                                   |

@@ -94,9 +94,9 @@
         },
         "dodona.environment": {
           "type": "string",
-          "default": "https://dodona.ugent.be",
+          "default": "https://dodona.be",
           "enum": [
-            "https://dodona.ugent.be",
+            "https://dodona.be",
             "http://localhost:3000",
             "https://naos.ugent.be"
           ],
