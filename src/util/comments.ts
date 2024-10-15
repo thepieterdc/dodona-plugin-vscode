@@ -21,6 +21,7 @@ const commentMapping: { [key: string]: CallableFunction } = {
     python: hashtag,
     ruby: hashtag,
     sql: dashes,
+    sh: hashtag,
 };
 
 /**
