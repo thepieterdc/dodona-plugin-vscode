@@ -5,15 +5,16 @@ import {
     TreeDataProvider,
     TreeItem,
 } from "vscode";
-import { AbstractTreeItem } from "./items/abstractTreeItem";
+
 import execute from "../api/client";
-import { YearTreeItem } from "./items/yearTreeItem";
+import { Course } from "../api/resources/course";
 import {
     getCourseFilter,
     getSortOption,
     getYearFilter,
 } from "../configuration";
-import { Course } from "../api/resources/course";
+import { AbstractTreeItem } from "./items/abstractTreeItem";
+import { YearTreeItem } from "./items/yearTreeItem";
 
 // TODO add an icon for course & series to make them easier to separate in the view
 

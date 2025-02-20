@@ -1,12 +1,13 @@
 import * as nodeAssert from "assert";
-import * as vscode from "vscode";
+import { assert } from "chai";
 import got from "got";
-import { submitSolution } from "../../commands/submitSolution";
-import { CONFIG_KEY } from "../../configuration";
+import * as vscode from "vscode";
+
 import { Activity } from "../../api/resources/activities";
 import Submission from "../../api/resources/submission";
+import { submitSolution } from "../../commands/submitSolution";
+import { CONFIG_KEY } from "../../configuration";
 import { canonicalUrl } from "../../util/base";
-import { assert } from "chai";
 
 suite("submitSolution", () => {
     test("Submit empty solution", async () => {

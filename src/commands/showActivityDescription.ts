@@ -1,9 +1,10 @@
-import { commands, ViewColumn, WebviewPanel, window } from "vscode";
-import IdentificationData, { identify } from "../identification";
 import { AssertionError } from "assert";
-import { getApiEnvironment } from "../configuration";
+import { commands, ViewColumn, WebviewPanel, window } from "vscode";
+
 import execute from "../api/client";
 import Activity from "../api/resources/activities/activity";
+import { getApiEnvironment } from "../configuration";
+import IdentificationData, { identify } from "../identification";
 import { AbstractActivityTreeItem } from "../treeView/items/activityTreeItem";
 
 // TODO only show command in palette if an exercise is opened
@@ -29,7 +30,7 @@ async function openActivityDescription(
                 descriptionPanels[i].reveal(viewColumn);
                 return;
             }
-        } catch (e) {
+        } catch {
             // The Webview has been disposed.
             descriptionPanels.splice(i, 1);
         }

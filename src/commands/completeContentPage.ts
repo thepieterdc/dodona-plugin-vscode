@@ -1,9 +1,10 @@
 import { window } from "vscode";
+
 import execute from "../api/client";
-import { ContentPageReadListener } from "../listeners";
 import ContentPage from "../api/resources/activities/contentPage";
-import { AbstractActivityTreeItem } from "../treeView/items/activityTreeItem";
 import { READING_ACTIVITY_COMPLETED_MSG } from "../constants/messages";
+import { ContentPageReadListener } from "../listeners";
+import { AbstractActivityTreeItem } from "../treeView/items/activityTreeItem";
 
 // TODO only show command in palette if an exercise is opened
 //      (can be done using "when" in package.json)
@@ -50,5 +51,7 @@ export async function completeContentPage(
     window.setStatusBarMessage("");
 
     // Notify listeners.
-    ret && listener(ret);
+    if (ret) {
+        listener(ret);
+    }
 }

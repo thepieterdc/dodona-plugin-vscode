@@ -1,16 +1,17 @@
 import { commands, ExtensionContext, window, workspace } from "vscode";
-import RootDataProvider from "./treeView/dataProvider";
-import { createNewExercise } from "./commands/createNewExercise";
-import { CONFIG_KEY, getApiEnvironment } from "./configuration";
-import { openCourse } from "./commands/openCourse";
-import { openSeries } from "./commands/openSeries";
-import { submitSolution } from "./commands/submitSolution";
-import { showActivityDescription } from "./commands/showActivityDescription";
-import { completeContentPage } from "./commands/completeContentPage";
+
 import ContentPage from "./api/resources/activities/contentPage";
 import NotificationWatcher, {
     openNotifications,
 } from "./commands/checkNotifications";
+import { completeContentPage } from "./commands/completeContentPage";
+import { createNewExercise } from "./commands/createNewExercise";
+import { openCourse } from "./commands/openCourse";
+import { openSeries } from "./commands/openSeries";
+import { showActivityDescription } from "./commands/showActivityDescription";
+import { submitSolution } from "./commands/submitSolution";
+import { CONFIG_KEY, getApiEnvironment } from "./configuration";
+import RootDataProvider from "./treeView/dataProvider";
 
 export function activate(context: ExtensionContext) {
     // Create a data provider for the tree view.

@@ -3,7 +3,8 @@ import * as path from "path";
 
 export async function run(): Promise<void> {
     // Register coverage tracking.
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
+     
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const NYC = require("nyc");
     const nyc = new NYC({
         all: true,

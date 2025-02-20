@@ -1,5 +1,5 @@
-import { Resource } from "./resource";
 import Course from "./course";
+import { Resource } from "./resource";
 
 /**
  * A submission on Dodona.

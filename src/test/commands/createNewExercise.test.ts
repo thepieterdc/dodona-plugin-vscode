@@ -1,9 +1,10 @@
 import { assert } from "chai";
-import * as vscode from "vscode";
 import got from "got";
-import { CONFIG_KEY } from "../../configuration";
+import * as vscode from "vscode";
+
 import { Activity, Exercise } from "../../api/resources/activities";
 import { createNewExercise } from "../../commands/createNewExercise";
+import { CONFIG_KEY } from "../../configuration";
 import { canonicalUrl } from "../../util/base";
 
 suite("createNewExercise", () => {

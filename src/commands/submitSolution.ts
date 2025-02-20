@@ -1,15 +1,16 @@
-import { commands, window } from "vscode";
-import IdentificationData, { identify } from "../identification";
 import { AssertionError } from "assert";
+import { commands, window } from "vscode";
+
+import execute from "../api/client";
+import { Activity } from "../api/resources/activities";
+import Submission from "../api/resources/submission";
 import {
     getApiEnvironment,
     getAutoOpenSubmissionResult,
 } from "../configuration";
-import execute from "../api/client";
-import { canonicalUrl, sleep } from "../util/base";
+import IdentificationData, { identify } from "../identification";
 import { SubmissionEvaluatedListener } from "../listeners";
-import Submission from "../api/resources/submission";
-import { Activity } from "../api/resources/activities";
+import { canonicalUrl, sleep } from "../util/base";
 
 // TODO only show command in palette if an exercise is opened
 //      (can be done using "when" in package.json)
@@ -216,5 +217,7 @@ export async function submitSolution(
     }
 
     // Notify listeners.
-    listener && listener(submission!);
+    if (listener) {
+        listener(submission);
+    }
 }

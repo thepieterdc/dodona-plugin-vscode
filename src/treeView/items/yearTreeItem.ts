@@ -1,5 +1,6 @@
-import Course from "../../api/resources/course";
 import { ProviderResult, TreeItemCollapsibleState } from "vscode";
+
+import Course from "../../api/resources/course";
 import { AbstractTreeItem } from "./abstractTreeItem";
 import { CourseTreeItem } from "./courseTreeItem";
 

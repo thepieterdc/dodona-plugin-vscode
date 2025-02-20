@@ -1,4 +1,5 @@
 import { commands } from "vscode";
+
 import { Series } from "../api/resources/series";
 import { SeriesTreeItem } from "../treeView/items/seriesTreeItem";
 import { canonicalUrl } from "../util/base";

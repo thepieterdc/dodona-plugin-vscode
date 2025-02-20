@@ -249,7 +249,8 @@
   },
   "scripts": {
     "build": "tsc -p ./",
-    "lint": "eslint . --ext .ts,.tsx",
+    "lint": "eslint . --max-warnings 0 src",
+    "lint:fix": "eslint . --max-warnings 0 --fix src",
     "package": "vsce package",
     "pretest": "rm -rf ./testOutput && mkdir ./testOutput",
     "test:integration": "yarn run build && yarn run pretest && node ./out/test/runner.js",
@@ -267,18 +268,19 @@
     "@types/mocha": "10.0.10",
     "@types/node": "22.13.4",
     "@types/vscode": "1.97.0",
-    "@typescript-eslint/eslint-plugin": "8.24.1",
-    "@typescript-eslint/parser": "8.24.1",
     "@vscode/test-electron": "2.4.1",
     "@vscode/vsce": "3.2.2",
     "chai": "5.2.0",
     "eslint": "9.20.1",
     "eslint-plugin-prettier": "5.2.3",
+    "eslint-plugin-simple-import-sort": "12.1.1",
+    "globals": "15.15.0",
     "mocha": "11.1.0",
     "nyc": "17.1.0",
     "prettier": "3.5.1",
     "ts-mocha": "10.0.0",
-    "typescript": "5.7.3"
+    "typescript": "5.7.3",
+    "typescript-eslint": "8.24.1"
   },
   "packageManager": "yarn@4.6.0+sha512.5383cc12567a95f1d668fbe762dfe0075c595b4bfff433be478dbbe24e05251a8e8c3eb992a986667c1d53b6c3a9c85b8398c35a960587fbd9fa3a0915406728"
 }

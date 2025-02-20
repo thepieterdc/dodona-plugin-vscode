@@ -1922,19 +1922,20 @@ __metadata:
     "@types/mocha": "npm:10.0.10"
     "@types/node": "npm:22.13.4"
     "@types/vscode": "npm:1.97.0"
-    "@typescript-eslint/eslint-plugin": "npm:8.24.1"
-    "@typescript-eslint/parser": "npm:8.24.1"
     "@vscode/test-electron": "npm:2.4.1"
     "@vscode/vsce": "npm:3.2.2"
     chai: "npm:5.2.0"
     eslint: "npm:9.20.1"
     eslint-plugin-prettier: "npm:5.2.3"
+    eslint-plugin-simple-import-sort: "npm:12.1.1"
+    globals: "npm:15.15.0"
     got: "npm:11.8.6"
     mocha: "npm:11.1.0"
     nyc: "npm:17.1.0"
     prettier: "npm:3.5.1"
     ts-mocha: "npm:10.0.0"
     typescript: "npm:5.7.3"
+    typescript-eslint: "npm:8.24.1"
   languageName: unknown
   linkType: soft
 
@@ -2171,6 +2172,15 @@ __metadata:
     eslint-config-prettier:
       optional: true
   checksum: 10c0/60d9c03491ec6080ac1d71d0bee1361539ff6beb9b91ac98cfa7176c9ed52b7dbe7119ebee5b441b479d447d17d802a4a492ee06095ef2f22c460e3dd6459302
+  languageName: node
+  linkType: hard
+
+"eslint-plugin-simple-import-sort@npm:12.1.1":
+  version: 12.1.1
+  resolution: "eslint-plugin-simple-import-sort@npm:12.1.1"
+  peerDependencies:
+    eslint: ">=5.0.0"
+  checksum: 10c0/0ad1907ad9ddbadd1db655db0a9d0b77076e274b793a77b982c8525d808d868e6ecfce24f3a411e8a1fa551077387f9ebb38c00956073970ebd7ee6a029ce2b3
   languageName: node
   linkType: hard
 
@@ -2710,6 +2720,13 @@ __metadata:
     once: "npm:^1.3.0"
     path-is-absolute: "npm:^1.0.0"
   checksum: 10c0/478b40e38be5a3d514e64950e1e07e0ac120585add6a37c98d0ed24d72d9127d734d2a125786073c8deb687096e84ae82b641c441a869ada3a9cc91b68978632
+  languageName: node
+  linkType: hard
+
+"globals@npm:15.15.0":
+  version: 15.15.0
+  resolution: "globals@npm:15.15.0"
+  checksum: 10c0/f9ae80996392ca71316495a39bec88ac43ae3525a438b5626cd9d5ce9d5500d0a98a266409605f8cd7241c7acf57c354a48111ea02a767ba4f374b806d6861fe
   languageName: node
   linkType: hard
 
@@ -5336,6 +5353,20 @@ __metadata:
   dependencies:
     is-typedarray: "npm:^1.0.0"
   checksum: 10c0/4ac5b7a93d604edabf3ac58d3a2f7e07487e9f6e98195a080e81dbffdc4127817f470f219d794a843b87052cedef102b53ac9b539855380b8c2172054b7d5027
+  languageName: node
+  linkType: hard
+
+"typescript-eslint@npm:8.24.1":
+  version: 8.24.1
+  resolution: "typescript-eslint@npm:8.24.1"
+  dependencies:
+    "@typescript-eslint/eslint-plugin": "npm:8.24.1"
+    "@typescript-eslint/parser": "npm:8.24.1"
+    "@typescript-eslint/utils": "npm:8.24.1"
+  peerDependencies:
+    eslint: ^8.57.0 || ^9.0.0
+    typescript: ">=4.8.4 <5.8.0"
+  checksum: 10c0/5bcb6af12d04777ca04ca9300552e1c7410d640950945d854be41c264fdfe965ce40c0203336e073eb0697567d59043b3096dfed825e76fd7347081e9abf3b16
   languageName: node
   linkType: hard
 

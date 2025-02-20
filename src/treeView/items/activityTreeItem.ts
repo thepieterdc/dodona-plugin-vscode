@@ -1,12 +1,13 @@
 import * as path from "path";
-import { AbstractTreeItem } from "./abstractTreeItem";
+import { ProviderResult, TreeItemCollapsibleState, ViewColumn } from "vscode";
+
 import Activity from "../../api/resources/activities/activity";
 import { ContentPage } from "../../api/resources/activities/contentPage";
 import Exercise, {
     ExerciseStatus,
     findExerciseStatus,
 } from "../../api/resources/activities/exercise";
-import { ProviderResult, TreeItemCollapsibleState, ViewColumn } from "vscode";
+import { AbstractTreeItem } from "./abstractTreeItem";
 
 // Icon to display next to completed content pages.
 const CONTENT_PAGE_COMPLETED_ICON = path.join(

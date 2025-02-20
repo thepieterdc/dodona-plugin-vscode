@@ -1,4 +1,5 @@
 import { env, workspace, WorkspaceConfiguration } from "vscode";
+
 import { DodonaEnvironment, getDodonaEnvironment } from "./dodonaEnvironment";
 
 /**

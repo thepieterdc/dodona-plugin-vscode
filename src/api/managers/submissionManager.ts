@@ -1,4 +1,5 @@
 import { Got } from "got";
+
 import IdentificationData from "../../identification";
 import Submission, { SubmissionCreatedResponse } from "../resources/submission";
 

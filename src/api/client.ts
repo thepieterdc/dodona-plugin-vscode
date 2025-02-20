@@ -1,3 +1,6 @@
+import "../prototypes/string";
+
+import got, { HTTPError, RequestError } from "got";
 import {
     commands,
     ConfigurationTarget,
@@ -6,24 +9,23 @@ import {
     window,
     workspace,
 } from "vscode";
+
 import { ApiToken, getApiEnvironment, getApiToken, getDisplayLanguage } from "../configuration";
+import {
+    OPEN_SETTINGS_ACTION,
+    VIEW_INSTRUCTIONS_ACTION,
+} from "../constants/actions";
+import { INVALID_TOKEN_MSG, MISSING_TOKEN_MSG } from "../constants/messages";
+import { TOKEN_INSTUCTIONS_URL } from "../constants/urls";
 import { DodonaEnvironments } from "../dodonaEnvironment";
-import got, { HTTPError, RequestError } from "got";
+import { InvalidAccessToken } from "./errors/invalidAccessToken";
 import {
     ActivityManager,
     CourseManager,
     SeriesManager,
     SubmissionManager,
 } from "./managers";
-import "../prototypes/string";
-import { InvalidAccessToken } from "./errors/invalidAccessToken";
 import NotificationManager from "./managers/notificationManager";
-import {
-    OPEN_SETTINGS_ACTION,
-    VIEW_INSTRUCTIONS_ACTION,
-} from "../constants/actions";
-import { TOKEN_INSTUCTIONS_URL } from "../constants/urls";
-import { INVALID_TOKEN_MSG, MISSING_TOKEN_MSG } from "../constants/messages";
 
 /**
  * A client for interfacing with Dodona.

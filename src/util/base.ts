@@ -1,6 +1,7 @@
 import * as fs from "fs";
 import * as readline from "readline";
 import { Uri, workspace } from "vscode";
+
 import { Resource } from "../api/resources/resource";
 
 /**
