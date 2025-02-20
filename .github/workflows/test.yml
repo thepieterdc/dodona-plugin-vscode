@@ -40,7 +40,7 @@ jobs:
 
       - run: corepack enable
 
-      - run: yarn set version 4.5.0
+      - run: yarn set version 4.6.0
 
       - uses: actions/setup-node@v4
         with:
@@ -75,7 +75,7 @@ jobs:
 
       - run: corepack enable
 
-      - run: yarn set version 4.5.0
+      - run: yarn set version 4.6.0
 
       - uses: actions/setup-node@v4
         with:
