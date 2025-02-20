@@ -9,7 +9,7 @@
     "url": "https://github.com/thepieterdc/dodona-plugin-vscode"
   },
   "engines": {
-    "vscode": "^1.86.0"
+    "vscode": "^1.90.0"
   },
   "license": "MIT",
   "categories": [
@@ -267,7 +267,7 @@
     "@types/chai": "5.0.1",
     "@types/mocha": "10.0.10",
     "@types/node": "22.13.4",
-    "@types/vscode": "1.97.0",
+    "@types/vscode": "1.90.0",
     "@vscode/test-electron": "2.4.1",
     "@vscode/vsce": "3.2.2",
     "chai": "5.2.0",
