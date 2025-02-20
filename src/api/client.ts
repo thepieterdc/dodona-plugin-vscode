@@ -6,7 +6,7 @@ import {
     window,
     workspace,
 } from "vscode";
-import { ApiToken, getApiEnvironment, getApiToken } from "../configuration";
+import { ApiToken, getApiEnvironment, getApiToken, getDisplayLanguage } from "../configuration";
 import { DodonaEnvironments } from "../dodonaEnvironment";
 import got, { HTTPError, RequestError } from "got";
 import {
@@ -58,7 +58,7 @@ class DodonaClientImpl implements DodonaClient {
     public readonly series: SeriesManager;
     public readonly submissions: SubmissionManager;
 
-    constructor(host: string, token: ApiToken | null) {
+    constructor(host: string, language: string, token: ApiToken | null) {
         // Get the extension version.
         const version = extensions.getExtension(
             "thepieterdc.dodona-plugin-vscode",
@@ -68,6 +68,7 @@ class DodonaClientImpl implements DodonaClient {
         const html = got.extend({
             headers: {
                 Accept: "text/html",
+                "accept-language": language,
                 Authorization: token || "",
                 "user-agent": userAgent,
             },
@@ -79,6 +80,7 @@ class DodonaClientImpl implements DodonaClient {
         const json = got.extend({
             headers: {
                 Accept: "application/json",
+                "accept-language": language,
                 Authorization: token || "",
                 "user-agent": userAgent,
             },
@@ -105,12 +107,13 @@ export type DodonaCall<T> = (client: DodonaClient) => Promise<T>;
  * Builds a DodonaClient using the configured settings.
  */
 function buildClient(): DodonaClient {
-    // Fetch the host and token from the settings.
+    // Load the settings.
     const host = DodonaEnvironments[getApiEnvironment()];
+    const language = getDisplayLanguage();
     const token = getApiToken();
 
     // Build a client.
-    return new DodonaClientImpl(host, token);
+    return new DodonaClientImpl(host, language, token);
 }
 
 // Cache a client.

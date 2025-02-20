@@ -4,7 +4,7 @@
 export enum DodonaEnvironments {
     DODONA = "https://dodona.be",
     LOCAL = "http://localhost:3000",
-    NAOS = "https://naos.ugent.be",
+    NAOS = "https://naos.dodona.be",
 }
 
 /**
