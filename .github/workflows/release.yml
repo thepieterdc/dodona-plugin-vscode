@@ -23,10 +23,10 @@ jobs:
           git checkout -b release
           git push -u origin release
 
-      - name: Install Node.js 16.x
+      - name: Install Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '16'
+          node-version-file: '.node-version'
 
       - name: Set the version in package.json
         run: node scripts/set-version.js ${{ github.event.inputs.version }}
@@ -45,7 +45,7 @@ jobs:
           echo "::set-output name=dir::$(yarn cache dir)"
 
       - name: Cache Yarn dependencies
-        uses: actions/cache@v3.3.2
+        uses: actions/cache@v4
         with:
           path: ${{ steps.yarn-cache.outputs.dir }}
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
