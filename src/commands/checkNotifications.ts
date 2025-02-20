@@ -1,10 +1,12 @@
-import { commands, Uri, window } from "vscode";
-import { getEnvironmentUrl } from "../configuration";
-import execute, { ErrorHandler } from "../api/client";
 import "../prototypes/array";
-import { UNREAD_NOTIFICATION_MSG } from "../constants/messages";
-import { OPEN_NOTIFICATIONS_ACTION } from "../constants/actions";
+
+import { commands, Uri, window } from "vscode";
+
+import execute, { ErrorHandler } from "../api/client";
 import { Notification } from "../api/resources/notification";
+import { getEnvironmentUrl } from "../configuration";
+import { OPEN_NOTIFICATIONS_ACTION } from "../constants/actions";
+import { UNREAD_NOTIFICATION_MSG } from "../constants/messages";
 
 /**
  * Watcher for notifications.
@@ -65,7 +67,7 @@ export default class NotificationWatcher {
             if (unread.length > 0) {
                 showNotificationMessage(unread.length);
             }
-        } catch (e) {
+        } catch {
             this.enabled = false;
         }
 
@@ -76,7 +78,7 @@ export default class NotificationWatcher {
                 if (unread.length > 0) {
                     showNotificationMessage(unread.length);
                 }
-            } catch (e) {
+            } catch {
                 this.enabled = false;
             }
         }, 60000);

@@ -1,9 +1,10 @@
-import * as vscode from "vscode";
 import { assert } from "chai";
 import got from "got";
-import { CONFIG_KEY } from "../../configuration";
+import * as vscode from "vscode";
+
 import { Activity, ContentPage } from "../../api/resources/activities";
 import { completeContentPage } from "../../commands/completeContentPage";
+import { CONFIG_KEY } from "../../configuration";
 
 suite("completeContentPage", () => {
     test("Complete a content page", async () => {

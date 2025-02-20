@@ -14,25 +14,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install Node.js 16.x
-        uses: actions/setup-node@v4
         with:
-          node-version: '16'
-      - name: Get the Yarn cache directory
-        id: yarn-cache
-        run: |
-          echo "::set-output name=dir::$(yarn cache dir)"
-      - name: Cache Yarn dependencies
-        uses: actions/cache@v3.3.2
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
         with:
-          path: ${{ steps.yarn-cache.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-      - run: yarn install
+          cache: 'yarn'
+          node-version-file: .node-version
+      - run: yarn install --frozen-lockfile
       - run: yarn build
       - run: yarn package
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           path: |
             *.vsix
@@ -41,20 +32,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install Node.js 16.x
-        uses: actions/setup-node@v4
         with:
-          node-version: '16'
-      - name: Get the Yarn cache directory
-        id: yarn-cache
-        run: |
-          echo "::set-output name=dir::$(yarn cache dir)"
-      - name: Cache Yarn dependencies
-        uses: actions/cache@v3.3.2
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
         with:
-          path: ${{ steps.yarn-cache.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-      - run: yarn install
+          cache: 'yarn'
+          node-version-file: .node-version
+      - run: yarn install --frozen-lockfile
       - run: yarn lint

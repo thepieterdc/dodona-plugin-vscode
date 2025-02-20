@@ -1,4 +1,5 @@
-import { workspace, WorkspaceConfiguration } from "vscode";
+import { env, workspace, WorkspaceConfiguration } from "vscode";
+
 import { DodonaEnvironment, getDodonaEnvironment } from "./dodonaEnvironment";
 
 /**
@@ -61,6 +62,21 @@ export function getAutoDescription(): boolean {
  */
 export function getAutoOpenSubmissionResult(): boolean {
     return config().get("submission.result.open-auto") || false;
+}
+
+/**
+ * Gets the display language from the configuration.
+ * 
+ * @returns the display language
+ */
+export function getDisplayLanguage(): string {
+    // Get the setting value, default to the system language.
+    const setting = (config().get("language") as string).toLocaleLowerCase() || "system";
+    if (setting.includes("system")) {
+        return env.language || "en";
+    }
+
+    return setting.includes("en") ? "en" : "nl";
 }
 
 /**

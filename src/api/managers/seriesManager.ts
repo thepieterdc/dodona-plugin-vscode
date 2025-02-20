@@ -1,5 +1,6 @@
-import Course from "../resources/course";
 import { Got } from "got";
+
+import Course from "../resources/course";
 import Series from "../resources/series";
 
 export default class SeriesManager {

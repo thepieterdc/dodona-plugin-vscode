@@ -1,4 +1,5 @@
 import { commands } from "vscode";
+
 import { Course } from "../api/resources/course";
 import { CourseTreeItem } from "../treeView/items/courseTreeItem";
 import { canonicalUrl } from "../util/base";

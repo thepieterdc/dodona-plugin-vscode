@@ -1,4 +1,5 @@
 import { Got } from "got";
+
 import { Notification } from "../resources/notification";
 
 export default class NotificationManager {

@@ -1,9 +1,10 @@
 import { Got } from "got";
-import Series from "../resources/series";
+
+import { DodonaEnvironments } from "../../dodonaEnvironment";
 import IdentificationData, { identify } from "../../identification";
 import Activity from "../resources/activities/activity";
 import ContentPage from "../resources/activities/contentPage";
-import { DodonaEnvironments } from "../../dodonaEnvironment";
+import Series from "../resources/series";
 
 export default class ActivityManager {
     private readonly htmlApi: Got;

@@ -1,5 +1,5 @@
-import Activity from "./activity";
 import ProgrammingLanguage from "../programmingLanguage";
+import Activity from "./activity";
 
 /**
  * The status an exercise can be.

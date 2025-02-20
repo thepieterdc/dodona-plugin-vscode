@@ -1,7 +1,8 @@
-import Course from "../resources/course";
 import { Got } from "got";
-import User from "../resources/user";
+
 import { InvalidAccessToken } from "../errors/invalidAccessToken";
+import Course from "../resources/course";
+import User from "../resources/user";
 
 /**
  * Response of querying the root of Dodona.

@@ -1,13 +1,14 @@
-import { commands, Uri, ViewColumn, window, workspace } from "vscode";
-import * as path from "path";
 import * as fs from "fs";
-import { getAutoDescription } from "../configuration";
-import { showActivityDescription } from "./showActivityDescription";
+import * as path from "path";
+import { commands, Uri, ViewColumn, window, workspace } from "vscode";
+
 import Exercise from "../api/resources/activities/exercise";
-import { canonicalUrl, readFirstLine, workspaceRoot } from "../util/base";
+import { getAutoDescription } from "../configuration";
 import { identify } from "../identification";
+import { canonicalUrl, readFirstLine, workspaceRoot } from "../util/base";
 import { comment } from "../util/comments";
 import { generateFilename } from "../util/naming";
+import { showActivityDescription } from "./showActivityDescription";
 
 /**
  * Action to create a new file for an exercise.

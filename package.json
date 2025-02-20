@@ -9,7 +9,7 @@
     "url": "https://github.com/thepieterdc/dodona-plugin-vscode"
   },
   "engines": {
-    "vscode": "^1.63.1"
+    "vscode": "^1.90.0"
   },
   "license": "MIT",
   "categories": [
@@ -18,11 +18,7 @@
   "icon": "assets/dodona.png",
   "activationEvents": [
     "onStartupFinished",
-    "onCommand:dodona.activity.description",
-    "onCommand:dodona.series.open",
-    "onCommand:dodona.submit",
-    "onView:dodona.activity.description",
-    "onView:dodona-activities"
+    "onView:dodona.activity.description"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -98,9 +94,20 @@
           "enum": [
             "https://dodona.be",
             "http://localhost:3000",
-            "https://naos.ugent.be"
+            "https://naos.dodona.be"
           ],
           "description": "Specifies which Dodona environment should be used.",
+          "scope": "application"
+        },
+        "dodona.language": {
+          "type": "string",
+          "default": "",
+          "enum": [
+            "(same as system)",
+            "English",
+            "Nederlands"
+          ],
+          "description": "Override for the language in which exercise descriptions should be displayed, defaults to your system language.",
           "scope": "application"
         },
         "dodona.exercise.description.auto": {
@@ -240,14 +247,18 @@
       }
     ]
   },
+  "vsce": {
+    "yarn": true
+  },
   "scripts": {
     "build": "tsc -p ./",
-    "lint": "eslint . --ext .ts,.tsx",
+    "lint": "eslint . --max-warnings 0 src",
+    "lint:fix": "eslint . --max-warnings 0 --fix src",
     "package": "vsce package",
     "pretest": "rm -rf ./testOutput && mkdir ./testOutput",
     "test:integration": "yarn run build && yarn run pretest && node ./out/test/runner.js",
     "test:unit": "nyc --reporter=lcov mocha -r ts-node/register src/**/*.test.ts",
-    "vscode:publish": "vsce publish --yarn",
+    "vscode:publish": "vsce publish",
     "vscode:prepublish": "yarn run build",
     "watch": "tsc -watch -p ./"
   },
@@ -256,21 +267,22 @@
   },
   "devDependencies": {
     "@istanbuljs/nyc-config-typescript": "1.0.2",
-    "@types/chai": "4.3.5",
-    "@types/mocha": "10.0.1",
-    "@types/node": "18.15.3",
-    "@types/vscode": "1.63.1",
-    "@typescript-eslint/eslint-plugin": "6.2.0",
-    "@typescript-eslint/parser": "6.2.0",
-    "@vscode/test-electron": "2.3.3",
-    "@vscode/vsce": "2.19.0",
-    "chai": "4.3.7",
-    "eslint": "8.45.0",
-    "eslint-plugin-prettier": "5.0.0",
-    "mocha": "10.2.0",
-    "nyc": "15.1.0",
-    "prettier": "3.0.0",
+    "@types/chai": "5.0.1",
+    "@types/mocha": "10.0.10",
+    "@types/node": "22.13.4",
+    "@types/vscode": "1.90.0",
+    "@vscode/test-electron": "2.4.1",
+    "@vscode/vsce": "3.2.2",
+    "chai": "4.5.0",
+    "eslint": "9.20.1",
+    "eslint-plugin-prettier": "5.2.3",
+    "eslint-plugin-simple-import-sort": "12.1.1",
+    "globals": "15.15.0",
+    "mocha": "11.1.0",
+    "nyc": "17.1.0",
+    "prettier": "3.5.1",
     "ts-mocha": "10.0.0",
-    "typescript": "5.1.6"
+    "typescript": "5.7.3",
+    "typescript-eslint": "8.24.1"
   }
 }

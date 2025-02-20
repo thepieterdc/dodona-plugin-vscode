@@ -1,4 +1,5 @@
 import { AssertionError } from "assert";
+
 import { DodonaEnvironment, getDodonaEnvironment } from "./dodonaEnvironment";
 
 /**

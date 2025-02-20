@@ -1,5 +1,5 @@
-import { Resource } from "./resource";
 import { ExerciseStatus } from "./activities/exercise";
+import { Resource } from "./resource";
 
 export interface SubmissionCreatedResponse {
     url: string;
