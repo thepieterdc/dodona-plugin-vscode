@@ -17,6 +17,8 @@ export function generateFilename(exercise: Exercise): string {
     let basename = exercise.name
         // Strip out all non-alphanumeric characters.
         .replace(NON_ALPHA, "")
+        // Replace dashes by underscores.
+        .replace("-", "_")
         // Replace all whitespace by underscores.
         .replace(WHITESPACE, "_");
 
