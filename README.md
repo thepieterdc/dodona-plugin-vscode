@@ -14,7 +14,7 @@ Extension for Visual Studio Code to submit exercises to [Dodona](https://dodona.
 
 ## Insert API token (Configuration)
 
-You can authenticate by creating an API token. Using such token, VS Code can submit your solution on your behalf without needing your password. Instructions on how to do so can be found [here](https://dodona-edu.github.io/guides/creating-an-api-token/). After you have generated a token, configure it in the settings (`Ctrl+,` > `dodona.auth.dodona`):
+You can authenticate by creating an API token. Using such token, VS Code can submit your solution on your behalf without needing your password. Instructions on how to do so can be found [here](https://docs.dodona.be/nl/faq/ide-plugins/#hoe-installeer-ik-de-vs-code-extensie). After you have generated a token, configure it in the settings (`Ctrl+,` > `dodona.auth.dodona`):
 
 1. <img src="assets/readme/sideview.png" alt="cogwheel" width=30px;/> Dodona icon in the Activity Bar (icon in left column)
 2. `Open Settings`
