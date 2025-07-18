@@ -73,19 +73,19 @@
         "dodona.auth.dodona": {
           "type": "string",
           "default": null,
-          "markdownDescription": "Specifies which API token should be used to authorize to Dodona.\n\nFollow [these instructions](https://dodona-edu.github.io/en/guides/vs-code-extension/#_3-insert-api-token) to get an API token.",
+          "markdownDescription": "Specifies which API token should be used to authorize to Dodona.\n\nFollow [these instructions](https://docs.dodona.be/en/faq/api-tokens/#how-do-i-create-an-api-token) to get an API token.",
           "scope": "application"
         },
         "dodona.auth.local": {
           "type": "string",
           "default": null,
-          "markdownDescription": "Specifies which API token should be used to authorize to your local Dodona instance.\n\nFollow [these instructions](https://dodona-edu.github.io/en/guides/vs-code-extension/#_3-insert-api-token) to get an API token.",
+          "markdownDescription": "Specifies which API token should be used to authorize to your local Dodona instance.\n\nFollow [these instructions](https://docs.dodona.be/en/faq/api-tokens/#how-do-i-create-an-api-token) to get an API token.",
           "scope": "application"
         },
         "dodona.auth.naos": {
           "type": "string",
           "default": null,
-          "markdownDescription": "Specifies which API token should be used to authorize to Naos.\n\nFollow [these instructions](https://dodona-edu.github.io/en/guides/vs-code-extension/#_3-insert-api-token) to get an API token.",
+          "markdownDescription": "Specifies which API token should be used to authorize to Naos.\n\nFollow [these instructions](https://docs.dodona.be/en/faq/api-tokens/#how-do-i-create-an-api-token) to get an API token.",
           "scope": "application"
         },
         "dodona.environment": {
@@ -243,7 +243,7 @@
     "viewsWelcome": [
       {
         "view": "dodona-activities",
-        "contents": "No courses could be found for your current environment that matched your filters. Make sure you have supplied valid API tokens and filters. To correctly set up your token in Visual Studio Code, follow [these instructions](https://dodona-edu.github.io/en/guides/vs-code-extension/#_3-insert-api-token).\n[Open Settings](command:dodona.settings.token)"
+        "contents": "No courses could be found for your current environment that matched your filters. Make sure you have supplied valid API tokens and filters. To correctly set up your token in Visual Studio Code, follow [these instructions](https://docs.dodona.be/nl/faq/ide-plugins/#hoe-installeer-ik-de-vs-code-extensie).\n[Open Settings](command:dodona.settings.token)"
       }
     ]
   },
