@@ -18,6 +18,7 @@ import {
 import { INVALID_TOKEN_MSG, MISSING_TOKEN_MSG } from "../constants/messages";
 import { TOKEN_INSTUCTIONS_URL } from "../constants/urls";
 import { DodonaEnvironments } from "../dodonaEnvironment";
+import { logger } from "../logging/logger";
 import { InvalidAccessToken } from "./errors/invalidAccessToken";
 import {
     ActivityManager,
@@ -183,6 +184,9 @@ export default async function execute<T>(
                         commands.executeCommand("dodona.settings.token");
                     }
                 });
+        } else if (error instanceof HTTPError && error.response.statusCode === 403) {
+            const errorMessage = (error.response?.body as { error?: string })?.error || "Not allowed to access this resource.";
+            window.showErrorMessage(errorMessage);
         } else if (error instanceof RequestError) {
             // Attempt to fix the certificate error.
             const key = "http.systemCertificates";
@@ -193,10 +197,12 @@ export default async function execute<T>(
                 return execute(call, errorHandler);
             } else {
                 // The setting was already turned off.
+                logger.error("Dodona request error.", error);
                 window.showErrorMessage(`${error}`);
             }
         } else {
             // Display every other error as popup
+            logger.error("Dodona unexpected error.", error);
             window.showErrorMessage(`${error}`);
         }
 
