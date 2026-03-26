@@ -257,7 +257,7 @@
     "package": "vsce package",
     "pretest": "rm -rf ./testOutput && mkdir ./testOutput",
     "test:integration": "yarn run build && yarn run pretest && node ./out/test/runner.js",
-    "test:unit": "nyc --reporter=lcov mocha -r ts-node/register src/**/*.test.ts",
+    "test:unit": "nyc --reporter=lcov mocha -r ts-node/register --exclude \"src/test/**\" \"src/**/*.test.ts\"",
     "vscode:publish": "vsce publish",
     "vscode:prepublish": "yarn run build",
     "watch": "tsc -watch -p ./"
@@ -271,8 +271,9 @@
     "@types/mocha": "10.0.10",
     "@types/node": "22.19.15",
     "@types/vscode": "1.90.0",
+    "@vscode/test-cli": "0.0.12",
     "@vscode/test-electron": "2.5.2",
-    "@vscode/vsce": "3.2.2",
+    "@vscode/vsce": "3.7.1",
     "chai": "4.5.0",
     "eslint": "10.1.0",
     "eslint-plugin-prettier": "5.5.5",
@@ -282,6 +283,7 @@
     "nyc": "18.0.0",
     "prettier": "3.8.1",
     "ts-mocha": "11.1.0",
+    "ts-node": "10.9.2",
     "typescript": "5.9.3",
     "typescript-eslint": "8.57.2"
   },
