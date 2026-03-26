@@ -30,6 +30,9 @@ jobs:
           cache: "yarn"
           node-version-file: .node-version
 
+      - run: corepack enable
+      - run: corepack prepare yarn@4.7.0 --activate
+
       - name: Set the version in package.json
         run: node scripts/set-version.js ${{ github.event.inputs.version }}
 
@@ -42,7 +45,7 @@ jobs:
           push: false
 
       - name: Install Yarn dependencies
-        run: yarn install --frozen-lockfile
+        run: yarn install --immutable
 
       - name: Package the extension
         run: yarn package

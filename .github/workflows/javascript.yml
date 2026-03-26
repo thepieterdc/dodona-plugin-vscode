@@ -20,7 +20,9 @@ jobs:
         with:
           cache: 'yarn'
           node-version-file: .node-version
-      - run: yarn install --frozen-lockfile
+      - run: corepack enable
+      - run: corepack prepare yarn@4.7.0 --activate
+      - run: yarn install --immutable
       - run: yarn build
       - run: yarn package
       - uses: actions/upload-artifact@v4
@@ -38,5 +40,7 @@ jobs:
         with:
           cache: 'yarn'
           node-version-file: .node-version
-      - run: yarn install --frozen-lockfile
+      - run: corepack enable
+      - run: corepack prepare yarn@4.7.0 --activate
+      - run: yarn install --immutable
       - run: yarn lint

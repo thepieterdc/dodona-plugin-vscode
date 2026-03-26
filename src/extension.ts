@@ -11,9 +11,12 @@ import { openSeries } from "./commands/openSeries";
 import { showActivityDescription } from "./commands/showActivityDescription";
 import { submitSolution } from "./commands/submitSolution";
 import { CONFIG_KEY, getApiEnvironment } from "./configuration";
+import { logger } from "./logging/logger";
 import RootDataProvider from "./treeView/dataProvider";
 
 export function activate(context: ExtensionContext) {
+    context.subscriptions.push({ dispose: () => logger.dispose() });
+
     // Create a data provider for the tree view.
     const treeDataProvider = new RootDataProvider();
 
@@ -114,4 +117,8 @@ export function activate(context: ExtensionContext) {
 
     // Start the notification watcher.
     notifications.watch();
+}
+
+export function deactivate() {
+    logger.dispose();
 }

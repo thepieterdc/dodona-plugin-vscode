@@ -39,7 +39,9 @@ jobs:
           cache: 'yarn'
           node-version-file: .node-version
 
-      - run: yarn install --frozen-lockfile
+      - run: corepack enable
+      - run: corepack prepare yarn@4.7.0 --activate
+      - run: yarn install --immutable
 
       - name: Wait for dodona to boot
         run: timeout 300 bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' localhost:3000/activities.json)" != "200" ]]; do sleep 5; done' || false
@@ -66,7 +68,9 @@ jobs:
           cache: 'yarn'
           node-version-file: .node-version
 
-      - run: yarn install --frozen-lockfile
+      - run: corepack enable
+      - run: corepack prepare yarn@4.7.0 --activate
+      - run: yarn install --immutable
 
       - run: yarn run test:unit
 
