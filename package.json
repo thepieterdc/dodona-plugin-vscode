@@ -252,13 +252,13 @@
   },
   "scripts": {
     "build": "tsc -p ./",
-    "lint": "eslint . --max-warnings 0 src",
-    "lint:fix": "eslint . --max-warnings 0 --fix src",
-    "package": "vsce package",
+    "lint": "eslint --max-warnings 0 eslint.config.mjs src",
+    "lint:fix": "eslint --max-warnings 0 --fix eslint.config.mjs src",
+    "package": "vsce package --no-yarn",
     "pretest": "rm -rf ./testOutput && mkdir ./testOutput",
     "test:integration": "yarn run build && yarn run pretest && node ./out/test/runner.js",
     "test:unit": "nyc --reporter=lcov mocha -r ts-node/register --exclude \"src/test/**\" \"src/**/*.test.ts\"",
-    "vscode:publish": "vsce publish",
+    "vscode:publish": "vsce publish --no-yarn",
     "vscode:prepublish": "yarn run build",
     "watch": "tsc -watch -p ./"
   },
@@ -266,6 +266,7 @@
     "got": "11.8.6"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@istanbuljs/nyc-config-typescript": "1.0.2",
     "@types/chai": "5.2.3",
     "@types/mocha": "10.0.10",
