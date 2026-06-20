@@ -46,7 +46,7 @@ jobs:
         run: node scripts/set-version.js ${{ github.event.inputs.version }}
 
       - name: Create a release commit
-        uses: EndBug/add-and-commit@v9.1.4
+        uses: EndBug/add-and-commit@v10.0.0
         with:
           add: "package.json"
           commit: "--signoff"
@@ -95,7 +95,7 @@ jobs:
         run: node scripts/prepare-next-snapshot.js
 
       - name: Push new development commit
-        uses: EndBug/add-and-commit@v9.1.4
+        uses: EndBug/add-and-commit@v10.0.0
         with:
           add: "package.json"
           commit: "--signoff"
