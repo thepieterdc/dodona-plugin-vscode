@@ -57,7 +57,7 @@ jobs:
       - run: xvfb-run -a yarn run test:integration
 
       - name: Upload the coverage report
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@v6
         with:
           files: ./coverage/lcov.info
           flags: integration
@@ -91,7 +91,7 @@ jobs:
       - run: yarn run test:unit
 
       - name: Upload the coverage report
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@v6
         with:
           files: ./coverage/lcov.info
           flags: unit
