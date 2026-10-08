@@ -175,6 +175,9 @@ export async function submitSolution(
 ): Promise<void> {
     const editor = window.activeTextEditor;
     if (!editor) {
+        window.showWarningMessage(
+            "Open the file with your solution before submitting.",
+        );
         return;
     }
 
