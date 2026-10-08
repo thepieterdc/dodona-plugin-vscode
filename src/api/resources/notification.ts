@@ -1,6 +1,10 @@
-import { Resource } from "./resource";
+import { z } from "zod";
 
-export interface Notification extends Resource {
-    read: boolean;
-    updated_at: string;
-}
+import { resourceSchema } from "./resource";
+
+export const notificationSchema = resourceSchema.extend({
+    read: z.boolean(),
+    updated_at: z.string(),
+});
+
+export type Notification = z.infer<typeof notificationSchema>;

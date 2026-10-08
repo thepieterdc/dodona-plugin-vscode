@@ -13,51 +13,54 @@ jobs:
   integration:
     runs-on: ubuntu-latest
 
-    services:
-      database:
-        image: mariadb:10.9.6
-        env:
-          MYSQL_DATABASE: "dodona"
-          MYSQL_ROOT_PASSWORD: "dodona"
-          MYSQL_HOST: "localhost"
-        options: --health-cmd "mysqladmin ping --silent" --health-interval 10s --health-timeout 10s --health-retries 6
-      dodona:
-        image: ghcr.io/dodona-edu/dodona:develop-latest
-        ports:
-          - 3000:3000
-
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
       - name: Install xvfb
         run: sudo apt-get install -y xvfb libxkbcommon-x11-0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-randr0 libxcb-render-util0 libxcb-xinerama0 libxcb-xinput0 libxcb-xfixes0
 
-      - uses: actions/setup-node@v6
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
         with:
           node-version-file: .node-version
+          cache: pnpm
 
-      - run: corepack enable
-      - run: corepack prepare yarn@4.7.0 --activate
-      - name: Get Yarn cache directory
-        id: yarn-cache
-        run: echo "dir=$(yarn config get cacheFolder)" >> "$GITHUB_OUTPUT"
-      - uses: actions/cache@v4
-        with:
-          path: ${{ steps.yarn-cache.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-      - run: yarn install --immutable
+      - run: pnpm install --frozen-lockfile
+
+      # mysql 8.4 disables mysql_native_password by default, which is the only
+      # auth plugin the dodona image's mysql client supports. A service
+      # container cannot take a command, so the containers are started here.
+      - name: Start the database
+        run: |
+          docker network create dodona
+          mkdir init
+          cat > init/00_init.sql <<'SQL'
+          CREATE USER IF NOT EXISTS 'dodona'@'%' IDENTIFIED BY 'dodona';
+          GRANT ALL ON dodona.* TO 'dodona'@'%';
+          GRANT ALL ON dodona_cache.* TO 'dodona'@'%';
+          GRANT ALL ON dodona_queue.* TO 'dodona'@'%';
+          GRANT ALL ON dodona_test.* TO 'dodona'@'%';
+          GRANT ALL ON `dodona_test_%`.* TO 'dodona'@'%';
+          SQL
+          docker run -d --name database --network dodona \
+            -e MYSQL_DATABASE=dodona -e MYSQL_ROOT_PASSWORD=dodona \
+            -v "$PWD/init:/docker-entrypoint-initdb.d" \
+            --health-cmd "mysqladmin ping --silent" --health-interval 10s --health-timeout 10s --health-retries 6 \
+            mysql:8 --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --mysql-native-password=ON --authentication-policy=mysql_native_password --sql-mode=STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION
+          timeout 120 bash -c 'until [ "$(docker inspect -f {{.State.Health.Status}} database)" = healthy ]; do sleep 5; done'
+
+      - name: Start dodona
+        run: docker run -d --name dodona --network dodona -p 3000:3000 ghcr.io/dodona-edu/dodona:develop-latest
 
       - name: Wait for dodona to boot
-        run: timeout 300 bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' localhost:3000/activities.json)" != "200" ]]; do sleep 5; done' || false
+        run: timeout 300 bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' localhost:3000/activities.json)" != "200" ]]; do sleep 5; done' || { docker logs dodona; false; }
 
-      - run: xvfb-run -a yarn run test:integration
+      - run: xvfb-run -a pnpm run test:integration
 
       - name: Upload the coverage report
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@v7
         with:
           files: ./coverage/lcov.info
           flags: integration
@@ -67,31 +70,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
-      - uses: actions/setup-node@v6
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
         with:
           node-version-file: .node-version
+          cache: pnpm
 
-      - run: corepack enable
-      - run: corepack prepare yarn@4.7.0 --activate
-      - name: Get Yarn cache directory
-        id: yarn-cache
-        run: echo "dir=$(yarn config get cacheFolder)" >> "$GITHUB_OUTPUT"
-      - uses: actions/cache@v4
-        with:
-          path: ${{ steps.yarn-cache.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-      - run: yarn install --immutable
+      - run: pnpm install --frozen-lockfile
 
-      - run: yarn run test:unit
+      - run: pnpm run test:unit
 
       - name: Upload the coverage report
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@v7
         with:
           files: ./coverage/lcov.info
           flags: unit

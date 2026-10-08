@@ -1,6 +1,6 @@
 import * as assert from "assert";
 
-import { comment } from "./comments";
+import { comment } from "../../../util/comments";
 
 describe("test comment default", () => {
     it("should be /* */", () => {

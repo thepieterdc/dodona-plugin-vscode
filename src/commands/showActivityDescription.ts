@@ -1,8 +1,9 @@
 import { AssertionError } from "assert";
+
 import { commands, ViewColumn, WebviewPanel, window } from "vscode";
 
 import execute from "../api/client";
-import Activity from "../api/resources/activities/activity";
+import { Activity } from "../api/resources/activities";
 import { getApiEnvironment } from "../configuration";
 import IdentificationData, { identify } from "../identification";
 import { AbstractActivityTreeItem } from "../treeView/items/activityTreeItem";

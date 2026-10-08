@@ -1,16 +1,17 @@
-import { Got } from "got";
+import { z } from "zod";
 
-import { Notification } from "../resources/notification";
+import HttpClient from "../http";
+import { Notification, notificationSchema } from "../resources/notification";
 
 export default class NotificationManager {
-    private readonly jsonApi: Got;
+    private readonly jsonApi: HttpClient;
 
     /**
      * NotificationManager constructor.
      *
      * @param jsonApi json request factory
      */
-    constructor(jsonApi: Got) {
+    constructor(jsonApi: HttpClient) {
         this.jsonApi = jsonApi;
     }
 
@@ -20,6 +21,9 @@ export default class NotificationManager {
      * @return a list of notifications
      */
     public get list(): Promise<Notification[]> {
-        return this.jsonApi.get("notifications.json").json();
+        return this.jsonApi.json(
+            "notifications.json",
+            z.array(notificationSchema),
+        );
     }
 }

@@ -1,0 +1,24 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "arrowParens": "avoid",
+  "printWidth": 80,
+  "sortImports": {},
+  "tabWidth": 4,
+  "trailingComma": "all",
+  "ignorePatterns": [
+    "assets",
+    "out",
+    "coverage",
+    "pnpm-lock.yaml",
+    "*.md",
+    "package.json"
+  ],
+  "overrides": [
+    {
+      "files": ["*.json", "*.jsonc", "*.code-workspace", "*.yml"],
+      "options": {
+        "tabWidth": 2
+      }
+    }
+  ]
+}

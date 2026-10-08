@@ -1,4 +1,4 @@
-import ProgrammingLanguage from "../api/resources/programmingLanguage";
+import { ProgrammingLanguage } from "../api/resources/programmingLanguage";
 
 // Comment functions.
 const dashes = (text: string) => `-- ${text}`;

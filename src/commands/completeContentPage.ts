@@ -1,7 +1,7 @@
 import { window } from "vscode";
 
 import execute from "../api/client";
-import ContentPage from "../api/resources/activities/contentPage";
+import { ContentPage } from "../api/resources/activities";
 import { READING_ACTIVITY_COMPLETED_MSG } from "../constants/messages";
 import { ContentPageReadListener } from "../listeners";
 import { AbstractActivityTreeItem } from "../treeView/items/activityTreeItem";

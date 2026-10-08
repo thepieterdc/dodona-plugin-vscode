@@ -66,12 +66,13 @@ export function getAutoOpenSubmissionResult(): boolean {
 
 /**
  * Gets the display language from the configuration.
- * 
+ *
  * @returns the display language
  */
 export function getDisplayLanguage(): string {
     // Get the setting value, default to the system language.
-    const setting = (config().get("language") as string).toLocaleLowerCase() || "system";
+    const setting =
+        (config().get("language") as string).toLocaleLowerCase() || "system";
     if (setting.includes("system")) {
         return env.language || "en";
     }

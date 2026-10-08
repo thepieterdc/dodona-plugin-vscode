@@ -1,25 +1,25 @@
-import { Got } from "got";
+import { z } from "zod";
 
 import { InvalidAccessToken } from "../errors/invalidAccessToken";
-import Course from "../resources/course";
-import User from "../resources/user";
+import HttpClient from "../http";
+import { Course } from "../resources/course";
+import { userSchema } from "../resources/user";
 
 /**
- * Response of querying the root of Dodona.
+ * Response of querying the root of Dodona. The user is absent when the token
+ * is invalid.
  */
-interface RootResponse {
-    user: User;
-}
+const rootResponseSchema = z.object({ user: userSchema.nullish() });
 
 export default class CourseManager {
-    private readonly jsonApi: Got;
+    private readonly jsonApi: HttpClient;
 
     /**
      * CourseManager constructor.
      *
      * @param jsonApi json request fac>tory
      */
-    constructor(jsonApi: Got) {
+    constructor(jsonApi: HttpClient) {
         this.jsonApi = jsonApi;
     }
 
@@ -29,14 +29,11 @@ export default class CourseManager {
      * @return the courses
      */
     public get subscribed(): Promise<Course[]> {
-        return this.jsonApi
-            .get("")
-            .json()
-            .then(resp => {
-                if ((<RootResponse>resp).user) {
-                    return (<RootResponse>resp).user.subscribed_courses;
-                }
-                throw new InvalidAccessToken();
-            });
+        return this.jsonApi.json("", rootResponseSchema).then(resp => {
+            if (resp.user) {
+                return resp.user.subscribed_courses;
+            }
+            throw new InvalidAccessToken();
+        });
     }
 }

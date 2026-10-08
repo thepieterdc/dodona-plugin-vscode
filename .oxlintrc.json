@@ -1,0 +1,7 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "unicorn", "oxc"],
+  "categories": { "correctness": "error" },
+  "ignorePatterns": [".vscode-test", "coverage", "out"],
+  "env": { "builtin": true, "node": true, "mocha": true }
+}

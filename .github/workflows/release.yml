@@ -16,7 +16,7 @@ jobs:
       pull-requests: write
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -25,77 +25,53 @@ jobs:
           git checkout -b release
           git push -u origin release
 
-      - uses: actions/setup-node@v6
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
         with:
           node-version-file: .node-version
-
-      - run: corepack enable
-      - run: corepack prepare yarn@4.7.0 --activate
-
-      - name: Get Yarn cache directory
-        id: yarn-cache
-        run: echo "dir=$(yarn config get cacheFolder)" >> "$GITHUB_OUTPUT"
-      - uses: actions/cache@v4
-        with:
-          path: ${{ steps.yarn-cache.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
+          cache: pnpm
 
       - name: Set the version in package.json
-        run: node scripts/set-version.js ${{ github.event.inputs.version }}
+        run: node scripts/set-version.mts ${{ github.event.inputs.version }}
 
       - name: Create a release commit
-        uses: EndBug/add-and-commit@v9.1.4
+        uses: EndBug/add-and-commit@v11
         with:
           add: "package.json"
           commit: "--signoff"
           message: Release v${{ github.event.inputs.version }}
           push: false
 
-      - name: Install Yarn dependencies
-        run: yarn install --immutable
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
       - name: Package the extension
-        run: yarn package
+        run: pnpm package
 
       - name: Create tag
-        uses: mathieudutour/github-tag-action@v6.2
+        uses: mathieudutour/github-tag-action@v7
         with:
           custom_tag: ${{ github.event.inputs.version }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create release
-        id: release
-        uses: actions/create-release@v1
+        run: |
+          gh release create "v$VERSION" "dodona-plugin-vscode-$VERSION.vsix" \
+            --title "v$VERSION"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          draft: false
-          prerelease: false
-          release_name: v${{ github.event.inputs.version }}
-          tag_name: v${{ github.event.inputs.version }}
-
-      - name: Attach artifact to release
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          asset_content_type: application/octet-stream
-          asset_name: dodona-plugin-vscode-${{ github.event.inputs.version }}.vsix
-          asset_path: ./dodona-plugin-vscode-${{ github.event.inputs.version }}.vsix
-          upload_url: ${{ steps.release.outputs.upload_url }}
+          VERSION: ${{ github.event.inputs.version }}
 
       - name: Publish to Azure Marketplace
-        run: yarn run vscode:publish
+        run: pnpm run vscode:publish
         env:
           VSCE_PAT: ${{ secrets.VSCE_PAT }}
 
       - name: Prepare package.json for next version
-        run: node scripts/prepare-next-snapshot.js
+        run: node scripts/prepare-next-snapshot.mts
 
       - name: Push new development commit
-        uses: EndBug/add-and-commit@v9.1.4
+        uses: EndBug/add-and-commit@v11
         with:
           add: "package.json"
           commit: "--signoff"

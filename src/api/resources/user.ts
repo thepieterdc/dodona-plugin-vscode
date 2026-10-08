@@ -1,11 +1,13 @@
-import Course from "./course";
-import { Resource } from "./resource";
+import { z } from "zod";
+
+import { courseSchema } from "./course";
+import { resourceSchema } from "./resource";
 
 /**
- * A submission on Dodona.
+ * A user on Dodona.
  */
-export interface User extends Resource {
-    subscribed_courses: Course[];
-}
+export const userSchema = resourceSchema.extend({
+    subscribed_courses: z.array(courseSchema),
+});
 
-export default User;
+export type User = z.infer<typeof userSchema>;

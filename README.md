@@ -1,7 +1,7 @@
 # Dodona
 
-[![version](https://img.shields.io/visual-studio-marketplace/v/thepieterdc.dodona-plugin-vscode)](https://marketplace.visualstudio.com/items?itemName=thepieterdc.dodona-plugin-vscode)
-[![installs](https://img.shields.io/visual-studio-marketplace/i/thepieterdc.dodona-plugin-vscode)](https://marketplace.visualstudio.com/items?itemName=thepieterdc.dodona-plugin-vscode)
+[![version](https://vsmarketplacebadges.dev/version-short/thepieterdc.dodona-plugin-vscode.svg)](https://marketplace.visualstudio.com/items?itemName=thepieterdc.dodona-plugin-vscode)
+[![installs](https://vsmarketplacebadges.dev/installs-short/thepieterdc.dodona-plugin-vscode.svg)](https://marketplace.visualstudio.com/items?itemName=thepieterdc.dodona-plugin-vscode)
 [![Codecov](https://img.shields.io/codecov/c/gh/thepieterdc/dodona-plugin-vscode)](https://codecov.io/gh/thepieterdc/dodona-plugin-vscode)
 
 Extension for Visual Studio Code to submit exercises to [Dodona](https://dodona.be/).

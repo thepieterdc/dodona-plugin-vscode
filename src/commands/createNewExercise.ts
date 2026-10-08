@@ -1,8 +1,9 @@
 import * as fs from "fs";
 import * as path from "path";
+
 import { commands, Uri, ViewColumn, window, workspace } from "vscode";
 
-import Exercise from "../api/resources/activities/exercise";
+import { Exercise } from "../api/resources/activities";
 import { getAutoDescription } from "../configuration";
 import { identify } from "../identification";
 import { canonicalUrl, readFirstLine, workspaceRoot } from "../util/base";

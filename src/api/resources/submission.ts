@@ -1,31 +1,42 @@
+import { z } from "zod";
+
 import { ExerciseStatus } from "./activities/exercise";
-import { Resource } from "./resource";
+import { resourceSchema } from "./resource";
 
-export interface SubmissionCreatedResponse {
-    url: string;
-}
+export const submissionCreatedResponseSchema = z.object({
+    url: z.string(),
+});
 
-export type SubmissionStatus =
-    | "compilation error"
-    | "correct"
-    | "internal error"
-    | "memory limit exceeded"
-    | "output limit exceeded"
-    | "queued"
-    | "running"
-    | "runtime error"
-    | "time limit exceeded"
-    | "unknown"
-    | "wrong";
+export type SubmissionCreatedResponse = z.infer<
+    typeof submissionCreatedResponseSchema
+>;
+
+export const submissionStatusSchema = z.enum([
+    "compilation error",
+    "correct",
+    "internal error",
+    "memory limit exceeded",
+    "output limit exceeded",
+    "queued",
+    "running",
+    "runtime error",
+    "time limit exceeded",
+    "unknown",
+    "wrong",
+]);
+
+export type SubmissionStatus = z.infer<typeof submissionStatusSchema>;
 
 /**
  * A submission on Dodona.
  */
-export interface Submission extends Resource {
-    exercise: string;
-    status: SubmissionStatus;
-    summary: string | null;
-}
+export const submissionSchema = resourceSchema.extend({
+    exercise: z.string(),
+    status: submissionStatusSchema,
+    summary: z.string().nullable(),
+});
+
+export type Submission = z.infer<typeof submissionSchema>;
 
 /**
  * Finds the status of an exercise.
@@ -39,5 +50,3 @@ export function findExerciseStatus(submission: Submission): ExerciseStatus {
 
     return ExerciseStatus.WRONG;
 }
-
-export default Submission;

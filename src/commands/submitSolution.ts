@@ -1,9 +1,10 @@
 import { AssertionError } from "assert";
+
 import { commands, window } from "vscode";
 
 import execute from "../api/client";
 import { Activity } from "../api/resources/activities";
-import Submission from "../api/resources/submission";
+import { Submission } from "../api/resources/submission";
 import {
     getApiEnvironment,
     getAutoOpenSubmissionResult,
@@ -122,7 +123,7 @@ async function showFeedback(
     if (submission.status === "correct") {
         return window.showInformationMessage(
             `Solution to "${exercise.name}" has been accepted!`,
-            ...[FEEDBACK_VIEW_RESULTS],
+            FEEDBACK_VIEW_RESULTS,
         );
     }
 
@@ -130,7 +131,7 @@ async function showFeedback(
     if (submission!.status === "wrong") {
         return window.showWarningMessage(
             `Solution to "${exercise.name}" was not correct: ${submission.summary}`,
-            ...[FEEDBACK_VIEW_RESULTS],
+            FEEDBACK_VIEW_RESULTS,
         );
     }
 
@@ -138,7 +139,7 @@ async function showFeedback(
     return window.showErrorMessage(
         submission.summary ||
             "An unknown error occurred while evaluating your submission.",
-        ...[FEEDBACK_VIEW_RESULTS],
+        FEEDBACK_VIEW_RESULTS,
     );
 }
 
