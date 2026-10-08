@@ -27,7 +27,14 @@ export class SeriesTreeItem extends AbstractTreeItem {
         return (
             execute(dodona => dodona.activities.inSeries(this.series))
                 // Convert them to tree items.
-                .then(as => (as && as.map(createActivityTreeItem)) || [])
+                .then(
+                    as =>
+                        (as &&
+                            as.map(a =>
+                                createActivityTreeItem(a, this.series),
+                            )) ||
+                        [],
+                )
         );
     }
 }
