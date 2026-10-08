@@ -24,22 +24,30 @@ function safeToString(value: unknown): string {
 export const logger = {
     debug(message: string, ...args: unknown[]) {
         getChannel().debug(
-            args.length ? `${message} ${args.map(safeToString).join(" ")}` : message,
+            args.length
+                ? `${message} ${args.map(safeToString).join(" ")}`
+                : message,
         );
     },
     info(message: string, ...args: unknown[]) {
         getChannel().info(
-            args.length ? `${message} ${args.map(safeToString).join(" ")}` : message,
+            args.length
+                ? `${message} ${args.map(safeToString).join(" ")}`
+                : message,
         );
     },
     warn(message: string, ...args: unknown[]) {
         getChannel().warn(
-            args.length ? `${message} ${args.map(safeToString).join(" ")}` : message,
+            args.length
+                ? `${message} ${args.map(safeToString).join(" ")}`
+                : message,
         );
     },
     error(message: string, ...args: unknown[]) {
         getChannel().error(
-            args.length ? `${message} ${args.map(safeToString).join(" ")}` : message,
+            args.length
+                ? `${message} ${args.map(safeToString).join(" ")}`
+                : message,
         );
     },
     dispose() {
@@ -47,4 +55,3 @@ export const logger = {
         channel = undefined;
     },
 };
-

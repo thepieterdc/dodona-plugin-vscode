@@ -1,9 +1,11 @@
 import * as path from "path";
+
 import { ProviderResult, TreeItemCollapsibleState, ViewColumn } from "vscode";
 
-import Activity from "../../api/resources/activities/activity";
-import { ContentPage } from "../../api/resources/activities/contentPage";
-import Exercise, {
+import { Activity } from "../../api/resources/activities";
+import { ContentPage } from "../../api/resources/activities";
+import {
+    Exercise,
     ExerciseStatus,
     findExerciseStatus,
 } from "../../api/resources/activities/exercise";

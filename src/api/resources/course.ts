@@ -1,12 +1,14 @@
-import { Resource } from "./resource";
+import { z } from "zod";
+
+import { resourceSchema } from "./resource";
 
 /**
  * A course on Dodona.
  */
-export interface Course extends Resource {
-    name: string;
-    series: string;
-    year: string;
-}
+export const courseSchema = resourceSchema.extend({
+    name: z.string(),
+    series: z.string(),
+    year: z.string(),
+});
 
-export default Course;
+export type Course = z.infer<typeof courseSchema>;

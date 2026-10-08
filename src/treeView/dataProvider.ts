@@ -22,9 +22,7 @@ import { YearTreeItem } from "./items/yearTreeItem";
  * Data provider for the exercise tree view.
  */
 
-export default class RootDataProvider
-    implements TreeDataProvider<AbstractTreeItem>
-{
+export default class RootDataProvider implements TreeDataProvider<AbstractTreeItem> {
     private _onDidChangeTreeData: EventEmitter<AbstractTreeItem | undefined> =
         new EventEmitter<AbstractTreeItem | undefined>();
     readonly onDidChangeTreeData: Event<AbstractTreeItem | undefined> =
@@ -93,12 +91,12 @@ export default class RootDataProvider
             a.year < b.year
                 ? 1
                 : a.year > b.year
-                ? -1
-                : a.name < b.name
-                ? priority
-                : a.name > b.name
-                ? -priority
-                : 0,
+                  ? -1
+                  : a.name < b.name
+                    ? priority
+                    : a.name > b.name
+                      ? -priority
+                      : 0,
         );
     }
 

@@ -1,6 +1,8 @@
-export interface ProgrammingLanguage {
-    extension: string;
-    name: string;
-}
+import { z } from "zod";
 
-export default ProgrammingLanguage;
+export const programmingLanguageSchema = z.object({
+    extension: z.string(),
+    name: z.string(),
+});
+
+export type ProgrammingLanguage = z.infer<typeof programmingLanguageSchema>;

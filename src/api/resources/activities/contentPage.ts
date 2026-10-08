@@ -1,10 +1,13 @@
-import Activity from "./activity";
+import { z } from "zod";
+
+import { baseActivitySchema } from "./activity";
 
 /**
- * An content page on Dodona.
+ * A content page on Dodona.
  */
-export interface ContentPage extends Activity {
-    has_read: boolean;
-}
+export const contentPageSchema = baseActivitySchema.extend({
+    type: z.literal("ContentPage"),
+    has_read: z.boolean(),
+});
 
-export default ContentPage;
+export type ContentPage = z.infer<typeof contentPageSchema>;

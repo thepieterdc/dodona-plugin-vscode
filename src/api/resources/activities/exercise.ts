@@ -1,5 +1,7 @@
-import ProgrammingLanguage from "../programmingLanguage";
-import Activity from "./activity";
+import { z } from "zod";
+
+import { programmingLanguageSchema } from "../programmingLanguage";
+import { baseActivitySchema } from "./activity";
 
 /**
  * The status an exercise can be.
@@ -13,13 +15,16 @@ export enum ExerciseStatus {
 /**
  * An exercise on Dodona.
  */
-export interface Exercise extends Activity {
-    boilerplate: string | null;
-    has_correct_solution: boolean;
-    has_solution: boolean;
-    last_solution_is_best: boolean;
-    programming_language: ProgrammingLanguage | null;
-}
+export const exerciseSchema = baseActivitySchema.extend({
+    type: z.literal("Exercise"),
+    boilerplate: z.string().nullable(),
+    has_correct_solution: z.boolean(),
+    has_solution: z.boolean(),
+    last_solution_is_best: z.boolean(),
+    programming_language: programmingLanguageSchema.nullable(),
+});
+
+export type Exercise = z.infer<typeof exerciseSchema>;
 
 /**
  * Finds the status of an exercise.
@@ -37,5 +42,3 @@ export function findExerciseStatus(exercise: Exercise): ExerciseStatus {
 
     return ExerciseStatus.WRONG;
 }
-
-export default Exercise;

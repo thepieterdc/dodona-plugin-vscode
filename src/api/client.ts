@@ -1,6 +1,4 @@
 import "../prototypes/string";
-
-import got, { HTTPError, RequestError } from "got";
 import {
     commands,
     ConfigurationTarget,
@@ -10,7 +8,12 @@ import {
     workspace,
 } from "vscode";
 
-import { ApiToken, getApiEnvironment, getApiToken, getDisplayLanguage } from "../configuration";
+import {
+    ApiToken,
+    getApiEnvironment,
+    getApiToken,
+    getDisplayLanguage,
+} from "../configuration";
 import {
     OPEN_SETTINGS_ACTION,
     VIEW_INSTRUCTIONS_ACTION,
@@ -20,6 +23,7 @@ import { TOKEN_INSTUCTIONS_URL } from "../constants/urls";
 import { DodonaEnvironments } from "../dodonaEnvironment";
 import { logger } from "../logging/logger";
 import { InvalidAccessToken } from "./errors/invalidAccessToken";
+import HttpClient, { HttpError, RequestError } from "./http";
 import {
     ActivityManager,
     CourseManager,
@@ -68,28 +72,15 @@ class DodonaClientImpl implements DodonaClient {
         )?.packageJSON.version;
         const userAgent = `Plugin/VSCode-${version}`;
 
-        const html = got.extend({
-            headers: {
-                Accept: "text/html",
-                "accept-language": language,
-                Authorization: token || "",
-                "user-agent": userAgent,
-            },
-            prefixUrl: host,
-            resolveBodyOnly: true,
-            responseType: "text",
-        });
-
-        const json = got.extend({
-            headers: {
-                Accept: "application/json",
-                "accept-language": language,
-                Authorization: token || "",
-                "user-agent": userAgent,
-            },
-            prefixUrl: host,
-            resolveBodyOnly: true,
-            responseType: "json",
+        const headers = {
+            "accept-language": language,
+            Authorization: token || "",
+            "user-agent": userAgent,
+        };
+        const html = new HttpClient(host, { ...headers, Accept: "text/html" });
+        const json = new HttpClient(host, {
+            ...headers,
+            Accept: "application/json",
         });
 
         // Initialise managers.
@@ -151,7 +142,7 @@ export default async function execute<T>(
 
         // Handle invalid tokens.
         if (
-            (error instanceof HTTPError && error.response.statusCode === 401) ||
+            (error instanceof HttpError && error.status === 401) ||
             error instanceof InvalidAccessToken
         ) {
             // Raise errors to the caller.
@@ -184,8 +175,10 @@ export default async function execute<T>(
                         commands.executeCommand("dodona.settings.token");
                     }
                 });
-        } else if (error instanceof HTTPError && error.response.statusCode === 403) {
-            const errorMessage = (error.response?.body as { error?: string })?.error || "Not allowed to access this resource.";
+        } else if (error instanceof HttpError && error.status === 403) {
+            const errorMessage =
+                (error.body as { error?: string } | null)?.error ||
+                "Not allowed to access this resource.";
             window.showErrorMessage(errorMessage);
         } else if (error instanceof RequestError) {
             // Attempt to fix the certificate error.

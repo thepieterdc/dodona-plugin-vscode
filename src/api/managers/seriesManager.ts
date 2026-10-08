@@ -1,17 +1,18 @@
-import { Got } from "got";
+import { z } from "zod";
 
-import Course from "../resources/course";
-import Series from "../resources/series";
+import HttpClient from "../http";
+import { Course } from "../resources/course";
+import { Series, seriesSchema } from "../resources/series";
 
 export default class SeriesManager {
-    private readonly jsonApi: Got;
+    private readonly jsonApi: HttpClient;
 
     /**
      * SeriesManager constructor.
      *
      * @param jsonApi json request factory
      */
-    constructor(jsonApi: Got) {
+    constructor(jsonApi: HttpClient) {
         this.jsonApi = jsonApi;
     }
 
@@ -21,6 +22,6 @@ export default class SeriesManager {
      * @return the series
      */
     public inCourse(course: Course): Promise<Series[]> {
-        return this.jsonApi.get(course.series, { prefixUrl: "" }).json();
+        return this.jsonApi.json(course.series, z.array(seriesSchema));
     }
 }

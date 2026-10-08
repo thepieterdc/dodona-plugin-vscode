@@ -1,14 +1,15 @@
-import * as Mocha from "mocha";
 import * as path from "path";
+
+import Mocha from "mocha";
 
 export async function run(): Promise<void> {
     // Register coverage tracking.
-     
+
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     const NYC = require("nyc");
     const nyc = new NYC({
         all: true,
-        cwd: path.join(__dirname, "..", ".."),
+        cwd: path.join(__dirname, "..", "..", ".."),
         exclude: ["**/test/**", ".vscode-test/**", "**/**.test.*s"],
         instrument: true,
         hookRequire: true,

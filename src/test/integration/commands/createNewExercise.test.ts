@@ -1,11 +1,12 @@
-import { assert } from "chai";
-import got from "got";
+import * as assert from "assert/strict";
+
 import * as vscode from "vscode";
 
-import { Activity, Exercise } from "../../api/resources/activities";
-import { createNewExercise } from "../../commands/createNewExercise";
-import { CONFIG_KEY } from "../../configuration";
-import { canonicalUrl } from "../../util/base";
+import { Activity, Exercise } from "../../../api/resources/activities";
+import { createNewExercise } from "../../../commands/createNewExercise";
+import { CONFIG_KEY } from "../../../configuration";
+import { canonicalUrl } from "../../../util/base";
+import { getJson } from "../util";
 
 suite("createNewExercise", () => {
     let exercise: Exercise;
@@ -17,16 +18,8 @@ suite("createNewExercise", () => {
         await config.update("environment", "http://localhost:3000", true);
 
         // Get an available exercise.
-        const activities: Activity[] = await got(
+        const activities: Activity[] = await getJson(
             "http://localhost:3000/activities",
-            {
-                headers: {
-                    Accept: "application/json",
-                    Authorization: "zeus",
-                },
-                resolveBodyOnly: true,
-                responseType: "json",
-            },
         );
         exercise = activities.filter(a => a.type === "Exercise")[0] as Exercise;
     });
@@ -37,9 +30,9 @@ suite("createNewExercise", () => {
 
         // Validate that the file is opened.
         const openFile = vscode.window.visibleTextEditors[0].document.getText();
-        assert.isNotNull(openFile);
+        assert.notEqual(openFile, null);
 
         // Validate that the file contains the exercise url.
-        assert.include(openFile, canonicalUrl(exercise).toString());
+        assert.ok(openFile?.includes(canonicalUrl(exercise).toString()));
     });
 });

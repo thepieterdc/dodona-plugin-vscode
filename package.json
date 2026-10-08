@@ -9,7 +9,7 @@
     "url": "https://github.com/thepieterdc/dodona-plugin-vscode"
   },
   "engines": {
-    "vscode": "^1.90.0"
+    "vscode": "^1.105.0"
   },
   "license": "MIT",
   "categories": [
@@ -247,46 +247,42 @@
       }
     ]
   },
-  "vsce": {
-    "yarn": true
-  },
   "scripts": {
     "build": "tsc -p ./",
-    "lint": "eslint --max-warnings 0 eslint.config.mjs src",
-    "lint:fix": "eslint --max-warnings 0 --fix eslint.config.mjs src",
-    "package": "vsce package --no-yarn",
+    "fmt": "oxfmt",
+    "fmt:check": "oxfmt --check",
+    "lint": "oxlint --deny-warnings",
+    "lint:fix": "oxlint --fix",
+    "prepare": "husky",
+    "package": "vsce package",
     "pretest": "rm -rf ./testOutput && mkdir ./testOutput",
-    "test:integration": "yarn run build && yarn run pretest && node ./out/test/runner.js",
-    "test:unit": "nyc --reporter=lcov mocha -r ts-node/register --exclude \"src/test/**\" \"src/**/*.test.ts\"",
-    "vscode:publish": "vsce publish --no-yarn",
-    "vscode:prepublish": "yarn run build",
+    "test:integration": "pnpm run build && pnpm run pretest && node ./out/test/integration/runner.js",
+    "test:unit": "pnpm run build && c8 --reporter=lcov mocha \"out/test/unit/**/*.test.js\"",
+    "vscode:publish": "vsce publish",
+    "vscode:prepublish": "pnpm run build",
     "watch": "tsc -watch -p ./"
   },
   "dependencies": {
-    "got": "11.8.6"
+    "zod": "^4.6.5"
+  },
+  "lint-staged": {
+    "*.{ts,js,mjs,json,md,yml,yaml}": "oxfmt --no-error-on-unmatched-pattern",
+    "*.{ts,js,mjs}": "oxlint --fix --deny-warnings"
   },
   "devDependencies": {
-    "@eslint/js": "^10.0.1",
-    "@istanbuljs/nyc-config-typescript": "1.0.2",
-    "@types/chai": "5.2.3",
     "@types/mocha": "10.0.10",
-    "@types/node": "22.19.15",
-    "@types/vscode": "1.90.0",
-    "@vscode/test-cli": "0.0.12",
-    "@vscode/test-electron": "2.5.2",
-    "@vscode/vsce": "3.7.1",
-    "chai": "4.5.0",
-    "eslint": "10.1.0",
-    "eslint-plugin-prettier": "5.5.5",
-    "eslint-plugin-simple-import-sort": "12.1.1",
-    "globals": "17.4.0",
-    "mocha": "11.7.5",
+    "@types/node": "24.19.1",
+    "@types/vscode": "1.105.0",
+    "@vscode/test-electron": "3.1.0",
+    "@vscode/vsce": "4.0.0",
+    "c8": "12.0.0",
+    "husky": "9.1.7",
+    "lint-staged": "17.6.0",
+    "mocha": "12.0.3",
     "nyc": "18.0.0",
-    "prettier": "3.8.1",
-    "ts-mocha": "11.1.0",
-    "ts-node": "10.9.2",
-    "typescript": "5.9.3",
-    "typescript-eslint": "8.57.2"
+    "oxfmt": "0.72.0",
+    "oxlint": "1.87.0",
+    "typescript": "7.0.2"
   },
-  "packageManager": "yarn@4.7.0+sha512.5a0afa1d4c1d844b3447ee3319633797bcd6385d9a44be07993ae52ff4facabccafb4af5dcd1c2f9a94ac113e5e9ff56f6130431905884414229e284e37bb7c9"
+  "packageManager": "pnpm@12.10.1"
 }

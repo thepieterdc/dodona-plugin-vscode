@@ -1,17 +1,21 @@
-import { Got } from "got";
-
 import IdentificationData from "../../identification";
-import Submission, { SubmissionCreatedResponse } from "../resources/submission";
+import HttpClient from "../http";
+import {
+    Submission,
+    SubmissionCreatedResponse,
+    submissionCreatedResponseSchema,
+    submissionSchema,
+} from "../resources/submission";
 
 export default class SubmissionManager {
-    private readonly jsonApi: Got;
+    private readonly jsonApi: HttpClient;
 
     /**
      * SubmissionManager constructor.
      *
      * @param jsonApi json request factory
      */
-    constructor(jsonApi: Got) {
+    constructor(jsonApi: HttpClient) {
         this.jsonApi = jsonApi;
     }
 
@@ -37,7 +41,11 @@ export default class SubmissionManager {
         };
 
         // Submit the solution.
-        return this.jsonApi.post("submissions.json", { json: body }).json();
+        return this.jsonApi.post(
+            "submissions.json",
+            submissionCreatedResponseSchema,
+            body,
+        );
     }
 
     /**
@@ -46,6 +54,6 @@ export default class SubmissionManager {
      * @param url the url to the submission
      */
     public async byUrl(url: string): Promise<Submission> {
-        return this.jsonApi.extend({ prefixUrl: "" }).get(url).json();
+        return this.jsonApi.json(url, submissionSchema);
     }
 }

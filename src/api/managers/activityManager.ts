@@ -1,14 +1,15 @@
-import { Got } from "got";
+import { z } from "zod";
 
 import { DodonaEnvironments } from "../../dodonaEnvironment";
 import IdentificationData, { identify } from "../../identification";
-import Activity from "../resources/activities/activity";
-import ContentPage from "../resources/activities/contentPage";
-import Series from "../resources/series";
+import HttpClient from "../http";
+import { Activity, activitySchema, ContentPage } from "../resources/activities";
+import { contentPageSchema } from "../resources/activities/contentPage";
+import { Series } from "../resources/series";
 
 export default class ActivityManager {
-    private readonly htmlApi: Got;
-    private readonly jsonApi: Got;
+    private readonly htmlApi: HttpClient;
+    private readonly jsonApi: HttpClient;
 
     /**
      * ActivityManager constructor.
@@ -16,7 +17,7 @@ export default class ActivityManager {
      * @param htmlApi html request factory
      * @param jsonApi json request factory
      */
-    constructor(htmlApi: Got, jsonApi: Got) {
+    constructor(htmlApi: HttpClient, jsonApi: HttpClient) {
         this.htmlApi = htmlApi;
         this.jsonApi = jsonApi;
     }
@@ -28,9 +29,7 @@ export default class ActivityManager {
      * @return HTML content of the description
      */
     public description(activity: Activity): Promise<string> {
-        return this.htmlApi
-            .get(activity.description_url, { prefixUrl: "" })
-            .text();
+        return this.htmlApi.text(activity.description_url);
     }
 
     /**
@@ -48,7 +47,7 @@ export default class ActivityManager {
         }
 
         // Send the request.
-        return this.jsonApi.get(url).json();
+        return this.jsonApi.json(url, activitySchema);
     }
 
     /**
@@ -58,7 +57,7 @@ export default class ActivityManager {
      * @return the activities
      */
     public inSeries(series: Series): Promise<Activity[]> {
-        return this.jsonApi.get(series.exercises, { prefixUrl: "" }).json();
+        return this.jsonApi.json(series.exercises, z.array(activitySchema));
     }
 
     /**
@@ -74,9 +73,9 @@ export default class ActivityManager {
         // Build the "Mark as read" url.
         const coursePart = course ? `/courses/${course}` : "";
         const readUrl = `${DodonaEnvironments[environment]}${coursePart}/activities/${activity}/read`;
-        await this.jsonApi.post(readUrl, { prefixUrl: "" });
+        await this.jsonApi.post(readUrl, z.unknown());
 
         // Return the updated content page.
-        return this.jsonApi.get(contentPage.url, { prefixUrl: "" }).json();
+        return this.jsonApi.json(contentPage.url, contentPageSchema);
     }
 }

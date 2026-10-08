@@ -1,17 +1,18 @@
-import { Resource } from "../resource";
+import { z } from "zod";
+
+import { resourceSchema } from "../resource";
 
 /**
  * Types of activities.
  */
-export type ActivityType = "ContentPage" | "Exercise";
+export const activityTypeSchema = z.enum(["ContentPage", "Exercise"]);
+
+export type ActivityType = z.infer<typeof activityTypeSchema>;
 
 /**
- * An activity on Dodona.
+ * Fields shared by all activities on Dodona.
  */
-export interface Activity extends Resource {
-    description_url: string;
-    name: string;
-    type: ActivityType;
-}
-
-export default Activity;
+export const baseActivitySchema = resourceSchema.extend({
+    description_url: z.string(),
+    name: z.string(),
+});

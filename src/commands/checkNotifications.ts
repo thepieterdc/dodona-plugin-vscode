@@ -1,5 +1,4 @@
 import "../prototypes/array";
-
 import { commands, Uri, window } from "vscode";
 
 import execute, { ErrorHandler } from "../api/client";

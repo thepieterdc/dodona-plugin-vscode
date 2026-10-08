@@ -7,6 +7,16 @@
 .git/
 scripts/
 
+# Tooling
+.editorconfig
+.node-version
+.oxfmtrc.json
+.oxlintrc.json
+codecov.yml
+pnpm-lock.yaml
+pnpm-workspace.yaml
+tsconfig.json
+
 # Source files
 src/
 

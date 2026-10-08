@@ -1,6 +1,6 @@
 import { commands, ExtensionContext, window, workspace } from "vscode";
 
-import ContentPage from "./api/resources/activities/contentPage";
+import { ContentPage } from "./api/resources/activities";
 import NotificationWatcher, {
     openNotifications,
 } from "./commands/checkNotifications";

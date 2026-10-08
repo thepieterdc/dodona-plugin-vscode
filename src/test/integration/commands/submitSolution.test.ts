@@ -1,13 +1,14 @@
 import * as nodeAssert from "assert";
-import { assert } from "chai";
-import got from "got";
+import * as assert from "assert/strict";
+
 import * as vscode from "vscode";
 
-import { Activity } from "../../api/resources/activities";
-import Submission from "../../api/resources/submission";
-import { submitSolution } from "../../commands/submitSolution";
-import { CONFIG_KEY } from "../../configuration";
-import { canonicalUrl } from "../../util/base";
+import { Activity } from "../../../api/resources/activities";
+import { Submission } from "../../../api/resources/submission";
+import { submitSolution } from "../../../commands/submitSolution";
+import { CONFIG_KEY } from "../../../configuration";
+import { canonicalUrl } from "../../../util/base";
+import { getJson } from "../util";
 
 suite("submitSolution", () => {
     test("Submit empty solution", async () => {
@@ -17,16 +18,8 @@ suite("submitSolution", () => {
         await config.update("environment", "http://localhost:3000", true);
 
         // Get an available exercise.
-        const activities: Activity[] = await got(
+        const activities: Activity[] = await getJson(
             "http://localhost:3000/activities",
-            {
-                headers: {
-                    Accept: "application/json",
-                    Authorization: "zeus",
-                },
-                resolveBodyOnly: true,
-                responseType: "json",
-            },
         );
         const exercise = activities.filter(a => a.type === "Exercise")[0];
 
@@ -51,28 +44,13 @@ suite("submitSolution", () => {
         });
 
         // Get the submissions to the exercise.
-        const submissions: Submission[] = await got(
+        const submissions: Submission[] = await getJson(
             `${canonicalUrl(exercise)}/submissions`,
-            {
-                headers: {
-                    Accept: "application/json",
-                    Authorization: "zeus",
-                },
-                resolveBodyOnly: true,
-                responseType: "json",
-            },
         );
 
         // Validate the code of the last submission.
         const lastSubmission = submissions[0];
-        const { code }: { code: string } = await got(lastSubmission.url, {
-            headers: {
-                Accept: "application/json",
-                Authorization: "zeus",
-            },
-            resolveBodyOnly: true,
-            responseType: "json",
-        });
-        assert.include(code, uniqueIdentifier);
+        const { code }: { code: string } = await getJson(lastSubmission.url);
+        assert.ok(code?.includes(uniqueIdentifier));
     });
 });

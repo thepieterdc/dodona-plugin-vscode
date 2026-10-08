@@ -1,7 +1,7 @@
 import { ProviderResult, TreeItemCollapsibleState } from "vscode";
 
 import execute from "../../api/client";
-import Series from "../../api/resources/series";
+import { Series } from "../../api/resources/series";
 import { AbstractTreeItem } from "./abstractTreeItem";
 import createActivityTreeItem from "./activityTreeItem";
 

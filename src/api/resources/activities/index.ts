@@ -1,5 +1,16 @@
-import Activity from "./activity";
-import ContentPage from "./contentPage";
-import Exercise from "./exercise";
+import { z } from "zod";
 
-export { Activity, ContentPage, Exercise };
+import { ContentPage, contentPageSchema } from "./contentPage";
+import { Exercise, exerciseSchema } from "./exercise";
+
+/**
+ * An activity on Dodona.
+ */
+export const activitySchema = z.discriminatedUnion("type", [
+    contentPageSchema,
+    exerciseSchema,
+]);
+
+export type Activity = ContentPage | Exercise;
+
+export type { ContentPage, Exercise };
