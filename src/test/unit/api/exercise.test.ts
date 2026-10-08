@@ -1,5 +1,7 @@
 import * as assert from "assert";
 
+import * as sinon from "sinon";
+
 import {
     Exercise,
     ExerciseStatus,
@@ -26,8 +28,13 @@ describe("findExerciseStatus", () => {
 
     describe("after the deadline", () => {
         const deadline = new Date("2020-01-01");
-        const now = new Date("2020-06-01");
-        const status = (e: Exercise) => findExerciseStatus(e, deadline, now);
+        const status = (e: Exercise) => findExerciseStatus(e, deadline);
+
+        let clock: sinon.SinonFakeTimers;
+        beforeEach(() => {
+            clock = sinon.useFakeTimers(new Date("2020-06-01"));
+        });
+        afterEach(() => clock.restore());
 
         it("detects a met deadline", () => {
             const e = exercise({
@@ -73,7 +80,12 @@ describe("findExerciseStatus", () => {
 
     describe("before the deadline", () => {
         const deadline = new Date("2020-06-01");
-        const now = new Date("2020-01-01");
+
+        let clock: sinon.SinonFakeTimers;
+        beforeEach(() => {
+            clock = sinon.useFakeTimers(new Date("2020-01-01"));
+        });
+        afterEach(() => clock.restore());
 
         it("uses the normal status", () => {
             const e = exercise({
@@ -83,7 +95,7 @@ describe("findExerciseStatus", () => {
                 last_solution_is_best: true,
             });
             assert.strictEqual(
-                findExerciseStatus(e, deadline, now),
+                findExerciseStatus(e, deadline),
                 ExerciseStatus.CORRECT,
             );
         });

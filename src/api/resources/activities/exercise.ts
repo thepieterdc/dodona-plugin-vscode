@@ -39,16 +39,14 @@ export type Exercise = z.infer<typeof exerciseSchema>;
  *
  * @param exercise the exercise
  * @param deadline the deadline of the series the exercise is viewed in, if any
- * @param now the current time
  */
 export function findExerciseStatus(
     exercise: Exercise,
     deadline?: Date | null,
-    now = new Date(),
 ): ExerciseStatus {
     if (
         deadline &&
-        deadline < now &&
+        deadline < new Date() &&
         exercise.accepted_before_deadline !== undefined
     ) {
         if (exercise.accepted_before_deadline) {
