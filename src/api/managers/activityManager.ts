@@ -1,10 +1,8 @@
 import { z } from "zod";
 
-import { DodonaEnvironments } from "../../dodonaEnvironment";
-import IdentificationData, { identify } from "../../identification";
+import IdentificationData from "../../identification";
 import HttpClient from "../http";
-import { Activity, activitySchema, ContentPage } from "../resources/activities";
-import { contentPageSchema } from "../resources/activities/contentPage";
+import { Activity, activitySchema } from "../resources/activities";
 import { Series } from "../resources/series";
 
 export default class ActivityManager {
@@ -58,24 +56,5 @@ export default class ActivityManager {
      */
     public inSeries(series: Series): Promise<Activity[]> {
         return this.jsonApi.json(series.exercises, z.array(activitySchema));
-    }
-
-    /**
-     * Marks the given content page as read.
-     *
-     * @param contentPage the content page
-     * @return the content page with updated read status
-     */
-    public async markAsRead(contentPage: ContentPage): Promise<ContentPage> {
-        // Parse the url of the content page.
-        const { environment, course, activity } = identify(contentPage.url);
-
-        // Build the "Mark as read" url.
-        const coursePart = course ? `/courses/${course}` : "";
-        const readUrl = `${DodonaEnvironments[environment]}${coursePart}/activities/${activity}/read`;
-        await this.jsonApi.post(readUrl, z.unknown());
-
-        // Return the updated content page.
-        return this.jsonApi.json(contentPage.url, contentPageSchema);
     }
 }

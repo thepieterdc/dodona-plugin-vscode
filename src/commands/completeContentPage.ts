@@ -1,22 +1,15 @@
-import { window } from "vscode";
+import { Uri, env } from "vscode";
 
-import execute from "../api/client";
 import { ContentPage } from "../api/resources/activities";
-import { READING_ACTIVITY_COMPLETED_MSG } from "../constants/messages";
-import { ContentPageReadListener } from "../listeners";
 import { AbstractActivityTreeItem } from "../treeView/items/activityTreeItem";
 
-// TODO only show command in palette if an exercise is opened
-//      (can be done using "when" in package.json)
-
 /**
- * Action to complete a content page on Dodona.
+ * Action to complete a content page on Dodona. Reading activities can only be
+ * marked as read on Dodona itself, so the page is opened in the browser.
  *
- * @param listener function that is called when the page is marked as read
- * @param contentPage the content page to mark as read
+ * @param contentPage the content page to open
  */
 export async function completeContentPage(
-    listener: ContentPageReadListener,
     contentPage?: ContentPage | AbstractActivityTreeItem,
 ): Promise<void> {
     // Coerce to correct type.
@@ -24,34 +17,15 @@ export async function completeContentPage(
         contentPage = <ContentPage>contentPage.activity;
     }
 
-    // Validate whether this was called from the tree view or using the command
-    // palette.
+    // Not supported from the command palette.
     if (!contentPage) {
-        // Not supported.
         return;
     }
 
-    // Check if the activity was already completed.
+    // Nothing to do if the activity was already completed.
     if (contentPage.has_read) {
         return;
     }
 
-    // Set the status bar.
-    window.setStatusBarMessage("Completing the reading activity...");
-
-    // Mark the content page as read.
-    const ret = await execute(dodona =>
-        dodona.activities.markAsRead(<ContentPage>contentPage),
-    );
-
-    // Send a notification message.
-    window.showInformationMessage(READING_ACTIVITY_COMPLETED_MSG);
-
-    // Clear the status bar.
-    window.setStatusBarMessage("");
-
-    // Notify listeners.
-    if (ret) {
-        listener(ret);
-    }
+    await env.openExternal(Uri.parse(contentPage.url.replace(/\.json$/, "")));
 }

@@ -32,13 +32,11 @@ export function activate(context: ExtensionContext) {
         showActivityDescription,
     );
 
-    // Command: Mark a content page as read.
+    // Command: Open a content page on Dodona to mark it as read.
     const completeContentPageCommand = commands.registerCommand(
         "dodona.contentPage.read",
         async (contentPage?: ContentPage) => {
-            await completeContentPage(() => {
-                treeDataProvider.refresh();
-            }, contentPage);
+            await completeContentPage(contentPage);
         },
     );
 
