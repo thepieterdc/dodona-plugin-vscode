@@ -30,7 +30,7 @@
       },
       {
         "command": "dodona.contentPage.read",
-        "title": "Dodona: Mark reading activity as completed",
+        "title": "Dodona: Open reading activity in your browser to mark it as read",
         "icon": "assets/content-page-read.svg"
       },
       {
