@@ -243,7 +243,18 @@
     "viewsWelcome": [
       {
         "view": "dodona-activities",
-        "contents": "No courses could be found for your current environment that matched your filters. Make sure you have supplied valid API tokens and filters. To correctly set up your token in Visual Studio Code, follow [these instructions](https://docs.dodona.be/nl/faq/ide-plugins/#hoe-installeer-ik-de-vs-code-extensie).\n[Open Settings](command:dodona.settings.token)"
+        "contents": "The connection to Dodona with your API token was successful, but you are not registered for any course yet. Once you register for a course on Dodona, it will appear here.\n[Refresh](command:dodona.treeview.refresh)",
+        "when": "dodona.emptyState == noCourses"
+      },
+      {
+        "view": "dodona-activities",
+        "contents": "None of your courses matched your current filters. Check your year and course filters in the settings.\n[Open Settings](command:dodona.settings.token)",
+        "when": "dodona.emptyState == filtered"
+      },
+      {
+        "view": "dodona-activities",
+        "contents": "No courses could be found for your current environment that matched your filters. Make sure you have supplied valid API tokens and filters. To correctly set up your token in Visual Studio Code, follow [these instructions](https://docs.dodona.be/nl/faq/ide-plugins/#hoe-installeer-ik-de-vs-code-extensie).\n[Open Settings](command:dodona.settings.token)",
+        "when": "dodona.emptyState != noCourses && dodona.emptyState != filtered"
       }
     ]
   },
