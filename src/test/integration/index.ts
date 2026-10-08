@@ -9,7 +9,7 @@ export async function run(): Promise<void> {
     const NYC = require("nyc");
     const nyc = new NYC({
         all: true,
-        cwd: path.join(__dirname, "..", ".."),
+        cwd: path.join(__dirname, "..", "..", ".."),
         exclude: ["**/test/**", ".vscode-test/**", "**/**.test.*s"],
         instrument: true,
         hookRequire: true,

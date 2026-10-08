@@ -5,7 +5,7 @@ import { runTests } from "@vscode/test-electron";
 // Main test runner.
 async function main(): Promise<void> {
     // Folder containing the extension manifest.
-    const extensionDevelopmentPath = path.resolve(__dirname, "..", "..");
+    const extensionDevelopmentPath = path.resolve(__dirname, "..", "..", "..");
 
     // Path to the test runner.
     const extensionTestsPath = path.resolve(__dirname, "index");
@@ -13,6 +13,7 @@ async function main(): Promise<void> {
     // Path to the workspace.
     const testWorkspace = path.resolve(
         __dirname,
+        "..",
         "..",
         "..",
         "src",
