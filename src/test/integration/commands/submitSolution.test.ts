@@ -1,6 +1,7 @@
 import * as nodeAssert from "assert";
 import * as assert from "assert/strict";
 
+import * as sinon from "sinon";
 import * as vscode from "vscode";
 
 import { Activity } from "../../../api/resources/activities";
@@ -11,6 +12,27 @@ import { canonicalUrl } from "../../../util/base";
 import { getJson } from "../util";
 
 suite("submitSolution", () => {
+    test("Warn when no file is open", async () => {
+        await vscode.commands.executeCommand(
+            "workbench.action.closeAllEditors",
+        );
+        assert.equal(vscode.window.activeTextEditor, undefined);
+
+        const warning = sinon
+            .stub(vscode.window, "showWarningMessage")
+            .resolves(undefined);
+
+        try {
+            await submitSolution(null, 0);
+            sinon.assert.calledOnceWithMatch(
+                warning,
+                sinon.match(/Open the file with your solution/),
+            );
+        } finally {
+            warning.restore();
+        }
+    });
+
     test("Submit empty solution", async () => {
         // Set the zeus authentication token.
         const config = vscode.workspace.getConfiguration(CONFIG_KEY);
