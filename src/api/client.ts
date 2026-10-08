@@ -22,6 +22,7 @@ import { INVALID_TOKEN_MSG, MISSING_TOKEN_MSG } from "../constants/messages";
 import { TOKEN_INSTUCTIONS_URL } from "../constants/urls";
 import { DodonaEnvironments } from "../dodonaEnvironment";
 import { logger } from "../logging/logger";
+import { extractErrorMessage } from "../util/errors";
 import { InvalidAccessToken } from "./errors/invalidAccessToken";
 import HttpClient, { HttpError, RequestError } from "./http";
 import {
@@ -177,7 +178,7 @@ export default async function execute<T>(
                 });
         } else if (error instanceof HttpError && error.status === 403) {
             const errorMessage =
-                (error.body as { error?: string } | null)?.error ||
+                extractErrorMessage(error.body) ||
                 "Not allowed to access this resource.";
             window.showErrorMessage(errorMessage);
         } else if (error instanceof RequestError) {
