@@ -28,6 +28,10 @@ export default class RootDataProvider implements TreeDataProvider<AbstractTreeIt
     readonly onDidChangeTreeData: Event<AbstractTreeItem | undefined> =
         this._onDidChangeTreeData.event;
 
+    // In-flight request for the root items. VS Code may request the root
+    // children multiple times on initialisation.
+    private pendingRoot: Promise<AbstractTreeItem[]> | null = null;
+
     getChildren(
         element?: AbstractTreeItem,
     ): ProviderResult<AbstractTreeItem[]> {
@@ -36,6 +40,15 @@ export default class RootDataProvider implements TreeDataProvider<AbstractTreeIt
             return element.getChildren();
         }
 
+        if (!this.pendingRoot) {
+            this.pendingRoot = this.getRootItems().finally(() => {
+                this.pendingRoot = null;
+            });
+        }
+        return this.pendingRoot;
+    }
+
+    private getRootItems(): Promise<AbstractTreeItem[]> {
         // Get the courses the user is subscribed to.
         return (
             execute(dodona => dodona.courses.subscribed)
