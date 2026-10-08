@@ -1,4 +1,5 @@
 import {
+    commands,
     Event,
     EventEmitter,
     ProviderResult,
@@ -53,9 +54,20 @@ export default class RootDataProvider implements TreeDataProvider<AbstractTreeIt
         return (
             execute(dodona => dodona.courses.subscribed)
                 // Sort courses & apply filters
-                .then(cs =>
-                    RootDataProvider.sortCourses(this.filterCourses(cs || [])),
-                )
+                .then(cs => {
+                    const subscribed = cs || [];
+                    const filtered = RootDataProvider.sortCourses(
+                        this.filterCourses(subscribed),
+                    );
+                    RootDataProvider.setEmptyState(
+                        filtered.length > 0
+                            ? ""
+                            : subscribed.length === 0
+                              ? "noCourses"
+                              : "filtered",
+                    );
+                    return filtered;
+                })
                 // Convert them to tree items.
                 .then(cs =>
                     this.getYears(cs).map(
@@ -63,8 +75,20 @@ export default class RootDataProvider implements TreeDataProvider<AbstractTreeIt
                     ),
                 )
                 // Error handling.
-                .catch(() => [])
+                .catch(() => {
+                    RootDataProvider.setEmptyState("error");
+                    return [];
+                })
         );
+    }
+
+    /**
+     * Sets the reason why the tree is empty, used to pick the welcome message.
+     */
+    private static setEmptyState(
+        state: "" | "noCourses" | "filtered" | "error",
+    ): void {
+        void commands.executeCommand("setContext", "dodona.emptyState", state);
     }
 
     /**
