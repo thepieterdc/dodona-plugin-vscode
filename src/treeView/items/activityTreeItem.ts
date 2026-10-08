@@ -9,6 +9,7 @@ import {
     ExerciseStatus,
     findExerciseStatus,
 } from "../../api/resources/activities/exercise";
+import { Series } from "../../api/resources/series";
 import { AbstractTreeItem } from "./abstractTreeItem";
 
 // Icon to display next to completed content pages.
@@ -26,12 +27,14 @@ const CONTENT_PAGE_COMPLETED_ICON = path.join(
  * Creates an activity tree item.
  *
  * @param activity the activity to create an item for
+ * @param series the series the activity is shown in, if any
  */
 export default function createActivityTreeItem(
     activity: Activity,
+    series?: Series,
 ): AbstractTreeItem {
     if (activity.type === "Exercise") {
-        return new ExerciseTreeItem(<Exercise>activity);
+        return new ExerciseTreeItem(<Exercise>activity, series);
     }
     return new ContentPageTreeItem(<ContentPage>activity);
 }
@@ -107,8 +110,9 @@ class ExerciseTreeItem extends AbstractActivityTreeItem {
      * ExerciseTreeItem constructor.
      *
      * @param exercise the exercise
+     * @param series the series the exercise is shown in, if any
      */
-    constructor(exercise: Exercise) {
+    constructor(exercise: Exercise, series?: Series) {
         super(exercise);
 
         // Set the left-click action.
@@ -119,7 +123,10 @@ class ExerciseTreeItem extends AbstractActivityTreeItem {
         };
 
         // Set the icon based on the status and programming language (language-text.svg as default).
-        const status = findExerciseStatus(exercise);
+        const status = findExerciseStatus(
+            exercise,
+            series?.deadline ? new Date(series.deadline) : null,
+        );
         if (status !== ExerciseStatus.NOT_STARTED) {
             this.iconPath = path.join(
                 __filename,
