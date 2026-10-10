@@ -13,6 +13,7 @@ import { submitSolution } from "./commands/submitSolution";
 import { CONFIG_KEY, getApiEnvironment } from "./configuration";
 import { logger } from "./logging/logger";
 import RootDataProvider from "./treeView/dataProvider";
+import { trackOpenExercise } from "./util/exerciseContext";
 
 export function activate(context: ExtensionContext) {
     context.subscriptions.push({ dispose: () => logger.dispose() });
@@ -97,6 +98,9 @@ export function activate(context: ExtensionContext) {
         showActivityDescriptionCommand,
         submitSolutionCommand,
     );
+
+    // Track whether an exercise is opened, to show commands only when relevant.
+    context.subscriptions.push(trackOpenExercise());
 
     // Register and create the activity tree view for the plugin.
     window.registerTreeDataProvider("dodona-activities", treeDataProvider);
