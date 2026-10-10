@@ -3,7 +3,7 @@ import { commands, Uri, window } from "vscode";
 
 import execute, { ErrorHandler } from "../api/client";
 import { Notification } from "../api/resources/notification";
-import { getEnvironmentUrl } from "../configuration";
+import { getApiToken, getEnvironmentUrl } from "../configuration";
 import { OPEN_NOTIFICATIONS_ACTION } from "../constants/actions";
 import { UNREAD_NOTIFICATION_MSG } from "../constants/messages";
 
@@ -15,6 +15,10 @@ export default class NotificationWatcher {
     // in the case of invalid tokens.
     private enabled = true;
 
+    private disposed = false;
+
+    private interval: ReturnType<typeof setInterval> | undefined;
+
     // Timestamp of the last unread notification.
     private lastNotification = 0;
 
@@ -25,14 +29,22 @@ export default class NotificationWatcher {
         this.enabled = true;
     }
 
+    dispose(): void {
+        this.disposed = true;
+        if (this.interval !== undefined) {
+            clearInterval(this.interval);
+            this.interval = undefined;
+        }
+    }
+
     /**
      * Sends an api request to check if there are any unread notifications.
      *
      * @returns the amount of unread notifications
      */
     private async unreadNotifications(): Promise<Notification[]> {
-        // Only run if the service is enabled.
-        if (!this.enabled) {
+        // Only run if the service is enabled and an API token is configured.
+        if (this.disposed || !this.enabled || !getApiToken()) {
             return [];
         }
 
@@ -63,24 +75,32 @@ export default class NotificationWatcher {
         // Run once on start.
         try {
             const unread = await this.unreadNotifications();
-            if (unread.length > 0) {
+            if (!this.disposed && unread.length) {
                 showNotificationMessage(unread.length);
             }
         } catch {
             this.enabled = false;
         }
 
-        // Run every minute.
-        setInterval(async () => {
-            try {
-                const unread = await this.unreadNotifications();
-                if (unread.length > 0) {
-                    showNotificationMessage(unread.length);
+        // The watcher may have been disposed while the initial request ran.
+        if (this.disposed) {
+            return;
+        }
+
+        // Run every 10 minutes.
+        this.interval = setInterval(
+            async () => {
+                try {
+                    const unread = await this.unreadNotifications();
+                    if (!this.disposed && unread.length) {
+                        showNotificationMessage(unread.length);
+                    }
+                } catch {
+                    this.enabled = false;
                 }
-            } catch {
-                this.enabled = false;
-            }
-        }, 60000);
+            },
+            10 * 60 * 1000,
+        );
     }
 }
 
