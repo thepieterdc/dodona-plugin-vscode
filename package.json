@@ -52,6 +52,10 @@
         "icon": "assets/edit.svg"
       },
       {
+        "command": "dodona.submission.open",
+        "title": "Dodona: Open submission in editor"
+      },
+      {
         "command": "dodona.settings.token",
         "title": "Dodona: Open the settings page to configure your API token."
       },
@@ -158,6 +162,10 @@
           "when": "dodona.exerciseOpen"
         },
         {
+          "command": "dodona.submit",
+          "when": "dodona.exerciseOpen"
+        },
+        {
           "command": "dodona.contentPage.read",
           "when": "false"
         },
@@ -175,6 +183,10 @@
         },
         {
           "command": "dodona.series.open",
+          "when": "false"
+        },
+        {
+          "command": "dodona.submission.open",
           "when": "false"
         },
         {
@@ -218,6 +230,10 @@
         {
           "command": "dodona.exercise.create",
           "when": "view == dodona-activities && viewItem == activity-exercise"
+        },
+        {
+          "command": "dodona.submission.open",
+          "when": "view == dodona-activities && viewItem == submission"
         },
         {
           "command": "dodona.series.open",

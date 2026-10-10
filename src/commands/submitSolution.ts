@@ -13,9 +13,6 @@ import IdentificationData, { identify } from "../identification";
 import { SubmissionEvaluatedListener } from "../listeners";
 import { canonicalUrl, sleep } from "../util/base";
 
-// TODO only show command in palette if an exercise is opened
-//      (can be done using "when" in package.json)
-
 // Define a feedback action to open the exercise in a web browser.
 const FEEDBACK_VIEW_RESULTS = "View results";
 
@@ -33,11 +30,15 @@ async function evaluateSubmission(
     exercise: Activity,
     code: string,
     maxAttempts: number,
-): Promise<Submission> {
+): Promise<Submission | null> {
     // Submit the code to Dodona.
     const submitResp = await execute(dodona =>
         dodona.submissions.create(identification, code),
     );
+    if (!submitResp) {
+        // The error has already been reported.
+        return null;
+    }
 
     // Send a notification message.
     window.showInformationMessage(
@@ -56,7 +57,7 @@ async function evaluateSubmission(
 
         // Get the result.
         const submission = await execute(dodona =>
-            dodona.submissions.byUrl(submitResp!.url),
+            dodona.submissions.byUrl(submitResp.url),
         );
         if (!submission) break;
 
@@ -210,6 +211,9 @@ export async function submitSolution(
         code,
         maxAttempts,
     );
+    if (!submission) {
+        return;
+    }
 
     // Show the feedback. This can be automatic if the
     // `submission.result.open-auto` checkbox is set to true in the settings.

@@ -8,7 +8,11 @@ import { resourceSchema } from "./resource";
 export const courseSchema = resourceSchema.extend({
     name: z.string(),
     series: z.string(),
-    year: z.string(),
+    // The year is nullable for sandbox courses.
+    year: z
+        .string()
+        .nullish()
+        .transform(y => y ?? ""),
 });
 
 export type Course = z.infer<typeof courseSchema>;

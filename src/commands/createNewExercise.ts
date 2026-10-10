@@ -1,12 +1,12 @@
 import * as fs from "fs";
 import * as path from "path";
 
-import { commands, Uri, ViewColumn, window, workspace } from "vscode";
+import { Uri, ViewColumn, window, workspace } from "vscode";
 
 import { Exercise } from "../api/resources/activities";
 import { getAutoDescription } from "../configuration";
 import { identify } from "../identification";
-import { canonicalUrl, readFirstLine, workspaceRoot } from "../util/base";
+import { canonicalUrl, readFirstLine, workspaceFolder } from "../util/base";
 import { comment } from "../util/comments";
 import { generateFilename } from "../util/naming";
 import { showActivityDescription } from "./showActivityDescription";
@@ -77,45 +77,4 @@ export async function createNewExercise(exercise: Exercise) {
     if (editor && getAutoDescription()) {
         await showActivityDescription(exercise);
     }
-}
-
-/**
- * Gets the current workspace folder, or asks the user to select it if none.
- *
- * @return the (selected) workspace folder if any
- */
-async function workspaceFolder(): Promise<string | undefined> {
-    // Get the current workspace folder if there is one.
-    const current = workspaceRoot();
-    if (current) {
-        return current;
-    }
-
-    // No folder is opened, ask the user to select one.
-    const selectFolder = "Open Folder";
-    const cancel = "Cancel";
-
-    const choice = await window.showInformationMessage(
-        "In order to create new files, you should first open a folder.",
-        selectFolder,
-        cancel,
-    );
-
-    // If the user decided to cancel for whatever reason, do nothing
-    if (!choice || choice === cancel) {
-        return undefined;
-    }
-
-    const selected = await window.showOpenDialog({
-        canSelectFiles: false,
-        canSelectFolders: true,
-        canSelectMany: false,
-        title: "Choose a folder to work in",
-    });
-
-    if (!selected) return undefined;
-
-    const uri = selected[0];
-    await commands.executeCommand("vscode.openFolder", uri);
-    return uri.fsPath;
 }

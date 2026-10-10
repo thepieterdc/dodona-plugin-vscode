@@ -5,6 +5,7 @@ import {
     ProviderResult,
     TreeDataProvider,
     TreeItem,
+    TreeItemCollapsibleState,
 } from "vscode";
 
 import execute from "../api/client";
@@ -38,7 +39,17 @@ export default class RootDataProvider implements TreeDataProvider<AbstractTreeIt
     ): ProviderResult<AbstractTreeItem[]> {
         if (element) {
             // Element in the tree.
-            return element.getChildren();
+            return Promise.resolve(element.getChildren()).then(children => {
+                // Once we know an element has no children, drop its caret.
+                if (
+                    children?.length === 0 &&
+                    element.collapsibleState !== TreeItemCollapsibleState.None
+                ) {
+                    element.collapsibleState = TreeItemCollapsibleState.None;
+                    this._onDidChangeTreeData.fire(element);
+                }
+                return children;
+            });
         }
 
         if (!this.pendingRoot) {

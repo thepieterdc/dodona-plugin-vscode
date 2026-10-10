@@ -9,8 +9,9 @@ const WHITESPACE = /\s+/g;
  * Generates a filename for the given exercise.
  *
  * @param exercise the exercise
+ * @param suffix optional suffix to append to the basename
  */
-export function generateFilename(exercise: Exercise): string {
+export function generateFilename(exercise: Exercise, suffix = ""): string {
     // TODO Support generation of Java class names.
 
     // Get the basename.
@@ -27,5 +28,5 @@ export function generateFilename(exercise: Exercise): string {
     }
 
     // Append the extension of the programming language.
-    return `${basename}.${exercise.programming_language?.extension || "txt"}`;
+    return `${basename}${suffix}.${exercise.programming_language?.extension || "txt"}`;
 }

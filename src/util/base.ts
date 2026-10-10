@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as readline from "readline";
 
-import { Uri, workspace } from "vscode";
+import { commands, Uri, window, workspace } from "vscode";
 
 import { Resource } from "../api/resources/resource";
 
@@ -78,4 +78,48 @@ export function workspaceRoot(file?: Uri): string | undefined {
     // Otherwise, fall back to the first workspace.
     const folders = workspace.workspaceFolders;
     return folders && folders.length ? folders[0].uri.fsPath : undefined;
+}
+
+/**
+ * Gets the current workspace folder, or asks the user to select it if none.
+ *
+ * @param message the message to show when no folder is opened
+ * @return the (selected) workspace folder if any
+ */
+export async function workspaceFolder(
+    message = "In order to create new files, you should first open a folder.",
+): Promise<string | undefined> {
+    // Get the current workspace folder if there is one.
+    const current = workspaceRoot();
+    if (current) {
+        return current;
+    }
+
+    // No folder is opened, ask the user to select one.
+    const selectFolder = "Open Folder";
+    const cancel = "Cancel";
+
+    const choice = await window.showInformationMessage(
+        message,
+        selectFolder,
+        cancel,
+    );
+
+    // If the user decided to cancel for whatever reason, do nothing
+    if (!choice || choice === cancel) {
+        return undefined;
+    }
+
+    const selected = await window.showOpenDialog({
+        canSelectFiles: false,
+        canSelectFolders: true,
+        canSelectMany: false,
+        title: "Choose a folder to work in",
+    });
+
+    if (!selected) return undefined;
+
+    const uri = selected[0];
+    await commands.executeCommand("vscode.openFolder", uri);
+    return uri.fsPath;
 }
