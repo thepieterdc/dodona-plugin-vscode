@@ -2,6 +2,7 @@ import * as path from "path";
 
 import { ProviderResult, TreeItemCollapsibleState, ViewColumn } from "vscode";
 
+import execute from "../../api/client";
 import { Activity } from "../../api/resources/activities";
 import { ContentPage } from "../../api/resources/activities";
 import {
@@ -10,7 +11,9 @@ import {
     findExerciseStatus,
 } from "../../api/resources/activities/exercise";
 import { Series } from "../../api/resources/series";
+import { identify } from "../../identification";
 import { AbstractTreeItem } from "./abstractTreeItem";
+import { SubmissionTreeItem } from "./submissionTreeItem";
 
 // Icon to display next to completed content pages.
 const CONTENT_PAGE_COMPLETED_ICON = path.join(
@@ -50,8 +53,11 @@ export abstract class AbstractActivityTreeItem extends AbstractTreeItem {
      *
      * @param activity the activity
      */
-    protected constructor(activity: Activity) {
-        super(activity.name, TreeItemCollapsibleState.None);
+    protected constructor(
+        activity: Activity,
+        collapsibleState = TreeItemCollapsibleState.None,
+    ) {
+        super(activity.name, collapsibleState);
         this.activity = activity;
         this.contextValue = `activity-${activity.type.toLowerCase()}`;
     }
@@ -106,6 +112,8 @@ class ContentPageTreeItem extends AbstractActivityTreeItem {
  * TreeView item for an exercise.
  */
 class ExerciseTreeItem extends AbstractActivityTreeItem {
+    private readonly exercise: Exercise;
+
     /**
      * ExerciseTreeItem constructor.
      *
@@ -113,7 +121,8 @@ class ExerciseTreeItem extends AbstractActivityTreeItem {
      * @param series the series the exercise is shown in, if any
      */
     constructor(exercise: Exercise, series?: Series) {
-        super(exercise);
+        super(exercise, TreeItemCollapsibleState.Collapsed);
+        this.exercise = exercise;
 
         // Set the left-click action.
         this.command = {
@@ -148,5 +157,15 @@ class ExerciseTreeItem extends AbstractActivityTreeItem {
                 `language-${exercise.programming_language?.name || "text"}.svg`,
             );
         }
+    }
+
+    getChildren(): ProviderResult<AbstractTreeItem[]> {
+        // Get the submissions of the user to this exercise.
+        const identification = identify(this.exercise.url);
+        return execute(dodona =>
+            dodona.submissions.forExercise(identification),
+        ).then(submissions =>
+            submissions?.map(s => new SubmissionTreeItem(this.exercise, s)),
+        );
     }
 }

@@ -31,12 +31,23 @@ export type SubmissionStatus = z.infer<typeof submissionStatusSchema>;
  * A submission on Dodona.
  */
 export const submissionSchema = resourceSchema.extend({
+    created_at: z.string(),
     exercise: z.string(),
+    number: z.number().optional(),
     status: submissionStatusSchema,
     summary: z.string().nullable(),
 });
 
 export type Submission = z.infer<typeof submissionSchema>;
+
+/**
+ * A submission on Dodona, including the submitted code.
+ */
+export const submissionWithCodeSchema = submissionSchema.extend({
+    code: z.string(),
+});
+
+export type SubmissionWithCode = z.infer<typeof submissionWithCodeSchema>;
 
 /**
  * Finds the status of an exercise.

@@ -8,6 +8,7 @@ import { completeContentPage } from "./commands/completeContentPage";
 import { createNewExercise } from "./commands/createNewExercise";
 import { openCourse } from "./commands/openCourse";
 import { openSeries } from "./commands/openSeries";
+import { openSubmission } from "./commands/openSubmission";
 import { showActivityDescription } from "./commands/showActivityDescription";
 import { submitSolution } from "./commands/submitSolution";
 import { CONFIG_KEY, getApiEnvironment } from "./configuration";
@@ -25,6 +26,12 @@ export function activate(context: ExtensionContext) {
     const createNewExerciseCommand = commands.registerCommand(
         "dodona.exercise.create",
         createNewExercise,
+    );
+
+    // Command: Open a previous submission in a new file.
+    const openSubmissionCommand = commands.registerCommand(
+        "dodona.submission.open",
+        openSubmission,
     );
 
     // Command: Show the description of an activity.
@@ -94,6 +101,7 @@ export function activate(context: ExtensionContext) {
         refreshTreeViewCommand,
         openCourseCommand,
         openSeriesCommand,
+        openSubmissionCommand,
         settingsTokenCommand,
         showActivityDescriptionCommand,
         submitSolutionCommand,
