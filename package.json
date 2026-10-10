@@ -154,6 +154,10 @@
     "menus": {
       "commandPalette": [
         {
+          "command": "dodona.activity.description",
+          "when": "dodona.exerciseOpen"
+        },
+        {
           "command": "dodona.contentPage.read",
           "when": "false"
         },

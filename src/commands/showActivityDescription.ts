@@ -1,18 +1,51 @@
 import { AssertionError } from "assert";
 
-import { commands, ViewColumn, WebviewPanel, window } from "vscode";
+import {
+    ColorThemeKind,
+    commands,
+    ViewColumn,
+    WebviewPanel,
+    window,
+} from "vscode";
 
 import execute from "../api/client";
 import { Activity } from "../api/resources/activities";
 import { getApiEnvironment } from "../configuration";
 import IdentificationData, { identify } from "../identification";
 import { AbstractActivityTreeItem } from "../treeView/items/activityTreeItem";
-
-// TODO only show command in palette if an exercise is opened
-//      (can be done using "when" in package.json)
+import { applyTheme } from "../util/theme";
 
 // Store all open descriptions.
 const descriptionPanels = new Array<WebviewPanel>();
+
+// Original HTML of every open description, to re-render when the theme changes.
+const descriptionHtml = new Map<WebviewPanel, string>();
+
+let themeListenerRegistered = false;
+
+/**
+ * Whether the editor currently uses a dark theme.
+ */
+function isDarkTheme(): boolean {
+    const kind = window.activeColorTheme.kind;
+    return kind === ColorThemeKind.Dark || kind === ColorThemeKind.HighContrast;
+}
+
+/**
+ * Re-renders all open descriptions when the editor theme changes.
+ */
+function registerThemeListener() {
+    if (themeListenerRegistered) {
+        return;
+    }
+    themeListenerRegistered = true;
+
+    window.onDidChangeActiveColorTheme(() => {
+        for (const [panel, html] of descriptionHtml) {
+            panel.webview.html = applyTheme(html, isDarkTheme());
+        }
+    });
+}
 
 /**
  * Opens a new or existing panel with an activity description.
@@ -46,13 +79,16 @@ async function openActivityDescription(
     );
 
     descriptionPanels.push(panel);
+    registerThemeListener();
+    panel.onDidDispose(() => descriptionHtml.delete(panel));
 
     // Load the activity description HTML.
     const description = await execute(dodona =>
         dodona.activities.description(activity),
     );
     if (description) {
-        panel.webview.html = description;
+        descriptionHtml.set(panel, description);
+        panel.webview.html = applyTheme(description, isDarkTheme());
     } else {
         panel.dispose();
     }
