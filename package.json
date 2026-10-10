@@ -17,8 +17,7 @@
   ],
   "icon": "assets/dodona.png",
   "activationEvents": [
-    "onStartupFinished",
-    "onView:dodona.activity.description"
+    "onView:dodona-activities"
   ],
   "main": "./out/extension.js",
   "contributes": {

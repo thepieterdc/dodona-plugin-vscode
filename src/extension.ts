@@ -103,15 +103,18 @@ export function activate(context: ExtensionContext) {
 
     // Create a notification watcher.
     const notifications = new NotificationWatcher();
+    context.subscriptions.push(notifications);
 
     // Refresh the treeview when the API domain is changed, and re-enable the
     // notification watcher.
-    workspace.onDidChangeConfiguration(e => {
-        if (e.affectsConfiguration(CONFIG_KEY)) {
-            treeDataProvider.refresh();
-            notifications.enable();
-        }
-    });
+    context.subscriptions.push(
+        workspace.onDidChangeConfiguration(e => {
+            if (e.affectsConfiguration(CONFIG_KEY)) {
+                treeDataProvider.refresh();
+                notifications.enable();
+            }
+        }),
+    );
 
     // Start the notification watcher.
     notifications.watch();
