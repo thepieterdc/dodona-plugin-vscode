@@ -293,7 +293,7 @@
     "watch": "tsc -watch -p ./"
   },
   "dependencies": {
-    "zod": "^4.6.6"
+    "zod": "^4.6.7"
   },
   "lint-staged": {
     "*.{ts,js,mjs,json,md,yml,yaml}": "oxfmt --no-error-on-unmatched-pattern",
