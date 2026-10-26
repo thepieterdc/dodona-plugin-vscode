@@ -54,7 +54,22 @@ export default class ActivityManager {
      * @param series the series
      * @return the activities
      */
-    public inSeries(series: Series): Promise<Activity[]> {
-        return this.jsonApi.json(series.exercises, z.array(activitySchema));
+    public async inSeries(series: Series): Promise<Activity[]> {
+        // Dodona paginates this list, fetch pages until one is not full.
+        const perPage = 20;
+        const activities: Activity[] = [];
+        const url = new URL(series.exercises);
+        url.searchParams.set("per_page", `${perPage}`);
+        for (let page = 1; ; page++) {
+            url.searchParams.set("page", `${page}`);
+            const data = await this.jsonApi.json(
+                url.toString(),
+                z.array(activitySchema),
+            );
+            activities.push(...data);
+            if (data.length < perPage) {
+                return activities;
+            }
+        }
     }
 }
