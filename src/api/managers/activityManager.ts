@@ -5,6 +5,12 @@ import HttpClient from "../http";
 import { Activity, activitySchema } from "../resources/activities";
 import { Series } from "../resources/series";
 
+// Page size to request.
+const ACTIVITIES_PER_PAGE = 100;
+
+// Maximum amount of pages to fetch.
+const MAX_PAGES = 10;
+
 export default class ActivityManager {
     private readonly htmlApi: HttpClient;
     private readonly jsonApi: HttpClient;
@@ -55,21 +61,21 @@ export default class ActivityManager {
      * @return the activities
      */
     public async inSeries(series: Series): Promise<Activity[]> {
-        // Dodona paginates this list, fetch pages until one is not full.
-        const perPage = 20;
+        // Include pagination parameters.
         const activities: Activity[] = [];
         const url = new URL(series.exercises);
-        url.searchParams.set("per_page", `${perPage}`);
-        for (let page = 1; ; page++) {
+        url.searchParams.set("per_page", `${ACTIVITIES_PER_PAGE}`);
+        for (let page = 1; page <= MAX_PAGES; page++) {
             url.searchParams.set("page", `${page}`);
             const data = await this.jsonApi.json(
                 url.toString(),
                 z.array(activitySchema),
             );
             activities.push(...data);
-            if (data.length < perPage) {
-                return activities;
+            if (data.length < ACTIVITIES_PER_PAGE) {
+                break;
             }
         }
+        return activities;
     }
 }

@@ -1,11 +1,11 @@
 import * as assert from "assert";
 
-import { ExerciseStatus } from "../../../api/resources/activities/exercise";
+import { ExerciseStatus } from "../../../../api/resources/activities/exercise";
 import {
     findExerciseStatus,
     Submission,
     submissionStatusSchema,
-} from "../../../api/resources/submission";
+} from "../../../../api/resources/submission";
 
 describe("findExerciseStatus", () => {
     it("is correct for correct submissions", () => {

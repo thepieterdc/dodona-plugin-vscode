@@ -1,6 +1,6 @@
 import * as assert from "assert";
 
-import { courseSchema } from "../../../api/resources/course";
+import { courseSchema } from "../../../../api/resources/course";
 
 const base = { id: 1, url: "https://dodona.be/courses/1.json", name: "C" };
 
