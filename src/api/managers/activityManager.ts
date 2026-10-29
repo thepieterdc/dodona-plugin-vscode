@@ -5,6 +5,12 @@ import HttpClient from "../http";
 import { Activity, activitySchema } from "../resources/activities";
 import { Series } from "../resources/series";
 
+// Page size to request.
+const ACTIVITIES_PER_PAGE = 100;
+
+// Maximum amount of pages to fetch.
+const MAX_PAGES = 10;
+
 export default class ActivityManager {
     private readonly htmlApi: HttpClient;
     private readonly jsonApi: HttpClient;
@@ -54,7 +60,22 @@ export default class ActivityManager {
      * @param series the series
      * @return the activities
      */
-    public inSeries(series: Series): Promise<Activity[]> {
-        return this.jsonApi.json(series.exercises, z.array(activitySchema));
+    public async inSeries(series: Series): Promise<Activity[]> {
+        // Include pagination parameters.
+        const activities: Activity[] = [];
+        const url = new URL(series.exercises);
+        url.searchParams.set("per_page", `${ACTIVITIES_PER_PAGE}`);
+        for (let page = 1; page <= MAX_PAGES; page++) {
+            url.searchParams.set("page", `${page}`);
+            const data = await this.jsonApi.json(
+                url.toString(),
+                z.array(activitySchema),
+            );
+            activities.push(...data);
+            if (data.length < ACTIVITIES_PER_PAGE) {
+                break;
+            }
+        }
+        return activities;
     }
 }

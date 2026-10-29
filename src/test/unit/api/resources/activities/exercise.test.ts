@@ -6,7 +6,7 @@ import {
     Exercise,
     ExerciseStatus,
     findExerciseStatus,
-} from "../../../api/resources/activities/exercise";
+} from "../../../../../api/resources/activities/exercise";
 
 function exercise(fields: Partial<Exercise>): Exercise {
     return {
